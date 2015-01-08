@@ -29,6 +29,30 @@ function init() {
   RL.TRANSPORT = host.createTransport();
   RL.APPLICATION = host.createApplication();
 
+  RL.TRANSPORT.addIsRecordingObserver(function (on) {
+    RL.IS_RECORDING = on;
+
+    if (on) {
+      println('RECORDING');
+    }
+  });
+
+  RL.TRANSPORT.addIsPlayingObserver(function (on) {
+    RL.IS_PLAYING = on;
+
+    if (on) {
+      println('PLAYING');
+    }
+  });
+
+  RL.TRANSPORT.addOverdubObserver(function(on) {
+    RL.OVERDUB = on;
+
+    if (on) {
+      println('DUBING');
+    }
+  });
+
   host.getMidiInPort(0).setMidiCallback(onMidi);
   host.getMidiInPort(0).setSysexCallback(onSysex);
 
@@ -83,19 +107,51 @@ function onMidi(status, data1, data2) {
   println('- isActiveSensing? ' + isActiveSensing(status));
   println('- isSystemReset? ' + isSystemReset(status));
 
+  var toggle = data2 > 65;
+
+  function set(id, value) {
+    sendMidi(RL.CHANNEL1, id, value);
+  }
+
   switch (action.type) {
+    case 'overdub':
+      RL.TRANSPORT.toggleOverdub();
+    break;
+
     case 'record':
-      if (data2 > 65) {
+      if (RL.IS_PLAYING) {
+        RL.TRANSPORT.stop();
+        set(RL.PLAY, 0);
+      }
+
+      if (!RL.IS_RECORDING && toggle) {
         RL.IS_RECORDING = !RL.IS_RECORDING;
+      }
+
+      if (RL.IS_RECORDING) {
+        RL.TRANSPORT.record();
+      } else {
+        RL.TRANSPORT.stop();
       }
     break;
 
     case 'play':
+      if (!RL.IS_PLAYING && toggle) {
+        RL.TRANSPORT.play();
+      }
     break;
 
     case 'stop':
+      if (toggle) {
+        RL.TRANSPORT.stop();
+      }
+
       RL.IS_PLAYING = false;
       RL.IS_RECORDING = false;
+    break;
+
+    case 'stop-all':
+      RL.TRACKS.getClipLauncherScenes().stop();
     break;
 
     case 'up':
@@ -110,8 +166,6 @@ function onMidi(status, data1, data2) {
       }
     break;
   }
-
-  println('- isRecording? ' + RL.IS_RECORDING);
 }
 
 function onSysex(data) {
