@@ -44,8 +44,6 @@ var RL = {
   ARM: [],
   LAUNCH: [],
 
-  LOOP: false,
-  METRONOME: false,
   OVERDUB: false,
 
   CURRENT_SCENE: -1,
