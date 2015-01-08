@@ -53,6 +53,24 @@ function init() {
     }
   });
 
+  var track;
+
+  function buttonObserver(index, registry, button, set) {
+    return function (on) {
+      registry[index] = on;
+
+      sendMidi(RL.CHANNEL1, button[index], set[+on]);
+    };
+  }
+
+  for (var j = 0; j < 8; j += 1) {
+    track = RL.TRACKS.getTrack(j);
+
+    track.getMute().addValueObserver(buttonObserver(j, RL.MUTE, RL.BUTTON1, [127, 0]));
+    track.getSolo().addValueObserver(buttonObserver(j, RL.SOLO, RL.BUTTON2, [0, 127]));
+    track.getArm().addValueObserver(buttonObserver(j, RL.ARM, RL.BUTTON3, [0, 127]));
+  }
+
   host.getMidiInPort(0).setMidiCallback(onMidi);
   host.getMidiInPort(0).setSysexCallback(onSysex);
 
