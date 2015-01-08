@@ -22,9 +22,7 @@ var RL = {
   BUTTON1:  [8, 9, 10, 11, 12, 13, 14, 15],
   BUTTON1S: [16, 17, 18, 19, 20, 21, 22, 23],
   BUTTON2:  [24, 25, 26, 27, 28, 29, 30, 31],
-  BUTTON2S: [32, 33, 34, 35, 36, 37, 38, 39],
   BUTTON3:  [40, 41, 42, 43, 44, 45, 46, 47],
-  BUTTON3S: [49, 50, 51, 52, 53, 54, 55, 56],
 
   PLAY: 105,
   PLAYS: 108,
@@ -93,17 +91,6 @@ function actionFor(status, data1, data2) {
     params.index = { middle: data1 - RL.BUTTON2[0] };
   } else if (data1IsInRange8(RL.BUTTON3[0])) {
     params.index = { bottom: data1 - RL.BUTTON3[0] };
-  }
-
-  if (data1IsInRange8(RL.BUTTON1S[0])) {
-    params.shift = true;
-    params.index = { top: data1 - RL.BUTTON1S[0] };
-  } else if (data1IsInRange8(RL.BUTTON2S[0])) {
-    params.shift = true;
-    params.index = { middle: data1 - RL.BUTTON2S[0] };
-  } else if (data1IsInRange8(RL.BUTTON3S[0])) {
-    params.shift = true;
-    params.index = { bottom: data1 - RL.BUTTON3S[0] };
   }
 
   if (params.index) {

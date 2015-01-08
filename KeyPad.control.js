@@ -103,18 +103,7 @@ function onMidi(status, data1, data2) {
   }
 
   println(buttonType + ' ' + noteName + ' ' + toggle + ' ' + dump(action));
-
-  println('- isMTCQuarterFrame? ' + isMTCQuarterFrame(status));
-  println('- isSongPositionPointer? ' + isSongPositionPointer(status));
-  println('- isSongSelect? ' + isSongSelect(status));
-  println('- isTuneRequest? ' + isTuneRequest(status));
-  println('- isTimingClock? ' + isTimingClock(status));
-  println('- isMIDIStart? ' + isMIDIStart(status));
-  println('- isMIDIContinue? ' + isMIDIContinue(status));
-  println('- isMIDIStop? ' + isMIDIStop(status));
-  println('- isActiveSensing? ' + isActiveSensing(status));
-  println('- isSystemReset? ' + isSystemReset(status));
-
+  
   switch (action.type) {
     case 'button':
       if (typeof action.index.top === 'number') {
