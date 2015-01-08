@@ -30,27 +30,15 @@ function init() {
   RL.APPLICATION = host.createApplication();
 
   RL.TRANSPORT.addIsRecordingObserver(function (on) {
-    RL.IS_RECORDING = on;
-
-    if (on) {
-      println('RECORDING');
-    }
+    sendMidi(RL.CHANNEL1, RL.RECORD, (RL.IS_RECORDING = on) ? 127 : 0);
   });
 
   RL.TRANSPORT.addIsPlayingObserver(function (on) {
-    RL.IS_PLAYING = on;
-
-    if (on) {
-      println('PLAYING');
-    }
+    sendMidi(RL.CHANNEL1, RL.PLAY, (RL.IS_PLAYING = on) ? 127 : 0);
   });
 
   RL.TRANSPORT.addOverdubObserver(function(on) {
-    RL.OVERDUB = on;
-
-    if (on) {
-      println('DUBING');
-    }
+    sendMidi(RL.CHANNEL1, RL.RECORDS, (RL.OVERDUB = on) ? 127 : 0);
   });
 
   var track;
@@ -127,10 +115,6 @@ function onMidi(status, data1, data2) {
   println('- isActiveSensing? ' + isActiveSensing(status));
   println('- isSystemReset? ' + isSystemReset(status));
 
-  function set(id, value) {
-    sendMidi(RL.CHANNEL1, id, value);
-  }
-
   switch (action.type) {
     case 'button':
       if (typeof action.index.top === 'number') {
@@ -159,35 +143,30 @@ function onMidi(status, data1, data2) {
     break;
 
     case 'record':
-      if (RL.IS_PLAYING) {
-        RL.TRANSPORT.stop();
-        set(RL.PLAY, 0);
-      }
-
-      if (!RL.IS_RECORDING && toggle) {
-        RL.IS_RECORDING = !RL.IS_RECORDING;
-      }
-
-      if (RL.IS_RECORDING) {
+      if (toggle) {
         RL.TRANSPORT.record();
-      } else {
-        RL.TRANSPORT.stop();
+
+        RL.IS_RECORDING = !RL.IS_RECORDING;
       }
     break;
 
     case 'play':
-      if (!RL.IS_PLAYING && toggle) {
+      if (toggle) {
         RL.TRANSPORT.play();
       }
     break;
 
     case 'stop':
       if (toggle) {
+        if (RL.IS_RECORDING) {
+          RL.TRANSPORT.record();
+        }
+
+        RL.IS_RECORDING = false;
+        RL.IS_PLAYING = false;
+
         RL.TRANSPORT.stop();
       }
-
-      RL.IS_PLAYING = false;
-      RL.IS_RECORDING = false;
     break;
 
     case 'stop-all':
