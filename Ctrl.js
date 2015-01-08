@@ -130,10 +130,6 @@ function actionFor(status, data1, data2) {
     params.index = data1 - RL.KNOB1PS[0];
   }
 
-  if (params.type === 'button' && (data2 > 65)) {
-    params.active = true;
-  }
-
   // KNOBS / FADERS
   if (data1IsInRange8(RL.KNOB2[0])) {
     params.type = 'knob'
