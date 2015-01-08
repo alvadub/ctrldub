@@ -116,6 +116,8 @@ function onMidi(status, data1, data2) {
         bottom: 'getArm'
       };
 
+      var found = false;
+
       for (var key in prop) {
         if (typeof action.index[key] === 'number') {
           if (toggle) {
@@ -123,9 +125,18 @@ function onMidi(status, data1, data2) {
           } else {
             sendMidi(RL.CHANNEL1, data1, RL[prop[key].substr(3).toUpperCase()][action.index[key]] ? 127 : 0);
           }
+
+          found = true;
+
+          break;
         }
       }
-    break;
+
+      if (!found) {
+        println('DELEGATE');
+      }
+
+      break;
 
     case 'overdub':
       RL.TRANSPORT.toggleOverdub();
