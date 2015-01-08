@@ -102,6 +102,8 @@ function onMidi(status, data1, data2) {
 
   var action = buttonType === 'CC' ? actionFor(status, data1, data2) : false;
 
+  var toggle = data2 > 65;
+
   function dump(obj) {
     var out = [];
 
@@ -112,7 +114,7 @@ function onMidi(status, data1, data2) {
     return '{ ' + out.join(', ') + ' }';
   }
 
-  println(buttonType + ' ' + noteName + ' ' + dump(action));
+  println(buttonType + ' ' + noteName + ' ' + toggle + ' ' + dump(action));
 
   println('- isMTCQuarterFrame? ' + isMTCQuarterFrame(status));
   println('- isSongPositionPointer? ' + isSongPositionPointer(status));
@@ -125,13 +127,33 @@ function onMidi(status, data1, data2) {
   println('- isActiveSensing? ' + isActiveSensing(status));
   println('- isSystemReset? ' + isSystemReset(status));
 
-  var toggle = data2 > 65;
-
   function set(id, value) {
     sendMidi(RL.CHANNEL1, id, value);
   }
 
   switch (action.type) {
+    case 'button':
+      if (typeof action.index.top === 'number') {
+        RL.TRACKS.getTrack(action.index.top).getMute().set(!toggle);
+        sendMidi(RL.CHANNEL1, data1, toggle ? 127 : 0);
+      }
+
+      var prop = {
+        middle: 'getSolo',
+        bottom: 'getArm'
+      };
+
+      for (var key in prop) {
+        if (typeof action.index[key] === 'number') {
+          if (toggle) {
+            RL.TRACKS.getTrack(action.index[key])[prop[key]]().toggle();
+          } else {
+            sendMidi(RL.CHANNEL1, data1, RL[prop[key].substr(3).toUpperCase()][action.index[key]] ? 127 : 0);
+          }
+        }
+      }
+    break;
+
     case 'overdub':
       RL.TRANSPORT.toggleOverdub();
     break;
