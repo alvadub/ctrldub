@@ -22,7 +22,9 @@ var RL = {
   BUTTON1:  [8, 9, 10, 11, 12, 13, 14, 15],
   BUTTON1S: [16, 17, 18, 19, 20, 21, 22, 23],
   BUTTON2:  [24, 25, 26, 27, 28, 29, 30, 31],
+  BUTTON2S:  [32, 33, 34, 35, 36, 37, 38, 39],
   BUTTON3:  [40, 41, 42, 43, 44, 45, 46, 47],
+  BUTTON3S:  [49, 50, 51, 52, 53, 54, 55, 56],
 
   PLAY: 105,
   PLAYS: 108,
@@ -40,7 +42,6 @@ var RL = {
   MUTE: [],
   SOLO: [],
   ARM: [],
-  LAUNCH: [],
 
   OVERDUB: false,
 
@@ -53,7 +54,10 @@ var RL = {
 };
 
 function actionFor(status, data1, data2) {
-  var params = {};
+  var params = {
+    type: 'button',
+    index: -1
+  };
 
   // RECORDING
   if (data1 === RL.PLAY) {
@@ -71,7 +75,7 @@ function actionFor(status, data1, data2) {
   }
 
   function data1IsInRange8(low) {
-    return(data1 >= low && data1 <= (low + 7));
+    return data1 >= low && data1 <= (low + 7);
   }
   
   // SCENES
@@ -89,31 +93,29 @@ function actionFor(status, data1, data2) {
     params.index = { top: data1 - RL.BUTTON1[0] };
   } else if (data1IsInRange8(RL.BUTTON2[0])) {
     params.index = { middle: data1 - RL.BUTTON2[0] };
+  } else if (data1IsInRange8(RL.BUTTON2S[0])) {
+    params.index = { middle: data1 - RL.BUTTON2S[0] };
   } else if (data1IsInRange8(RL.BUTTON3[0])) {
     params.index = { bottom: data1 - RL.BUTTON3[0] };
+  } else if (data1IsInRange8(RL.BUTTON3S[0])) {
+    params.index = { bottom: data1 - RL.BUTTON3S[0] };
   }
 
-  if (params.index) {
-    params.type = 'button';
-  }
-
-  // ROTATORIES / SHIFT
+  // ENCODERS / SHIFT
   if (data1IsInRange8(RL.KNOB1[0])) {
-    params.type = 'rotatory'
+    params.type = 'encoder'
     params.index = data1 - RL.KNOB1[0];
   } else if (data1IsInRange8(RL.KNOB1S[0])) {
     params.shift = true;
-    params.type = 'rotatory'
+    params.type = 'encoder'
     params.index = data1 - RL.KNOB1S[0];
   }
 
-  // ROTATORIES / BUTTON
+  // ENCODERS / BUTTON
   if (data1IsInRange8(RL.KNOB1P[0])) {
-    params.type = 'button'
     params.index = data1 - RL.KNOB1P[0];
   } else if (data1IsInRange8(RL.KNOB1PS[0])) {
     params.shift = true;
-    params.type = 'button'
     params.index = data1 - RL.KNOB1PS[0];
   }
 
@@ -131,7 +133,7 @@ function actionFor(status, data1, data2) {
 
   var isKnob = typeof params.left === 'number' || typeof params.right === 'number';
 
-  if (isKnob || typeof params.index === 'number' && params.type !== 'button') {
+  if (!(params.type === 'button' || params.type === 'scene')) {
     params.level = data2;
   }
   
