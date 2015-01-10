@@ -29,6 +29,18 @@ function init() {
   RL.TRANSPORT = host.createTransport();
   RL.APPLICATION = host.createApplication();
 
+  RL.USER_ACTIONS_CC = []
+    .concat(RL.BUTTON2S)
+    .concat(RL.BUTTON3S)
+    .concat(RL.KNOB1)
+    .concat(RL.KNOB1S)
+    .concat(RL.KNOB1P)
+    .concat(RL.KNOB1PS)
+    .concat(RL.KNOB2)
+    .concat(RL.KNOB3);
+
+  RL.U_CONTROLS = host.createUserControls(RL.USER_ACTIONS_CC.length);
+
   RL.TRANSPORT.addIsRecordingObserver(function (on) {
     sendMidi(RL.CHANNEL1, RL.RECORD, (RL.IS_RECORDING = on) ? 127 : 0);
   });
@@ -41,8 +53,6 @@ function init() {
     sendMidi(RL.CHANNEL1, RL.RECORDS, (RL.OVERDUB = on) ? 127 : 0);
   });
 
-  var track;
-
   function buttonObserver(index, registry, button, set) {
     return function (on) {
       registry[index] = on;
@@ -51,7 +61,7 @@ function init() {
     };
   }
 
-  for (var j = 0; j < 8; j += 1) {
+  for (var j = 0, track; j < 8; j += 1) {
     track = RL.TRACKS.getTrack(j);
 
     track.getMute().addValueObserver(buttonObserver(j, RL.MUTE, RL.BUTTON1, [127, 0]));
@@ -103,37 +113,58 @@ function onMidi(status, data1, data2) {
   }
 
   println(buttonType + ' ' + noteName + ' ' + toggle + ' ' + dump(action));
-  
+
+  function data1IsUserActionCC() {
+    for (var i = 0, c = RL.USER_ACTIONS_CC.length; i < c; i += 1) {
+      if (data1 === RL.USER_ACTIONS_CC[i]) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  function userActionCC() {
+    var i = typeof action.left === 'number' ? action.left :
+            typeof action.right === 'number' ? action.right : action.index;
+
+    if (typeof i === 'object') {
+      i = typeof i.top === 'number' ? i.top :
+          typeof i.middle === 'number' ? i.middle : i.bottom;
+    }
+
+    RL.U_CONTROLS.getControl(data1IsUserActionCC()).set(data2, 128);
+  }
+
   switch (action.type) {
+    case 'fader':
+      RL.TRACKS.getTrack(action.index).getVolume().set(action.level, 128);
+    break;
+
     case 'button':
-      if (typeof action.index.top === 'number') {
-        RL.TRACKS.getTrack(action.index.top).getMute().set(!toggle);
-        sendMidi(RL.CHANNEL1, data1, toggle ? 127 : 0);
-      }
-
-      var prop = {
-        middle: 'getSolo',
-        bottom: 'getArm'
-      };
-
-      var found = false;
-
-      for (var key in prop) {
-        if (typeof action.index[key] === 'number') {
-          if (toggle) {
-            RL.TRACKS.getTrack(action.index[key])[prop[key]]().toggle();
-          } else {
-            sendMidi(RL.CHANNEL1, data1, RL[prop[key].substr(3).toUpperCase()][action.index[key]] ? 127 : 0);
-          }
-
-          found = true;
-
-          break;
+      if (data1IsUserActionCC() === -1) {
+        if (typeof action.index.top === 'number') {
+          RL.TRACKS.getTrack(action.index.top).getMute().set(!toggle);
+          sendMidi(RL.CHANNEL1, data1, toggle ? 127 : 0);
         }
-      }
 
-      if (!found) {
-        println('DELEGATE');
+        if (typeof action.index.middle === 'number') {
+          if (toggle) {
+            RL.TRACKS.getTrack(action.index.middle).getSolo().toggle();
+          } else {
+            sendMidi(RL.CHANNEL1, data1, RL.SOLO[action.index.middle] ? 127 : 0);
+          }
+        }
+
+        if (typeof action.index.bottom === 'number') {
+          if (toggle) {
+            RL.TRACKS.getTrack(action.index.bottom).getArm().toggle();
+          } else {
+            sendMidi(RL.CHANNEL1, data1, RL.ARM[action.index.bottom] ? 127 : 0);
+          }
+        }
+      } else {
+        userActionCC();
       }
 
       break;
@@ -180,8 +211,8 @@ function onMidi(status, data1, data2) {
     break;
 
     default:
-      if (action) {
-        println('DELEGATE');
+      if (action && (data1IsUserActionCC() > -1)) {
+        userActionCC();
       }
     break;
   }
