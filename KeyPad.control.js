@@ -17,7 +17,7 @@ function init() {
 
   var keys = host.getMidiInPort(0).createNoteInput('Keys', '?0????', '?1????', '?2????'),
       pads = host.getMidiInPort(0).createNoteInput('Pads', '?4????');
-  
+
   keys.setShouldConsumeEvents(false);
   pads.setShouldConsumeEvents(false);
 
@@ -37,7 +37,8 @@ function init() {
     .concat(RL.KNOB1P)
     .concat(RL.KNOB1PS)
     .concat(RL.KNOB2)
-    .concat(RL.KNOB3);
+    .concat(RL.KNOB3)
+    .concat(RL.BUTTONP);
 
   RL.U_CONTROLS = host.createUserControls(RL.USER_ACTIONS_CC.length);
 
@@ -95,7 +96,7 @@ function onMidi(status, data1, data2) {
   })[status & 0xF0] || 'Other';
 
   printMidi(status, data1, data2);
-  
+
   println('CHANNEL: ' + channelId + ' ' + status);
 
   var action = buttonType === 'CC' ? actionFor(status, data1, data2) : false;

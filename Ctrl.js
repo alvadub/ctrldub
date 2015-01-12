@@ -22,9 +22,10 @@ var RL = {
   BUTTON1:  [8, 9, 10, 11, 12, 13, 14, 15],
   BUTTON1S: [16, 17, 18, 19, 20, 21, 22, 23],
   BUTTON2:  [24, 25, 26, 27, 28, 29, 30, 31],
-  BUTTON2S:  [32, 33, 34, 35, 36, 37, 38, 39],
+  BUTTON2S: [32, 33, 34, 35, 36, 37, 38, 39],
   BUTTON3:  [40, 41, 42, 43, 44, 45, 46, 47],
-  BUTTON3S:  [49, 50, 51, 52, 53, 54, 55, 56],
+  BUTTON3S: [49, 50, 51, 52, 53, 54, 55, 56],
+  BUTTONP:  [113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 0],
 
   PLAY: 105,
   PLAYS: 108,
@@ -38,6 +39,8 @@ var RL = {
 
   CHANNEL1: 177,
   CHANNEL2: 178,
+  CHANNEL3: 179,
+  CHANNEL4: 180,
 
   MUTE: [],
   SOLO: [],
@@ -55,8 +58,7 @@ var RL = {
 
 function actionFor(status, data1, data2) {
   var params = {
-    type: 'button',
-    index: -1
+    type: 'button'
   };
 
   // RECORDING
@@ -77,7 +79,7 @@ function actionFor(status, data1, data2) {
   function data1IsInRange8(low) {
     return data1 >= low && data1 <= (low + 7);
   }
-  
+
   // SCENES
   if (data1IsInRange8(RL.BUTTON1S[0])) {
     params.type = 'scene';
@@ -126,16 +128,21 @@ function actionFor(status, data1, data2) {
   } else if (data1IsInRange8(RL.KNOB3[0])) {
     params.type = 'knob'
     params.right = data1 - RL.KNOB3[0];
-  } if (data1IsInRange8(RL.FADER[0])) {
+  } if (data1IsInRange8(RL.FADER[0]) && (status === RL.CHANNEL1)) {
     params.type = 'fader';
     params.index = data1 - RL.FADER[0];
   }
 
+  if (status === RL.CHANNEL3 || status === RL.CHANNEL4) {
+    params.index = data1 ? RL.BUTTONP.indexOf(data1) : 15;
+    params.type = 'pad';
+  }
+
   var isKnob = typeof params.left === 'number' || typeof params.right === 'number';
 
-  if (!(params.type === 'button' || params.type === 'scene')) {
+  if (!(params.type === 'button' || params.type === 'scene' || params.type === 'pad')) {
     params.level = data2;
   }
-  
+
   return params;
 }
