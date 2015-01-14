@@ -19,14 +19,18 @@ var E = { type: 'encoder' },
     M = { on: true },
     N = { off: true };
 
-function $(id, data1, status) {
+function $(id, data1, status, command) {
   var copy = {},
-      args = Array.prototype.slice.call(arguments, 3);
+      args = Array.prototype.slice.call(arguments, 4);
 
   for (var i = 0, v; v = args[i]; i += 1) {
     for (var k in v) {
       copy[k] = v[k];
     }
+  }
+
+  if (typeof command === 'function') {
+    copy.execute = command;
   }
 
   copy.channel = RL.CHANNELS[status];
@@ -35,6 +39,8 @@ function $(id, data1, status) {
 
   return copy;
 }
+
+var _;
 
 var RL = {
   PLAY: 105,
@@ -54,17 +60,23 @@ var RL = {
   IS_RECORDING: false
 };
 
+RL.ACTIONS = {
+  'track.send': function(e) {
+    e.track.getSend(0).set(e.value, 128);
+  }
+};
+
 RL.MAPPINGS = [
   // #1
-  $(0, 57, 0, E), $(0, 65, 0, E, S), $(0, 73, 0, E, B), $(0, 81, 0, E, B, S), // encoder (mixed)
-  $(0, 89, 0, K), $(0, 97, 0, K), // knobs (singles)
-  $(0, 8, 0, B, I), $(0, 16, 0, B, I, S), // mute (inverted-shift)
-  $(0, 24, 0, B), $(0, 32, 0, B, S), // solo (shift)
-  $(0, 40, 0, B), $(0, 49, 0, B, S), // arm (shift)
-  $(0, 0, 0, F), // fader (single)
-  $(0, 44, 5, P, M), $(0, 44, 6, P, N), // pad1 (on-off)
-  $(0, 36, 5, P, M), $(0, 36, 6, P, N), // pad2 (on-off)
-  $(0, 121, 0, P), $(0, 113, 0, P) // pad1, pad2 (cc-mode)
+  $(0, 57, 0, _, E), $(0, 65, 0, _, E, S), $(0, 73, 0, _, E, B), $(0, 81, 0, _, E, B, S), // encoder (mixed)
+  $(0, 89, 0, _, K), $(0, 97, 0, _, K), // knobs (singles)
+  $(0, 8, 0, _, B, I), $(0, 16, 0, _, B, I, S), // mute (inverted-shift)
+  $(0, 24, 0, _, B), $(0, 32, 0, _, B, S), // solo (shift)
+  $(0, 40, 0, _, B), $(0, 49, 0, _, B, S), // arm (shift)
+  $(0, 0, 0, RL.ACTIONS['track.send'], F), // fader (single)
+  $(0, 44, 5, _, P, M), $(0, 44, 6, _, P, N), // pad1 (on-off)
+  $(0, 36, 5, _, P, M), $(0, 36, 6, _, P, N), // pad2 (on-off)
+  $(0, 121, 0, _, P), $(0, 113, 0, _, P) // pad1, pad2 (cc-mode)
 ];
 
 function actionFor(status, data1, data2) {
@@ -101,7 +113,7 @@ function actionFor(status, data1, data2) {
 }
 
 function execute(action) {
-  debug(action);
+  debug(action.execute ? 'EX' : 'CC', action);
 
   switch (action.type) {
     case 'overdub':
@@ -153,7 +165,14 @@ function execute(action) {
         value = [127, 0][+(action.on || action.toggle)];
       }
 
-      RL.U_CONTROLS.getControl(action.offset).set(value, 128);
+      if (action.execute) {
+        action.execute({
+          track: RL.TRACKS.getTrack(action.track),
+          value: value
+        });
+      } else {
+        RL.U_CONTROLS.getControl(action.offset).set(value, 128);
+      }
     break;
   }
 }
@@ -168,6 +187,10 @@ function debug() {
       return 'true';
     }
 
+    if (typeof obj === 'function') {
+      return obj.toString().replace(/[\r\n\t\s]+/g, ' ');
+    }
+
     if (typeof obj !== 'object') {
       return obj;
     }
@@ -175,7 +198,7 @@ function debug() {
     var out = [];
 
     for (var k in obj) {
-      var v = typeof obj[k] === 'object' ? dump(obj[k]) : obj[k];
+      var v = dump(obj[k]);
 
       out.push(obj instanceof Array ? v : (k + ': ' + v));
     }
