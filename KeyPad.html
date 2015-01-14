@@ -188,7 +188,7 @@ var input = document.getElementsByName('input');
 // TYPE t: (v)alue (t)oggle (p)ush
 // UUID i:
 // SHIFTABLE? s:
-var E = { c: 'e', m: [{ t: 'v', s: 1 }, { t: 'p', s: 1 }] };
+var E = { c: 'e', m: [{ r: 'v', s: 1 }, { r: 'p', s: 1 }] };
 var K = { c: 'k' };
 var B = { c: 'b' };
 var F = { c: 'f' };
@@ -221,7 +221,7 @@ var mappings = [
 function refresh() {
   for (var i = 0, el; el = pages[i]; i += 1) {
     if (el.checked) {
-      _.page = el.value;
+      _.page = +el.value;
       break;
     }
   }
@@ -236,15 +236,21 @@ function refresh() {
 
 function set(page, index) {
   cc.innerHTML = '#' + index;
-  console.dir(page, index, mappings[page][index]);
+
+  var data = mappings[page][index];
+
+  data.p = page;
+  data.t = index % 8;
+
+  console.dir(data);
 }
 
 ctrl.addEventListener('click', function(e) {
   if (e.target.tagName === 'INPUT') {
     if (e.target.name === 'input') {
-      set(_.page, _.cc = e.target.value);
+      set(_.page, _.cc = +e.target.value);
     } else {
-      set(_.page = e.target.value, _.cc);
+      set(_.page = +e.target.value, _.cc);
     }
   }
 }, false);
