@@ -1,0 +1,253 @@
+<style>
+html {box-sizing:border-box;}
+*,*:before,*:after {box-sizing:inherit;}
+*{margin:0;padding:0;}
+.cc:before{content:" ";}
+.cc:hover{background:gray;color:silver;}
+.cc input{display:none;}
+.cc input:checked ~ label{background:black;}
+.cc label{position:absolute;top:0;right:0;bottom:0;left:0;}
+.cc{position:relative;}
+.track{border:1px solid silver;border-left:0;width:80px;}
+.track:first-child{border-left:1px solid silver;}
+.track:hover{background:silver;}
+.track:hover *{border-color:white;}
+.row{display:table;}
+.cell{display:table-cell;}
+.grid{margin:100px auto;width:640px;}
+.encoder,.pad{height:80px;}
+.left,.right{width:40px;}
+.mute,.solo,.arm{border-right:1px solid silver;}
+.fader,.mute,.solo,.arm{width:40px;}
+.left,.right,.mute,.solo,.arm{height:40px}
+.left,.right,.fader,.pad,.mute,.solo,.arm{border-top:1px solid silver;}
+.status input{display:none;}
+.status label{color:silver;}
+.status input:checked ~ label{color:gray;}
+.control,.page{font-size:24px;font-weight:bold;}
+.control{float:right;}
+</style>
+
+<div class="grid" id="controller">
+  <div class="row">
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc0" value="0" checked><label for="cc0"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc1" value="1"><label for="cc1"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc2" value="2"><label for="cc2"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc3" value="3"><label for="cc3"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc4" value="4"><label for="cc4"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc5" value="5"><label for="cc5"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc6" value="6"><label for="cc6"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc7" value="7"><label for="cc7"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc8" value="8"><label for="cc8"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc9" value="9"><label for="cc9"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc10" value="10"><label for="cc10"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc11" value="11"><label for="cc11"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc12" value="12"><label for="cc12"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc13" value="13"><label for="cc13"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc14" value="14"><label for="cc14"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc15" value="15"><label for="cc15"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc16" value="16"><label for="cc16"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc17" value="17"><label for="cc17"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc18" value="18"><label for="cc18"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc19" value="19"><label for="cc19"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc20" value="20"><label for="cc20"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc21" value="21"><label for="cc21"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc22" value="22"><label for="cc22"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc23" value="23"><label for="cc23"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc24" value="24"><label for="cc24"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc25" value="25"><label for="cc25"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc26" value="26"><label for="cc26"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc27" value="27"><label for="cc27"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc28" value="28"><label for="cc28"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc29" value="29"><label for="cc29"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc30" value="30"><label for="cc30"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc31" value="31"><label for="cc31"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc32" value="32"><label for="cc32"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc33" value="33"><label for="cc33"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc34" value="34"><label for="cc34"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc35" value="35"><label for="cc35"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc36" value="36"><label for="cc36"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc37" value="37"><label for="cc37"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc38" value="38"><label for="cc38"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc39" value="39"><label for="cc39"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc40" value="40"><label for="cc40"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc41" value="41"><label for="cc41"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc42" value="42"><label for="cc42"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc43" value="43"><label for="cc43"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc44" value="44"><label for="cc44"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc45" value="45"><label for="cc45"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc46" value="46"><label for="cc46"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc47" value="47"><label for="cc47"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc48" value="48"><label for="cc48"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc49" value="49"><label for="cc49"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc50" value="50"><label for="cc50"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc51" value="51"><label for="cc51"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc52" value="52"><label for="cc52"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc53" value="53"><label for="cc53"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc54" value="54"><label for="cc54"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc55" value="55"><label for="cc55"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc56" value="56"><label for="cc56"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc57" value="57"><label for="cc57"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc58" value="58"><label for="cc58"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc59" value="59"><label for="cc59"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc60" value="60"><label for="cc60"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc61" value="61"><label for="cc61"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc62" value="62"><label for="cc62"></label></div>
+    </div>
+    <div class="cell track">
+      <div class="cc encoder"><input type="radio" name="input" id="cc63" value="63"><label for="cc63"></label></div>
+      <div class="row">
+        <div class="cell cc knob left"><input type="radio" name="input" id="cc64" value="64"><label for="cc64"></label></div>
+        <div class="cell cc knob right"><input type="radio" name="input" id="cc65" value="65"><label for="cc65"></label></div>
+      </div>
+      <div class="row">
+        <div class="cell">
+          <div class="cc button mute"><input type="radio" name="input" id="cc66" value="66"><label for="cc66"></label></div>
+          <div class="cc button solo"><input type="radio" name="input" id="cc67" value="67"><label for="cc67"></label></div>
+          <div class="cc button arm"><input type="radio" name="input" id="cc68" value="68"><label for="cc68"></label></div>
+        </div>
+        <div class="cell cc fader"><input type="radio" name="input" id="cc69" value="69"><label for="cc69"></label></div>
+      </div>
+      <div class="cc pad"><input type="radio" name="input" id="cc70" value="70"><label for="cc70"></label></div>
+      <div class="cc pad"><input type="radio" name="input" id="cc71" value="71"><label for="cc71"></label></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="page"><input type="radio" name="page" id="pg1" value="0" checked><label for="pg1">PG1</label></span>
+    <span class="page"><input type="radio" name="page" id="pg2" value="1"><label for="pg2">PG2</label></span>
+    <span class="control" id="cc"></span>
+  </div>
+</div>
+
+<script>
+
+var _ = {};
+
+var cc = document.getElementById('cc');
+var ctrl = document.getElementById('controller');
+var pages = document.getElementsByName('page');
+var input = document.getElementsByName('input');
+
+// CTRL c: (e)ncoder (k)nob (b)utton (f)ader (p)ad
+// MODE m:
+// TYPE t: (v)alue (t)oggle (p)ush
+// UUID i:
+// SHIFTABLE? s:
+var E = { c: 'e', m: [{ t: 'v', i: 'T1E', s: 1 }, { t: 'p', i: 'T1E', s: 1 }] };
+var K = { c: 'k' };
+var B = { c: 'b' };
+var F = { c: 'f' };
+var P = { c: 'p' };
+var N = { c: 'n' };
+
+var mappings = [
+  [
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P,
+    E, K, K, B, B, B, F, P, P
+  ],
+  [
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N,
+    E, N, N, B, B, B, F, N, N
+  ]
+];
+
+function refresh() {
+  for (var i = 0, el; el = pages[i]; i += 1) {
+    if (el.checked) {
+      _.page = el.value;
+      break;
+    }
+  }
+
+  for (var i = 0, el; el = input[i]; i += 1) {
+    if (el.checked) {
+      set(_.page, _.cc = i);
+      break;
+    }
+  }
+}
+
+function set(page, index) {
+  cc.innerHTML = '#' + index;
+  console.dir(page, index, mappings[page][index]);
+}
+
+ctrl.addEventListener('click', function(e) {
+  if (e.target.tagName === 'INPUT') {
+    if (e.target.name === 'input') {
+      set(_.page, _.cc = e.target.value);
+    } else {
+      set(_.page = e.target.value, _.cc);
+    }
+  }
+}, false);
+
+refresh();
+</script>
