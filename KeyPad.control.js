@@ -104,16 +104,14 @@ function onSysex(data) {
 // TODO: move this...
 function defaultMappings() {
   return [
-    // #1
-    '0:57:177::E', '0:65:177::ES', '0:73:177::EB', '0:81:177::EBS'
-    // $('0:57:0::E'), $('0:65:0::ES'), $('0:73:0::EB'), $('0:81:0::EBS'), // encoder (mixed)
-    // $('0:89:0::K'), $('0:97:0::K'), // knobs (singles)
-    // $('0:8:0:track.mute:BI'), $('0:16:0::BIS'), // mute (inverted-shift)
-    // $('0:24:0:track.solo:B'), $('0:32:0::BS'), // solo (shift)
-    // $('0:40:0:track.arm:B'), $('0:49:0::BS'), // arm (shift)
-    // $('0:0:0:track.send:F'), // fader (single)
-    // $('0:44:5::PM'), $('0:44:6::PN'), // pad1 (on-off)
-    // $('0:36:5::PM'), $('0:36:6::PN'), // pad2 (on-off)
-    // $('0:121:0::P'), $('0:113:0::P') // pad3, pad4 (cc-mode)
+    '0:57:177::E', '0:65:177::ES', '0:73:177::EB', '0:81:177::EBS',
+    '0:89:177::K', '0:97:177::K',
+    '0:8:177:track.mute:BI', '0:16:177::BIS',
+    '0:24:177:track.solo:B', '0:32:177::BS',
+    '0:40:177:track.arm:B', '0:49:177::BS',
+    '0:0:177:track.send:F',
+    '0:44:148::PM', '0:44:132::PN',
+    '0:36:148::PM', '0:36:132::PN',
+    '0:121:180::P', '0:113:180::P'
   ];
 }
