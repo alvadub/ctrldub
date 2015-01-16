@@ -26,39 +26,23 @@ var RL = {
   IS_RECORDING: false,
 
   CC_MAPPINGS: [],
-
-  CC_ACTIONS: {
-    track: {
-      send: function(e) {
-        e.track.getSend(0).set(e.value, 128);
-      },
-      mute: function(e) {
-        e.track.getMute().set(e.toggle);
-      },
-      solo: function(e) {
-        e.track.getSolo().toggle();
-      },
-      arm: function(e) {
-        e.track.getArm().toggle();
-      }
-    }
-  },
-
-  CC_PARAMS: {
-    E: { type: 'encoder' },
-    K: { type: 'knob' },
-    B: { type: 'button' },
-    F: { type: 'fader' },
-    P: { type: 'pad' },
-    S: { shift: true },
-    I: { inverted: true },
-    M: { toggle: true },
-    N: { toggle: false }
-  },
-
+  CC_ACTIONS: {},
+  CC_PARAMS: {},
   CC_STATE: {},
 
   DEBUG: true
+};
+
+var PARAMS = {
+  E: { type: 'encoder' },
+  K: { type: 'knob' },
+  B: { type: 'button' },
+  F: { type: 'fader' },
+  P: { type: 'pad' },
+  S: { shift: true },
+  I: { inverted: true },
+  M: { toggle: true },
+  N: { toggle: false }
 };
 
 function actionFor(status, data1, data2) {
@@ -86,8 +70,6 @@ function actionFor(status, data1, data2) {
       for (var k in ref) {
         copy[k] = ref[k];
       }
-
-      copy.offset = i;
 
       return copy;
     }
@@ -142,25 +124,21 @@ function execute(action) {
       action.value = [127, 0][+action.toggle] || action.level || 0;
 
       if (action.command) {
-        var run = pick(RL.CC_ACTIONS, action.command);
+        var run = RL.CC_ACTIONS[action.command];
 
+        action.state = !!RL.CC_STATE[action.offset];
         action.track = RL.TRACKS.getTrack(action.track);
-        action.sendMidi = callback(sendMidi, action.channel, action.index);
 
         run(action);
+
+        if (!action.toggle && action.state) {
+          sendMidi(action.channel, action.index, 127);
+        }
       } else {
         RL.U_CONTROLS.getControl(action.offset).set(action.value, 128);
       }
     break;
   }
-}
-
-function callback(_) {
-  _.args = Array.prototype.slice.call(arguments, 1);
-
-  return function() {
-    return _.apply(null, _.args.concat(Array.prototype.slice.call(arguments)));
-  };
 }
 
 function debug() {
@@ -213,27 +191,13 @@ function debug() {
   println('> ' + out.join(' '));
 }
 
-function pick(obj, key) {
-  var parts = key.split('.');
-
-  while (parts.length) {
-    if (typeof obj === 'undefined') {
-      break;
-    }
-
-    obj = obj[parts.shift()];
-  }
-
-  return obj;
-}
-
-function $(_) {
+function $(_, key) {
   var options = _.split(':'),
       args = options[4].split('');
 
   var copy = {};
 
-  for (var i = 0, v; v = RL.CC_PARAMS[args[i]]; i += 1) {
+  for (var i = 0, v; v = PARAMS[args[i]]; i += 1) {
     for (var k in v) {
       copy[k] = v[k];
     }
@@ -246,6 +210,7 @@ function $(_) {
   copy.channel = +options[2];
   copy.index = +options[1];
   copy.track = +options[0];
+  copy.offset = key;
 
   return copy;
 }

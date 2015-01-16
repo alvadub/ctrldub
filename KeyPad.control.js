@@ -1,6 +1,7 @@
 loadAPI(1);
 
 load('KeyPad.js');
+load('Actions.js');
 load('Mappings.js');
 
 host.defineMidiPorts(1, 1);
@@ -30,8 +31,10 @@ function init() {
   RL.TRANSPORT = host.createTransport();
   RL.APPLICATION = host.createApplication();
 
-  (userMappings() || defaultMappings()).forEach(function(data) {
-    var e = $(data);
+  RL.CC_ACTIONS = userActions() || defaultActions();
+
+  (userMappings() || defaultMappings()).forEach(function(data, i) {
+    var e = $(data, i);
 
     RL.CC_MAPPINGS.push(e);
 
@@ -110,11 +113,34 @@ function valueObserver(e) {
     }
 
     RL.CC_STATE[e.offset] = state;
-    sendMidi(e.channel, e.index, state ? 127 : 0);
+
+    if (!state) {
+      sendMidi(e.channel, e.index, 0);
+    }
   };
 }
 
-// TODO: move this...
+function defaultActions() {
+  return {
+    'track.send': function(e) {
+      e.track.getSend(0).set(e.value, 128);
+    },
+    'track.mute': function(e) {
+      e.track.getMute().set(e.toggle);
+    },
+    'track.solo': function(e) {
+      if (e.toggle) {
+        e.track.getSolo().toggle();
+      }
+    },
+    'track.arm': function(e) {
+      if (e.toggle) {
+        e.track.getArm().toggle();
+      }
+    }
+  };
+}
+
 function defaultMappings() {
   return [
     '0:57:177::E', '0:65:177::ES', '0:73:177::EB', '0:81:177::EBS',
