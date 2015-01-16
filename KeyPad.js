@@ -7,40 +7,7 @@ var ID1 = 'Reloop KeyPad',
     ID3 = 'F0 AD F5 01 11 02 F7',
     ID4 = 'F0 7E ?? 06 02 AD F5 ?? ?? F7';
 
-var GUID = '372057e0-248e-11e4-8c21-0800200c9a66';
-
-var E = { type: 'encoder' },
-    K = { type: 'knob' },
-    B = { type: 'button' },
-    F = { type: 'fader' },
-    P = { type: 'pad' },
-    S = { shift: true },
-    I = { invert: true },
-    M = { on: true },
-    N = { off: true };
-
-function $(id, data1, status, command) {
-  var copy = {},
-      args = Array.prototype.slice.call(arguments, 4);
-
-  for (var i = 0, v; v = args[i]; i += 1) {
-    for (var k in v) {
-      copy[k] = v[k];
-    }
-  }
-
-  if (typeof command === 'function') {
-    copy.execute = command;
-  }
-
-  copy.channel = RL.CHANNELS[status];
-  copy.index = data1;
-  copy.track = id;
-
-  return copy;
-}
-
-var _;
+var GUID = 'c3550b0a-424d-4c24-8ad0-21f03ccabcb4';
 
 var RL = {
   PLAY: 105,
@@ -57,27 +24,32 @@ var RL = {
 
   OVERDUB: false,
   IS_PLAYING: false,
-  IS_RECORDING: false
-};
+  IS_RECORDING: false,
 
-RL.ACTIONS = {
-  'track.send': function(e) {
-    e.track.getSend(0).set(e.value, 128);
-  }
-};
+  CC_MAPPINGS: [],
 
-RL.MAPPINGS = [
-  // #1
-  $(0, 57, 0, _, E), $(0, 65, 0, _, E, S), $(0, 73, 0, _, E, B), $(0, 81, 0, _, E, B, S), // encoder (mixed)
-  $(0, 89, 0, _, K), $(0, 97, 0, _, K), // knobs (singles)
-  $(0, 8, 0, _, B, I), $(0, 16, 0, _, B, I, S), // mute (inverted-shift)
-  $(0, 24, 0, _, B), $(0, 32, 0, _, B, S), // solo (shift)
-  $(0, 40, 0, _, B), $(0, 49, 0, _, B, S), // arm (shift)
-  $(0, 0, 0, RL.ACTIONS['track.send'], F), // fader (single)
-  $(0, 44, 5, _, P, M), $(0, 44, 6, _, P, N), // pad1 (on-off)
-  $(0, 36, 5, _, P, M), $(0, 36, 6, _, P, N), // pad2 (on-off)
-  $(0, 121, 0, _, P), $(0, 113, 0, _, P) // pad1, pad2 (cc-mode)
-];
+  CC_ACTIONS: {
+    track: {
+      send: function(e) {
+        e.track.getSend(0).set(e.value, 128);
+      }
+    }
+  },
+
+  CC_PARAMS: {
+    E: { type: 'encoder' },
+    K: { type: 'knob' },
+    B: { type: 'button' },
+    F: { type: 'fader' },
+    P: { type: 'pad' },
+    S: { shift: true },
+    I: { invert: true },
+    M: { on: true },
+    N: { off: true }
+  },
+
+  DEBUG: false
+};
 
 function actionFor(status, data1, data2) {
   // RECORDING
@@ -95,8 +67,8 @@ function actionFor(status, data1, data2) {
     return { type: 'overdub' };
   }
 
-  for (var i = 0, c = RL.MAPPINGS.length; i < c; i += 1) {
-    var ref = RL.MAPPINGS[i];
+  for (var i = 0, c = RL.CC_MAPPINGS.length; i < c; i += 1) {
+    var ref = RL.CC_MAPPINGS[i];
 
     if (ref.channel === status && ref.index === data1) {
       var copy = {};
@@ -178,6 +150,14 @@ function execute(action) {
 }
 
 function debug() {
+  if (arguments.length === 1) {
+    return (RL.DEBUG = !!arguments[0]);
+  }
+
+  if (!RL.DEBUG) {
+    return;
+  }
+
   function dump(obj) {
     if (obj === true) {
       return 'true';
@@ -217,4 +197,51 @@ function debug() {
   }
 
   println('> ' + out.join(' '));
+}
+
+function pick(obj, key) {
+  var parts = key.split('.');
+
+  while (parts.length) {
+    if (typeof obj === 'undefined') {
+      break;
+    }
+
+    obj = obj[parts.shift()];
+  }
+
+  return obj;
+}
+
+function $(_) {
+  var options = _.split(':'),
+      id = +options[0],
+      data1 = +options[1],
+      status = +options[2],
+      command = options[3],
+      args = options[4].split('');
+
+  var copy = {};
+
+  for (var i = 0, v; v = RL.CC_PARAMS[args[i]]; i += 1) {
+    for (var k in v) {
+      copy[k] = v[k];
+    }
+  }
+
+  if (command) {
+    var callback = pick(RL.CC_ACTIONS, command);
+
+    if (typeof callback !== 'function') {
+      debug('UNKNOWN EX', command);
+    } else {
+      copy.execute = callback;
+    }
+  }
+
+  copy.channel = RL.CHANNELS[status];
+  copy.index = data1;
+  copy.track = id;
+
+  return copy;
 }
