@@ -74,7 +74,7 @@ function onMidi(status, data1, data2) {
       action.level = data2;
     }
 
-    if (action.invert) {
+    /*if (action.invert) {
       if (action.on) {
         delete action.on;
         action.off = true;
@@ -92,7 +92,7 @@ function onMidi(status, data1, data2) {
       }
 
       delete action.invert;
-    }
+    }*/
 
     execute(action);
   }
@@ -109,9 +109,9 @@ function defaultMappings() {
     // #1
     $('0:57:0::E'), $('0:65:0::ES'), $('0:73:0::EB'), $('0:81:0::EBS'), // encoder (mixed)
     $('0:89:0::K'), $('0:97:0::K'), // knobs (singles)
-    $('0:8:0::BI'), $('0:16:0::BIS'), // mute (inverted-shift)
-    $('0:24:0::B'), $('0:32:0::BS'), // solo (shift)
-    $('0:40:0::B'), $('0:49:0::BS'), // arm (shift)
+    $('0:8:0:track.mute:BI'), $('0:16:0::BIS'), // mute (inverted-shift)
+    $('0:24:0:track.solo:B'), $('0:32:0::BS'), // solo (shift)
+    $('0:40:0:track.arm:B'), $('0:49:0::BS'), // arm (shift)
     $('0:0:0:track.send:F'), // fader (single)
     $('0:44:5::PM'), $('0:44:6::PN'), // pad1 (on-off)
     $('0:36:5::PM'), $('0:36:6::PN'), // pad2 (on-off)

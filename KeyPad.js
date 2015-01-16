@@ -7,7 +7,7 @@ var ID1 = 'Reloop KeyPad',
     ID3 = 'F0 AD F5 01 11 02 F7',
     ID4 = 'F0 7E ?? 06 02 AD F5 ?? ?? F7';
 
-var GUID = 'c3550b0a-424d-4c24-8ad0-21f03ccabcb4';
+var GUID = '372057e0-248e-11e4-8c21-0800200c9a66';
 
 var RL = {
   PLAY: 105,
@@ -32,7 +32,12 @@ var RL = {
     track: {
       send: function(e) {
         e.track.getSend(0).set(e.value, 128);
-      }
+      },
+      mute: function(e) {
+        e.track.getMute().set(!!e.value);
+      },
+      solo: function(e) {},
+      arm: function(e) {}
     }
   },
 
@@ -142,6 +147,8 @@ function execute(action) {
           track: RL.TRACKS.getTrack(action.track),
           value: value
         });
+
+        sendMidi(action.channel, action.index, value);
       } else {
         RL.U_CONTROLS.getControl(action.offset).set(value, 128);
       }
