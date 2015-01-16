@@ -29,7 +29,19 @@ function init() {
   RL.TRACKS = host.createTrackBank(8, 2, 8);
   RL.TRANSPORT = host.createTransport();
   RL.APPLICATION = host.createApplication();
-  RL.CC_MAPPINGS = (userMappings() || defaultMappings()).map($);
+
+  (userMappings() || defaultMappings()).forEach(function(data) {
+    var e = $(data);
+
+    RL.CC_MAPPINGS.push(e);
+
+    switch (e.command) {
+      case 'track.mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
+      case 'track.solo': RL.TRACKS.getTrack(e.track).getSolo().addValueObserver(valueObserver(e)); break;
+      case 'track.arm': RL.TRACKS.getTrack(e.track).getArm().addValueObserver(valueObserver(e)); break;
+    }
+  });
+
   RL.U_CONTROLS = host.createUserControls(RL.CC_MAPPINGS.length);
 
   RL.TRANSPORT.addIsRecordingObserver(function (on) {
@@ -64,33 +76,23 @@ function onMidi(status, data1, data2) {
   if (!action) {
     debug('MIDI', status, data1, data2);
   } else {
-    if (action.type === 'pad' && (action.off || action.on)) {
-      action.level = action.off ? 0 : data2;
+    if (action.inverted) {
+      if (typeof action.toggle === 'boolean') {
+        action.toggle = !action.toggle;
+      }
+
+      data2 = 127 - data2;
+
+      delete action.inverted;
+    }
+
+    if (action.type === 'pad' && action.toggle) {
+      action.level = action.toggle ? 0 : data2;
     } else if (action.type === 'button') {
       action.toggle = data2 > 65;
     } else {
       action.level = data2;
     }
-
-    /*if (action.invert) {
-      if (action.on) {
-        delete action.on;
-        action.off = true;
-      } else if (typeof action.off === 'boolean') {
-        action.on = true;
-        delete action.off;
-      }
-
-      if (typeof action.toggle === 'boolean') {
-        action.toggle = !action.toggle;
-      }
-
-      if (typeof action.level === 'number') {
-        action.level = 127 - action.level;
-      }
-
-      delete action.invert;
-    }*/
 
     execute(action);
   }
@@ -99,6 +101,17 @@ function onMidi(status, data1, data2) {
 function onSysex(data) {
   println('SYSEX');
   printSysex(data);
+}
+
+function valueObserver(e) {
+  return function (state) {
+    if (e.inverted) {
+      state = !state;
+    }
+
+    RL.CC_STATE[e.offset] = state;
+    sendMidi(e.channel, e.index, state ? 127 : 0);
+  };
 }
 
 // TODO: move this...

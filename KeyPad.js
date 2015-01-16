@@ -33,10 +33,14 @@ var RL = {
         e.track.getSend(0).set(e.value, 128);
       },
       mute: function(e) {
-        e.track.getMute().set(!!e.value);
+        e.track.getMute().set(e.toggle);
       },
-      solo: function(e) {},
-      arm: function(e) {}
+      solo: function(e) {
+        e.track.getSolo().toggle();
+      },
+      arm: function(e) {
+        e.track.getArm().toggle();
+      }
     }
   },
 
@@ -47,12 +51,14 @@ var RL = {
     F: { type: 'fader' },
     P: { type: 'pad' },
     S: { shift: true },
-    I: { invert: true },
-    M: { on: true },
-    N: { off: true }
+    I: { inverted: true },
+    M: { toggle: true },
+    N: { toggle: false }
   },
 
-  DEBUG: false
+  CC_STATE: {},
+
+  DEBUG: true
 };
 
 function actionFor(status, data1, data2) {
@@ -133,26 +139,28 @@ function execute(action) {
     break;
 
     default:
-      var value;
+      action.value = [127, 0][+action.toggle] || action.level || 0;
 
-      if (typeof action.level === 'number') {
-        value = action.level;
+      if (action.command) {
+        var run = pick(RL.CC_ACTIONS, action.command);
+
+        action.track = RL.TRACKS.getTrack(action.track);
+        action.sendMidi = callback(sendMidi, action.channel, action.index);
+
+        run(action);
       } else {
-        value = [127, 0][+(action.on || action.toggle)];
-      }
-
-      if (action.execute) {
-        action.execute({
-          value: value,
-          track: RL.TRACKS.getTrack(action.track)
-        });
-
-        sendMidi(action.channel, action.index, value);
-      } else {
-        RL.U_CONTROLS.getControl(action.offset).set(value, 128);
+        RL.U_CONTROLS.getControl(action.offset).set(action.value, 128);
       }
     break;
   }
+}
+
+function callback(_) {
+  _.args = Array.prototype.slice.call(arguments, 1);
+
+  return function() {
+    return _.apply(null, _.args.concat(Array.prototype.slice.call(arguments)));
+  };
 }
 
 function debug() {
@@ -170,7 +178,7 @@ function debug() {
     }
 
     if (obj === false) {
-      return 'true';
+      return 'false';
     }
 
     if (typeof obj === 'function') {
@@ -232,13 +240,7 @@ function $(_) {
   }
 
   if (options[3]) {
-    var callback = pick(RL.CC_ACTIONS, options[3]);
-
-    if (typeof callback !== 'function') {
-      debug('UNKNOWN EX', options[3]);
-    } else {
-      copy.execute = callback;
-    }
+    copy.command = options[3];
   }
 
   copy.channel = +options[2];
