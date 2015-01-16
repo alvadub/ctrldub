@@ -19,8 +19,7 @@ var RL = {
 
   OCTAVE_DOWNS: 111,
   OCTAVE_UPS: 112,
-
-  CHANNELS: [176, 177, 178, 179, 180, 144, 128],
+  CHANNEL1: 177,
 
   OVERDUB: false,
   IS_PLAYING: false,
@@ -144,8 +143,8 @@ function execute(action) {
 
       if (action.execute) {
         action.execute({
-          track: RL.TRACKS.getTrack(action.track),
-          value: value
+          value: value,
+          track: RL.TRACKS.getTrack(action.track)
         });
 
         sendMidi(action.channel, action.index, value);
@@ -222,10 +221,6 @@ function pick(obj, key) {
 
 function $(_) {
   var options = _.split(':'),
-      id = +options[0],
-      data1 = +options[1],
-      status = +options[2],
-      command = options[3],
       args = options[4].split('');
 
   var copy = {};
@@ -236,19 +231,19 @@ function $(_) {
     }
   }
 
-  if (command) {
-    var callback = pick(RL.CC_ACTIONS, command);
+  if (options[3]) {
+    var callback = pick(RL.CC_ACTIONS, options[3]);
 
     if (typeof callback !== 'function') {
-      debug('UNKNOWN EX', command);
+      debug('UNKNOWN EX', options[3]);
     } else {
       copy.execute = callback;
     }
   }
 
-  copy.channel = RL.CHANNELS[status];
-  copy.index = data1;
-  copy.track = id;
+  copy.channel = +options[2];
+  copy.index = +options[1];
+  copy.track = +options[0];
 
   return copy;
 }
