@@ -100,9 +100,7 @@ function execute(action) {
     break;
 
     case 'play-all':
-      for (var i = 0; i < 8; i += 1) {
-        RL.TRACKS.getClipLauncherScenes().launch(i);
-      }
+      println('TODO');
     break;
 
     case 'stop':
@@ -119,7 +117,7 @@ function execute(action) {
     break;
 
     case 'stop-all':
-      RL.TRACKS.getClipLauncherScenes().stop();
+      println('TODO');
     break;
 
     default:
