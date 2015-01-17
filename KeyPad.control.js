@@ -114,9 +114,7 @@ function valueObserver(e) {
 
     RL.CC_STATE[e.offset] = state;
 
-    if (!state) {
-      sendMidi(e.channel, e.index, 0);
-    }
+    sendMidi(e.channel, e.index, state ? 127 : 0);
   };
 }
 
