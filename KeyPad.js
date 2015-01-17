@@ -204,7 +204,14 @@ function $(_, key) {
   }
 
   if (options[3]) {
+    var values = (options[5] || '').split(',');
+
+    for (var i = 0, v; (v = values[i] || '').length; i += 1) {
+      values[i] = /\d+/.test(values[i]) ? +values[i] : values[i];
+    }
+
     copy.command = options[3];
+    copy.params = values;
   }
 
   copy.channel = +options[2];
