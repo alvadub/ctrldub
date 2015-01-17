@@ -47,18 +47,20 @@ var PARAMS = {
 
 function actionFor(status, data1, data2) {
   // RECORDING
+  var on = data2 > 65;
+
   if (data1 === RL.PLAY) {
-    return { type: 'play' };
+    return { type: 'play', toggle: on };
   } if (data1 === RL.PLAYS) {
-    return { type: 'play-all' };
+    return { type: 'play-all', toggle: on };
   } else if (data1 === RL.STOP) {
-    return { type: 'stop' };
+    return { type: 'stop', toggle: on };
   } else if (data1 === RL.STOPS) {
-    return { type: 'stop-all' };
+    return { type: 'stop-all', toggle: on };
   } else if (data1 === RL.RECORD) {
-    return { type: 'record' };
+    return { type: 'record', toggle: on };
   } else if (data1 === RL.RECORDS) {
-    return { type: 'overdub' };
+    return { type: 'overdub', toggle: on };
   }
 
   for (var i = 0, c = RL.CC_MAPPINGS.length; i < c; i += 1) {
