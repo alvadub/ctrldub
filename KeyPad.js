@@ -127,7 +127,6 @@ function execute(action) {
         var run = RL.CC_ACTIONS[action.command];
 
         action.state = !!RL.CC_STATE[action.offset];
-        action.track = RL.TRACKS.getTrack(action.track);
 
         run(action);
 
@@ -193,7 +192,7 @@ function debug() {
 
 function $(_, key) {
   var options = _.split(':'),
-      args = options[4].split('');
+      args = options[3].split('');
 
   var copy = {};
 
@@ -203,14 +202,14 @@ function $(_, key) {
     }
   }
 
-  if (options[3]) {
+  if (options[4]) {
     var values = (options[5] || '').split(',');
 
     for (var i = 0, v; (v = values[i] || '').length; i += 1) {
       values[i] = /\d+/.test(values[i]) ? +values[i] : values[i];
     }
 
-    copy.command = options[3];
+    copy.command = options[4];
     copy.params = values;
   }
 

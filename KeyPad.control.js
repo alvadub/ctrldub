@@ -123,34 +123,37 @@ function valueObserver(e) {
 function defaultActions() {
   return {
     'track.send': function(e) {
-      e.track.getSend(e.params[0]).set(e.value, 128);
+      RL.TRACKS.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
     },
     'track.mute': function(e) {
-      e.track.getMute().set(e.toggle);
+      RL.TRACKS.getTrack(e.track).getMute().set(e.toggle);
     },
     'track.solo': function(e) {
       if (e.toggle) {
-        e.track.getSolo().toggle();
+        RL.TRACKS.getTrack(e.track).getSolo().toggle();
       }
     },
     'track.arm': function(e) {
       if (e.toggle) {
-        e.track.getArm().toggle();
+        RL.TRACKS.getTrack(e.track).getArm().toggle();
       }
+    },
+    'track.vol': function(e) {
+      RL.TRACKS.getTrack(e.track).getVolume().set(e.level, 128);
     }
   };
 }
 
 function defaultMappings() {
   return [
-    '0:57:177::E', '0:65:177::ES', '0:73:177::EB', '0:81:177::EBS',
-    '0:89:177:track.send:K:0', '0:97:177:track.send:K:1',
-    '0:8:177:track.mute:BI', '0:16:177::BIS',
-    '0:24:177:track.solo:B', '0:32:177::BS',
-    '0:40:177:track.arm:B', '0:49:177::BS',
-    '0:0:177::F',
-    '0:44:148::PM', '0:44:132::PN',
-    '0:36:148::PM', '0:36:132::PN',
-    '0:121:180::P', '0:113:180::P'
+    '0:57:177:E', '0:65:177:ES', '0:73:177:EB', '0:81:177:EBS',
+    '0:89:177:K:track.send:0', '0:97:177:K:track.send:1',
+    '0:8:177:BI:track.mute', '0:16:177:BIS',
+    '0:24:177:B:track.solo', '0:32:177:BS',
+    '0:40:177:B:track.arm', '0:49:177:BS',
+    '0:0:177:F:track.vol',
+    '0:44:148:PM', '0:44:132:PN',
+    '0:36:148:PM', '0:36:132:PN',
+    '0:121:180:P', '0:113:180:P'
   ];
 }
