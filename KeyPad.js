@@ -7,7 +7,7 @@ var ID1 = 'Reloop KeyPad',
     ID3 = 'F0 AD F5 01 11 02 F7',
     ID4 = 'F0 7E ?? 06 02 AD F5 ?? ?? F7';
 
-var GUID = '372057e0-248e-11e4-8c21-0800200c9a66';
+var GUID = 'BD3405A8-9C77-449F-BA6D-2E91D9873878';
 
 var RL = {
   PLAY: 105,
@@ -28,9 +28,7 @@ var RL = {
   CC_MAPPINGS: [],
   CC_ACTIONS: {},
   CC_PARAMS: {},
-  CC_STATE: {},
-
-  DEBUG: false
+  CC_STATE: {}
 };
 
 var PARAMS = {
@@ -123,13 +121,13 @@ function execute(action) {
 
     default:
       action.value = [127, 0][+action.toggle] || action.level || 0;
+      action.state = !!RL.CC_STATE[action.offset];
 
       if (action.command) {
-        var run = RL.CC_ACTIONS[action.command];
-
-        action.state = !!RL.CC_STATE[action.offset];
-
-        run(action);
+        RL.CC_ACTIONS[action.command].call({
+          transport: RL.TRANSPORT,
+          trackBank: RL.TRACKS
+        }, action);
 
         if (!action.toggle && action.state) {
           sendMidi(action.channel, action.index, 127);
@@ -139,85 +137,4 @@ function execute(action) {
       }
     break;
   }
-}
-
-function debug() {
-  if (arguments.length === 1) {
-    return (RL.DEBUG = !!arguments[0]);
-  }
-
-  if (!RL.DEBUG) {
-    return;
-  }
-
-  function dump(obj) {
-    if (obj === true) {
-      return 'true';
-    }
-
-    if (obj === false) {
-      return 'false';
-    }
-
-    if (typeof obj === 'function') {
-      return obj.toString().replace(/[\r\n\t\s]+/g, ' ');
-    }
-
-    if (typeof obj !== 'object') {
-      return obj;
-    }
-
-    var out = [];
-
-    for (var k in obj) {
-      var v = dump(obj[k]);
-
-      out.push(obj instanceof Array ? v : (k + ': ' + v));
-    }
-
-    if (obj instanceof Array) {
-      return '[ ' + out.join(', ') + ' ]';
-    }
-
-    return '{ ' + out.join(', ') + ' }';
-  }
-
-  var out = [];
-
-  for (var i = 0, a; typeof (a = arguments[i]) !== 'undefined'; i += 1) {
-    out.push(dump(a));
-  }
-
-  println('> ' + out.join(' '));
-}
-
-function $(_, key) {
-  var options = _.split(':'),
-      args = options[3].split('');
-
-  var copy = {};
-
-  for (var i = 0, v; v = PARAMS[args[i]]; i += 1) {
-    for (var k in v) {
-      copy[k] = v[k];
-    }
-  }
-
-  if (options[4]) {
-    var values = (options[5] || '').split(',');
-
-    for (var i = 0, v; (v = values[i] || '').length; i += 1) {
-      values[i] = /\d+/.test(values[i]) ? +values[i] : values[i];
-    }
-
-    copy.command = options[4];
-    copy.params = values;
-  }
-
-  copy.channel = +options[2];
-  copy.index = +options[1];
-  copy.track = +options[0];
-  copy.offset = key;
-
-  return copy;
 }

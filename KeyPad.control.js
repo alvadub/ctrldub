@@ -1,5 +1,8 @@
+DEBUG = 0;
+
 loadAPI(1);
 
+load('Utils.js');
 load('KeyPad.js');
 load('Actions.js');
 load('Mappings.js');
@@ -15,21 +18,18 @@ host.defineSysexIdentityReply(ID4);
 function init() {
   sendSysex(ID3);
 
-  var cTrack = host.createCursorTrack(3, 0);
-
   var keys = host.getMidiInPort(0).createNoteInput('Keys', '?0????', '?1????', '?2????'),
       pads = host.getMidiInPort(0).createNoteInput('Pads', '?4????');
 
   keys.setShouldConsumeEvents(false);
   pads.setShouldConsumeEvents(false);
 
+  host.getMidiInPort(0).setMidiCallback(onMidi);
+  host.getMidiInPort(0).setSysexCallback(onSysex);
   host.getMidiOutPort(0).setShouldSendMidiBeatClock(true);
 
-  RL.CTRACK = cTrack;
-  RL.CDEVICE = cTrack.getPrimaryDevice();
-  RL.TRACKS = host.createTrackBank(8, 2, 8);
   RL.TRANSPORT = host.createTransport();
-  RL.APPLICATION = host.createApplication();
+  RL.TRACKS = host.createTrackBank(8, 2, 8);
 
   RL.CC_ACTIONS = userActions() || defaultActions();
 
@@ -68,9 +68,6 @@ function init() {
 
     sendMidi(RL.CHANNEL1, RL.RECORDS, (RL.OVERDUB = on) ? 127 : 0);
   });
-
-  host.getMidiInPort(0).setMidiCallback(onMidi);
-  host.getMidiInPort(0).setSysexCallback(onSysex);
 
   println('CONNECTED');
 }
@@ -127,23 +124,23 @@ function valueObserver(e) {
 function defaultActions() {
   return {
     'track.send': function(e) {
-      RL.TRACKS.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
+      this.trackBank.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
     },
     'track.mute': function(e) {
-      RL.TRACKS.getTrack(e.track).getMute().set(e.toggle);
+      this.trackBank.getTrack(e.track).getMute().set(e.toggle);
     },
     'track.solo': function(e) {
       if (e.toggle) {
-        RL.TRACKS.getTrack(e.track).getSolo().toggle();
+        this.trackBank.getTrack(e.track).getSolo().toggle();
       }
     },
     'track.arm': function(e) {
       if (e.toggle) {
-        RL.TRACKS.getTrack(e.track).getArm().toggle();
+        this.trackBank.getTrack(e.track).getArm().toggle();
       }
     },
     'track.vol': function(e) {
-      RL.TRACKS.getTrack(e.track).getVolume().set(e.level, 128);
+      this.trackBank.getTrack(e.track).getVolume().set(e.level, 128);
     }
   };
 }
