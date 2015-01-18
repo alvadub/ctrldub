@@ -82,9 +82,12 @@ function debug() {
 function notify(action) {
   switch (action.type) {
     case 'encoder':
+      host.showPopupNotification(action.type.toUpperCase() + ' ' + (action.level || 'OFF'));
+    break;
+
     case 'fader':
     case 'knob':
-      host.showPopupNotification(action.type.toUpperCase() + ' ' + action.level);
+      host.showPopupNotification(action.type.toUpperCase() + ' ' + (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF'));
     break;
 
     case 'pad':
