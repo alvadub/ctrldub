@@ -63,18 +63,15 @@ function actionFor(status, data1, data2) {
     return { type: 'overdub', toggle: on };
   }
 
-  for (var i = 0, c = RL.CC_MAPPINGS.length; i < c; i += 1) {
-    var ref = RL.CC_MAPPINGS[i];
+  if (RL.CC_MAPPINGS[status] && RL.CC_MAPPINGS[status][data1]) {
+    var ref = RL.CC_MAPPINGS[status][data1],
+        copy = {};
 
-    if (ref.channel === status && ref.index === data1) {
-      var copy = {};
-
-      for (var k in ref) {
-        copy[k] = ref[k];
-      }
-
-      return copy;
+    for (var k in ref) {
+      copy[k] = ref[k];
     }
+
+    return copy;
   }
 }
 

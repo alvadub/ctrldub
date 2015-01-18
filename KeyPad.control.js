@@ -33,10 +33,16 @@ function init() {
 
   RL.CC_ACTIONS = userActions() || defaultActions();
 
-  (userMappings() || defaultMappings()).forEach(function(data, i) {
+  var fixed_controls = userMappings() || defaultMappings();
+
+  fixed_controls.forEach(function(data, i) {
     var e = $(data, i);
 
-    RL.CC_MAPPINGS.push(e);
+    if (!RL.CC_MAPPINGS[e.channel]) {
+      RL.CC_MAPPINGS[e.channel] = {};
+    }
+
+    RL.CC_MAPPINGS[e.channel][e.index] = e;
 
     switch (e.command) {
       case 'track.mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
@@ -45,7 +51,7 @@ function init() {
     }
   });
 
-  RL.U_CONTROLS = host.createUserControls(RL.CC_MAPPINGS.length);
+  RL.U_CONTROLS = host.createUserControls(fixed_controls.length);
 
   RL.TRANSPORT.addIsRecordingObserver(function (on) {
     sendMidi(RL.CHANNEL1, RL.RECORD, (RL.IS_RECORDING = on) ? 127 : 0);
