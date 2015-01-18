@@ -48,7 +48,7 @@ function actionFor(status, data1, data2) {
   var on = data2 > 65;
 
   if (data1 === RL.PLAY) {
-    return { type: 'play', toggle: on };
+    return { type: 'play', toggle: on, state: RL.IS_PLAYING };
   } if (data1 === RL.PLAYS) {
     return { type: 'play-all', toggle: on };
   } else if (data1 === RL.STOP) {
@@ -56,9 +56,9 @@ function actionFor(status, data1, data2) {
   } else if (data1 === RL.STOPS) {
     return { type: 'stop-all', toggle: on };
   } else if (data1 === RL.RECORD) {
-    return { type: 'record', toggle: on };
+    return { type: 'record', toggle: on, state: RL.IS_RECORDING };
   } else if (data1 === RL.RECORDS) {
-    return { type: 'overdub', toggle: on };
+    return { type: 'overdub', toggle: on, state: RL.OVERDUB };
   }
 
   if (RL.CC_MAPPINGS[status] && RL.CC_MAPPINGS[status][data1]) {

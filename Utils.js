@@ -84,7 +84,59 @@ function notify(action) {
     case 'encoder':
     case 'fader':
     case 'knob':
-      host.showPopupNotification(action.level);
+      host.showPopupNotification(action.type.toUpperCase() + ' ' + action.level);
+    break;
+
+    case 'pad':
+      if (action.toggle) {
+        host.showPopupNotification('PAD ' + action.level);
+      }
+
+      if (typeof action.toggle === 'undefined') {
+        if (action.level === 127) {
+          host.showPopupNotification('ON');
+        } else {
+          host.showPopupNotification('OFF');
+        }
+      }
+    break;
+
+    case 'play':
+      if (action.toggle) {
+        host.showPopupNotification(!action.state ? 'PLAY' : 'PAUSE');
+      }
+    break;
+
+    case 'record':
+    case 'overdub':
+      if (action.toggle) {
+        host.showPopupNotification(action.type.toUpperCase() + ' ' + (!action.state ? 'ON' : 'OFF'));
+      }
+    break;
+
+    default:
+      switch (action.command) {
+        case 'track.mute':
+          if (action.toggle) {
+            host.showPopupNotification('MUTE');
+          } else {
+            host.showPopupNotification('UNMUTE');
+          }
+        break;
+
+        case 'track.solo':
+        case 'track.arm':
+          if (action.toggle) {
+            host.showPopupNotification(action.command.split('.')[1].toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF'));
+          }
+        break;
+
+        default:
+          if (action.toggle) {
+            host.showPopupNotification(action.type.replace(/-/g, ' ').toUpperCase());
+          }
+        break;
+      }
     break;
   }
 }
