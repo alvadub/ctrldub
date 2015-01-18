@@ -137,4 +137,6 @@ function execute(action) {
       }
     break;
   }
+
+  notify(action);
 }

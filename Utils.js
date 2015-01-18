@@ -78,3 +78,13 @@ function debug() {
 
   println('> ' + out.join(' '));
 }
+
+function notify(action) {
+  switch (action.type) {
+    case 'encoder':
+    case 'fader':
+    case 'knob':
+      host.showPopupNotification(action.level);
+    break;
+  }
+}

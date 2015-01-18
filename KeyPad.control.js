@@ -92,9 +92,7 @@ function onMidi(status, data1, data2) {
       delete action.inverted;
     }
 
-    if (action.type === 'pad' && action.toggle) {
-      action.level = action.toggle ? 0 : data2;
-    } else if (action.type === 'button') {
+    if (action.type === 'button') {
       action.toggle = data2 > 65;
     } else {
       action.level = data2;
