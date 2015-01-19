@@ -61,8 +61,8 @@ function actionFor(status, data1, data2) {
     return { type: 'overdub', toggle: on, state: RL.OVERDUB };
   }
 
-  if (RL.CC_MAPPINGS[status] && RL.CC_MAPPINGS[status][data1]) {
-    var ref = RL.CC_MAPPINGS[status][data1],
+  if (RL.CC_MAPPINGS[status + '#' + data1]) {
+    var ref = RL.CC_MAPPINGS[status + '#' + data1],
         copy = {};
 
     for (var k in ref) {

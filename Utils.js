@@ -21,10 +21,10 @@ function $(_, key) {
     copy.params = values;
   }
 
-  copy.channel = +options[2];
-  copy.index = +options[1];
-  copy.track = +options[0];
   copy.offset = key;
+  copy.track = +options[0];
+  copy.channel = +options[1];
+  copy.index = +options[2];
 
   return copy;
 }
@@ -82,17 +82,17 @@ function debug() {
 function notify(action) {
   switch (action.type) {
     case 'encoder':
-      host.showPopupNotification(action.type.toUpperCase() + ' ' + (action.level || 'OFF'));
+      host.showPopupNotification(action.level);
     break;
 
     case 'fader':
     case 'knob':
-      host.showPopupNotification(action.type.toUpperCase() + ' ' + (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF'));
+      host.showPopupNotification(action.level ? Math.round(action.level / 1.27) + '%' : 'OFF');
     break;
 
     case 'pad':
       if (action.toggle) {
-        host.showPopupNotification('PAD ' + action.level);
+        host.showPopupNotification(action.level);
       }
 
       if (typeof action.toggle === 'undefined') {
@@ -119,7 +119,7 @@ function notify(action) {
 
     default:
       switch (action.command) {
-        case 'track.mute':
+        case 'mute':
           if (action.toggle) {
             host.showPopupNotification('MUTE');
           } else {
@@ -127,10 +127,10 @@ function notify(action) {
           }
         break;
 
-        case 'track.solo':
-        case 'track.arm':
+        case 'solo':
+        case 'arm':
           if (action.toggle) {
-            host.showPopupNotification(action.command.split('.')[1].toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF'));
+            host.showPopupNotification(action.command.toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF'));
           }
         break;
 

@@ -38,16 +38,12 @@ function init() {
   fixed_controls.forEach(function(data, i) {
     var e = $(data, i);
 
-    if (!RL.CC_MAPPINGS[e.channel]) {
-      RL.CC_MAPPINGS[e.channel] = {};
-    }
-
-    RL.CC_MAPPINGS[e.channel][e.index] = e;
+    RL.CC_MAPPINGS[e.channel + '#' + e.index] = e;
 
     switch (e.command) {
-      case 'track.mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
-      case 'track.solo': RL.TRACKS.getTrack(e.track).getSolo().addValueObserver(valueObserver(e)); break;
-      case 'track.arm': RL.TRACKS.getTrack(e.track).getArm().addValueObserver(valueObserver(e)); break;
+      case 'mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
+      case 'solo': RL.TRACKS.getTrack(e.track).getSolo().addValueObserver(valueObserver(e)); break;
+      case 'arm': RL.TRACKS.getTrack(e.track).getArm().addValueObserver(valueObserver(e)); break;
     }
   });
 
@@ -121,40 +117,37 @@ function valueObserver(e) {
 
 function defaultActions() {
   return {
-    'track.send': function(e) {
-      this.trackBank.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
-    },
-    'track.mute': function(e) {
+    mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
     },
-    'track.solo': function(e) {
+    solo: function(e) {
       if (e.toggle) {
         this.trackBank.getTrack(e.track).getSolo().toggle();
       }
     },
-    'track.arm': function(e) {
+    arm: function(e) {
       if (e.toggle) {
         this.trackBank.getTrack(e.track).getArm().toggle();
       }
     },
-    'track.vol': function(e) {
-      this.trackBank.getTrack(e.track).getVolume().set(e.level, 128);
+    vol: function(e) {
+      this.trackBank.getTrack(e.track).getVolume().set(e.value, 128);
     }
   };
 }
 
 function defaultMappings() {
   return [
-    '0:57:177:E',                 '1:58:177:E',                 '2:59:177:E',                 '3:60:177:E',                 '4:61:177:E',                 '5:62:177:E',                 '6:63:177:E',                 '7:64:177:E',
-    '0:89:177:K:track.send:0',    '1:90:177:K:track.send:0',    '2:91:177:K:track.send:0',    '3:92:177:K:track.send:0',    '4:93:177:K:track.send:0',    '5:94:177:K:track.send:0',    '6:95:177:K:track.send:0',    '7:96:177:K:track.send:0',
-    '0:97:177:K:track.send:1',    '1:98:177:K:track.send:1',    '2:99:177:K:track.send:1',    '3:100:177:K:track.send:1',   '4:101:177:K:track.send:1',   '5:102:177:K:track.send:1',   '6:103:177:K:track.send:1',   '7:104:177:K:track.send:1',
-    '0:8:177:BI:track.mute',      '1:9:177:BI:track.mute',      '2:10:177:BI:track.mute',     '3:11:177:BI:track.mute',     '4:12:177:BI:track.mute',     '5:13:177:BI:track.mute',     '6:14:177:BI:track.mute',     '7:15:177:BI:track.mute',
-    '0:24:177:B:track.solo',      '1:25:177:B:track.solo',      '2:26:177:B:track.solo',      '3:27:177:B:track.solo',      '4:28:177:B:track.solo',      '5:29:177:B:track.solo',      '6:30:177:B:track.solo',      '7:31:177:B:track.solo',
-    '0:40:177:B:track.arm',       '1:41:177:B:track.arm',       '2:42:177:B:track.arm',       '3:43:177:B:track.arm',       '4:44:177:B:track.arm',       '5:45:177:B:track.arm',       '6:46:177:B:track.arm',       '7:47:177:B:track.arm',
-    '0:0:177:F:track.vol',        '1:1:177:F:track.vol',        '2:2:177:F:track.vol',        '3:3:177:F:track.vol',        '4:4:177:F:track.vol',        '5:5:177:F:track.vol',        '6:6:177:F:track.vol',        '7:7:177:F:track.vol',
-    '0:44:148:PM', '0:44:132:PN', '1:45:148:PM', '1:45:132:PN', '2:46:148:PM', '2:46:132:PN', '3:47:148:PM', '3:47:132:PN', '4:48:148:PM', '4:48:132:PN', '5:49:148:PM', '5:49:132:PN', '6:50:148:PM', '6:50:132:PN', '7:51:148:PM', '7:51:132:PN',
-    '0:36:148:PM', '0:36:132:PN', '1:37:148:PM', '1:37:132:PN', '2:38:148:PM', '2:38:132:PN', '3:39:148:PM', '3:39:132:PN', '4:40:148:PM', '4:40:132:PN', '5:41:148:PM', '5:41:132:PN', '6:42:148:PM', '6:42:132:PN', '7:43:148:PM', '7:43:132:PN',
-    '0:121:180:P',                '1:122:180:P',                '2:123:180:P',                '3:124:180:P',                '4:125:180:P',                '5:126:180:P',                '6:127:180:P',                '7:0:179:P',
-    '0:113:180:P',                '1:114:180:P',                '2:115:180:P',                '3:116:180:P',                '4:117:180:P',                '5:118:180:P',                '6:119:180:P',                '7:120:180:P'
+    '0:177:57:E',                 '1:177:58:E',                 '2:177:59:E',                 '3:177:60:E',                 '4:177:61:E',                 '5:177:62:E',                 '6:177:63:E',                 '7:177:64:E',
+    '0:177:89:K',                 '1:177:90:K',                 '2:177:91:K',                 '3:177:92:K',                 '4:177:93:K',                 '5:177:94:K',                 '6:177:95:K',                 '7:177:96:K',
+    '0:177:97:K',                 '1:177:98:K',                 '2:177:99:K',                 '3:177:100:K',                '4:177:101:K',                '5:177:102:K',                '6:177:103:K',                '7:177:104:K',
+    '0:177:8:BI:mute',            '1:177:9:BI:mute',            '2:177:10:BI:mute',           '3:177:11:BI:mute',           '4:177:12:BI:mute',           '5:177:13:BI:mute',           '6:177:14:BI:mute',           '7:177:15:BI:mute',
+    '0:177:24:B:solo',            '1:177:25:B:solo',            '2:177:26:B:solo',            '3:177:27:B:solo',            '4:177:28:B:solo',            '5:177:29:B:solo',            '6:177:30:B:solo',            '7:177:31:B:solo',
+    '0:177:40:B:arm',             '1:177:41:B:arm',             '2:177:42:B:arm',             '3:177:43:B:arm',             '4:177:44:B:arm',             '5:177:45:B:arm',             '6:177:46:B:arm',             '7:177:47:B:arm',
+    '0:177:0:F',                  '1:177:1:F',                  '2:177:2:F',                  '3:177:3:F',                  '4:177:4:F',                  '5:177:5:F',                  '6:177:6:F',                  '7:177:7:F',
+    '0:148:44:PM', '0:132:44:PN', '1:148:45:PM', '1:132:45:PN', '2:148:46:PM', '2:132:46:PN', '3:148:47:PM', '3:132:47:PN', '4:148:48:PM', '4:132:48:PN', '5:148:49:PM', '5:132:49:PN', '6:148:50:PM', '6:132:50:PN', '7:148:51:PM', '7:132:51:PN',
+    '0:148:36:PM', '0:132:36:PN', '1:148:37:PM', '1:132:37:PN', '2:148:38:PM', '2:132:38:PN', '3:148:39:PM', '3:132:39:PN', '4:148:40:PM', '4:132:40:PN', '5:148:41:PM', '5:132:41:PN', '6:148:42:PM', '6:132:42:PN', '7:148:43:PM', '7:132:43:PN',
+    '0:180:121:P',                '1:180:122:P',                '2:180:123:P',                '3:180:124:P',                '4:180:125:P',                '5:180:126:P',                '6:180:127:P',                '7:179:0:P',
+    '0:180:113:P',                '1:180:114:P',                '2:180:115:P',                '3:180:116:P',                '4:180:117:P',                '5:180:118:P',                '6:180:119:P',                '7:180:120:P'
   ];
 }
