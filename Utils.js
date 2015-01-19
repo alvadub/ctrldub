@@ -80,26 +80,28 @@ function debug() {
 }
 
 function notify(action) {
+  var name = !action.command ? 'CC' + (action.offset + 1) : '';
+
   switch (action.type) {
     case 'encoder':
-      host.showPopupNotification(action.level);
+      host.showPopupNotification(name + ' ' + action.level);
     break;
 
     case 'fader':
     case 'knob':
-      host.showPopupNotification(action.level ? Math.round(action.level / 1.27) + '%' : 'OFF');
+      host.showPopupNotification(name + ' ' + (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF'));
     break;
 
     case 'pad':
       if (action.toggle) {
-        host.showPopupNotification(action.level);
+        host.showPopupNotification(name + ' ' + action.level);
       }
 
       if (typeof action.toggle === 'undefined') {
         if (action.level === 127) {
-          host.showPopupNotification('ON');
+          host.showPopupNotification(name + ' ON');
         } else {
-          host.showPopupNotification('OFF');
+          host.showPopupNotification(name + ' OFF');
         }
       }
     break;

@@ -33,9 +33,11 @@ function init() {
 
   RL.CC_ACTIONS = userActions() || defaultActions();
 
-  var fixed_controls = userMappings() || defaultMappings();
+  var CC_FIXED = (userMappings() || defaultMappings());
 
-  fixed_controls.forEach(function(data, i) {
+  RL.U_CONTROLS = host.createUserControls(CC_FIXED.length);
+
+  CC_FIXED.forEach(function(data, i) {
     var e = $(data, i);
 
     RL.CC_MAPPINGS[e.channel + '#' + e.index] = e;
@@ -44,10 +46,15 @@ function init() {
       case 'mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
       case 'solo': RL.TRACKS.getTrack(e.track).getSolo().addValueObserver(valueObserver(e)); break;
       case 'arm': RL.TRACKS.getTrack(e.track).getArm().addValueObserver(valueObserver(e)); break;
+
+      default:
+        var c = RL.U_CONTROLS.getControl(e.offset);
+
+        c.setLabel('CC' + (e.offset + 1));
+        c.setIndication(true);
+      break;
     }
   });
-
-  RL.U_CONTROLS = host.createUserControls(fixed_controls.length);
 
   RL.TRANSPORT.addIsRecordingObserver(function (on) {
     sendMidi(RL.CHANNEL1, RL.RECORD, (RL.IS_RECORDING = on) ? 127 : 0);
@@ -104,7 +111,7 @@ function onSysex(data) {
 }
 
 function valueObserver(e) {
-  return function (state) {
+  return function(state) {
     if (e.inverted) {
       state = !state;
     }
