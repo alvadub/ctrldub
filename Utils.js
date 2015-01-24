@@ -80,42 +80,44 @@ function debug() {
 }
 
 function notify(action) {
-  var name = !action.command ? 'CC' + (action.offset + 1) : '';
+  var text = '';
+
+  if (!action.command) {
+    text += 'CC' + (action.offset + 1) + ' ';
+  }
 
   switch (action.type) {
     case 'encoder':
-      host.showPopupNotification(name + ' ' + action.level);
+      text += action.level;
     break;
 
     case 'fader':
     case 'knob':
-      host.showPopupNotification(name + ' ' + (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF'));
+      text += (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF');
     break;
 
     case 'pad':
       if (action.toggle) {
-        host.showPopupNotification(name + ' ' + action.level);
-      }
-
-      if (typeof action.toggle === 'undefined') {
+        text += action.level;
+      } else if (typeof action.toggle === 'undefined') {
         if (action.level === 127) {
-          host.showPopupNotification(name + ' ON');
+          text += 'ON';
         } else {
-          host.showPopupNotification(name + ' OFF');
+          text += 'OFF';
         }
       }
     break;
 
     case 'play':
       if (action.toggle) {
-        host.showPopupNotification(!action.state ? 'PLAY' : 'PAUSE');
+        text += !action.state ? 'PLAY' : 'PAUSE';
       }
     break;
 
     case 'record':
     case 'overdub':
       if (action.toggle) {
-        host.showPopupNotification(action.type.toUpperCase() + ' ' + (!action.state ? 'ON' : 'OFF'));
+        text += action.type.toUpperCase() + ' ' + (!action.state ? 'ON' : 'OFF');
       }
     break;
 
@@ -123,25 +125,27 @@ function notify(action) {
       switch (action.command) {
         case 'mute':
           if (action.toggle) {
-            host.showPopupNotification('MUTE');
+            text += 'MUTE';
           } else {
-            host.showPopupNotification('UNMUTE');
+            text += 'UNMUTE';
           }
         break;
 
         case 'solo':
         case 'arm':
           if (action.toggle) {
-            host.showPopupNotification(action.command.toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF'));
+            text += action.command.toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF');
           }
         break;
 
         default:
           if (action.toggle) {
-            host.showPopupNotification(action.type.replace(/-/g, ' ').toUpperCase());
+            text += action.type.replace(/-/g, ' ').toUpperCase();
           }
         break;
       }
     break;
   }
+
+  host.showPopupNotification(text);
 }

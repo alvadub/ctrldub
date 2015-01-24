@@ -27,7 +27,6 @@ var RL = {
 
   CC_MAPPINGS: [],
   CC_ACTIONS: {},
-  CC_PARAMS: {},
   CC_STATE: {},
   CC_LAST: {}
 };
@@ -141,5 +140,9 @@ function execute(action) {
     break;
   }
 
-  notify(action);
+  if (action.label) {
+    host.showPopupNotification(action.label);
+  } else if (action.notify !== false) {
+    notify(action);
+  }
 }

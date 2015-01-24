@@ -33,6 +33,8 @@ function init() {
   RL.CURSORTRACK = host.createCursorTrack(8, 2);
   RL.CURSORDEVICE = host.createCursorDevice();
 
+  RL.CURSORDEVICE.addNameObserver(20, '', nameObserver('primaryDevice'));
+
   RL.CC_ACTIONS = userActions() || defaultActions();
 
   var CC_FIXED = (userMappings() || defaultMappings());
@@ -106,10 +108,12 @@ function onMidi(status, data1, data2) {
         var old = RL.CC_LAST[action.offset] || 0,
             diff = Math.max(old, data2) - Math.min(old, data2);
 
-        action.speed = diff > 1 ? 'fast' : 'slow';
-
         if (old !== data2) {
           action.range = data2 < old ? -1 : 1;
+        }
+
+        if (data2 === 0 || data2 === 127) {
+          action.range = data2 ? 1 : -1;
         }
 
         RL.CC_LAST[action.offset] = data2;
@@ -127,6 +131,12 @@ function onSysex(data) {
   printSysex(data);
 }
 
+function nameObserver(k) {
+  return function(value) {
+    RL.CC_STATE[k] = value;
+  };
+}
+
 function valueObserver(e) {
   return function(state) {
     if (e.inverted) {
@@ -142,14 +152,18 @@ function valueObserver(e) {
 function defaultActions() {
   return {
     device: function(e) {
-      if (e.speed === 'slow') {
-        this.cDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+      this.cDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+
+      if (RL.CC_STATE['primaryDevice']) {
+        e.label = RL.CC_STATE['primaryDevice'];
+      } else {
+        e.notify = false;
       }
     },
     track: function(e) {
-      if (e.speed === 'slow') {
-        this.cTrack[e.range > 0 ? 'selectNext' : 'selectPrevious']();
-      }
+      this.cTrack[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+
+      e.notify = false;
     },
     mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
