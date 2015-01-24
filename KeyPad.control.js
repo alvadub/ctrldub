@@ -211,6 +211,8 @@ function defaultActions() {
       for (var i in RL.CC_SCENES) {
         sendMidi(RL.CC_SCENES[i].channel, RL.CC_SCENES[i].index, RL.CC_SCENES[i].offset === e.offset ? 127 : 0);
       }
+
+      e.label = 'Scene ' + (e.track + 1);
     },
     device: function(e) {
       this.cDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
