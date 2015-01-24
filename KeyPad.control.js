@@ -33,9 +33,12 @@ function init() {
   RL.CURSORTRACK = host.createCursorTrack(16, 2);
   RL.CURSORDEVICE = host.createCursorDevice();
 
+  var tracks = [];
+
   for (var i = 0, c = 16; i < c; i += 1) {
-    RL.TRACKS.getTrack(i).addIsSelectedObserver(trackObserver(i));
-    RL.TRACKS.getTrack(i).addNameObserver(20, '', nameObserver(i, RL.CC_TRACKS));
+    tracks[i] = RL.TRACKS.getTrack(i);
+    tracks[i].addIsSelectedObserver(trackObserver(i));
+    tracks[i].addNameObserver(20, '', nameObserver(i, RL.CC_TRACKS));
   }
 
   RL.CURSORDEVICE.addNameObserver(20, '', nameObserver('primaryDevice', RL.CC_STATE));
@@ -52,9 +55,9 @@ function init() {
     RL.CC_MAPPINGS[e.channel + '#' + e.index] = e;
 
     switch (e.command) {
-      case 'mute': RL.TRACKS.getTrack(e.track).getMute().addValueObserver(valueObserver(e)); break;
-      case 'solo': RL.TRACKS.getTrack(e.track).getSolo().addValueObserver(valueObserver(e)); break;
-      case 'arm': RL.TRACKS.getTrack(e.track).getArm().addValueObserver(valueObserver(e)); break;
+      case 'mute': tracks[e.track].getMute().addValueObserver(valueObserver(e)); break;
+      case 'solo': tracks[e.track].getSolo().addValueObserver(valueObserver(e)); break;
+      case 'arm': tracks[e.track].getArm().addValueObserver(valueObserver(e)); break;
 
       default:
         var c = RL.U_CONTROLS.getControl(e.offset);
@@ -233,8 +236,8 @@ function defaultMappings() {
     '0:177:0:F', '1:177:1:F', '2:177:2:F', '3:177:3:F', '4:177:4:F', '5:177:5:F', '6:177:6:F', '7:177:7:F',
     '0:148:44:PM', '0:132:44:PN', '1:148:45:PM', '1:132:45:PN', '2:148:46:PM', '2:132:46:PN', '3:148:47:PM', '3:132:47:PN', '4:148:48:PM', '4:132:48:PN', '5:148:49:PM', '5:132:49:PN', '6:148:50:PM', '6:132:50:PN', '7:148:51:PM', '7:132:51:PN',
     '0:148:36:PM', '0:132:36:PN', '1:148:37:PM', '1:132:37:PN', '2:148:38:PM', '2:132:38:PN', '3:148:39:PM', '3:132:39:PN', '4:148:40:PM', '4:132:40:PN', '5:148:41:PM', '5:132:41:PN', '6:148:42:PM', '6:132:42:PN', '7:148:43:PM', '7:132:43:PN',
-    '0:180:121:P', '1:180:122:P', '2:180:123:P', '3:180:124:P', '4:180:125:P', '5:180:126:P', '6:180:127:P', '7:179:0:P',
-    '0:180:113:P', '1:180:114:P', '2:180:115:P', '3:180:116:P', '4:180:117:P', '5:180:118:P', '6:180:119:P', '7:180:120:P',
+    '0:180:121:PI', '1:180:122:PI', '2:180:123:PI', '3:180:124:PI', '4:180:125:PI', '5:180:126:PI', '6:180:127:PI', '7:179:0:PI',
+    '0:180:113:PI', '1:180:114:PI', '2:180:115:PI', '3:180:116:PI', '4:180:117:PI', '5:180:118:PI', '6:180:119:PI', '7:180:120:PI',
 
     // Channels 1-8 (shift)
     '0:177:65:ES',  '1:177:66:ES',  '2:177:67:ES',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
