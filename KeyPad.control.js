@@ -55,6 +55,10 @@ function init() {
     RL.CC_MAPPINGS[e.channel + '#' + e.index] = e;
 
     switch (e.command) {
+      case 'scene':
+        RL.CC_SCENES.push(e);
+      break;
+
       case 'mute': tracks[e.track].getMute().addValueObserver(valueObserver(e)); break;
       case 'solo': tracks[e.track].getSolo().addValueObserver(valueObserver(e)); break;
       case 'arm': tracks[e.track].getArm().addValueObserver(valueObserver(e)); break;
@@ -175,6 +179,18 @@ function valueObserver(e) {
 
 function defaultActions() {
   return {
+    macro: function(e) {
+      this.cTrack.getPrimaryDevice().getMacro(e.track).getAmount().set(e.level, 128);
+
+      e.label = e.level ? Math.round(e.level / 1.27) + '%' : 'OFF';
+    },
+    scene: function(e) {
+      this.trackBank.launchScene(e.track);
+
+      for (var i in RL.CC_SCENES) {
+        sendMidi(RL.CC_SCENES[i].channel, RL.CC_SCENES[i].index, RL.CC_SCENES[i].offset === e.offset ? 127 : 0);
+      }
+    },
     device: function(e) {
       this.cDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
 
@@ -227,7 +243,7 @@ function defaultActions() {
 function defaultMappings() {
   var PAGE_1 = [
     // Channels 1-8 (normal)
-    '0:177:57:E:track', '1:177:58:E:device', '2:177:59:E', '3:177:60:E', '4:177:61:E', '5:177:62:E', '6:177:63:E', '7:177:64:E',
+    '0:177:57:E:macro', '1:177:58:E:macro', '2:177:59:E:macro', '3:177:60:E:macro', '4:177:61:E:macro', '5:177:62:E:macro', '6:177:63:E:macro', '7:177:64:E:macro',
     '0:177:89:K', '1:177:90:K', '2:177:91:K', '3:177:92:K', '4:177:93:K', '5:177:94:K', '6:177:95:K', '7:177:96:K',
     '0:177:97:K', '1:177:98:K', '2:177:99:K', '3:177:100:K', '4:177:101:K', '5:177:102:K', '6:177:103:K', '7:177:104:K',
     '0:177:8:BI:mute', '1:177:9:BI:mute', '2:177:10:BI:mute', '3:177:11:BI:mute', '4:177:12:BI:mute', '5:177:13:BI:mute', '6:177:14:BI:mute', '7:177:15:BI:mute',
@@ -240,10 +256,10 @@ function defaultMappings() {
     '0:180:113:PI', '1:180:114:PI', '2:180:115:PI', '3:180:116:PI', '4:180:117:PI', '5:180:118:PI', '6:180:119:PI', '7:180:120:PI',
 
     // Channels 1-8 (shift)
-    '0:177:65:ES',  '1:177:66:ES',  '2:177:67:ES',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
+    '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
     '0:177:16:BIS', '1:177:17:BIS', '2:177:18:BIS', '3:177:19:BIS', '4:177:20:BIS', '5:177:21:BIS', '6:177:22:BIS', '7:177:23:BIS',
-    '0:177:32:BS',  '1:177:33:BS',  '2:177:34:BS',  '3:177:35:BS',  '4:177:36:BS',  '5:177:37:BS',  '6:177:38:BS',  '7:177:39:BS',
-    '0:177:49:BS',  '1:177:50:BS',  '2:177:51:BS',  '3:177:52:BS',  '4:177:53:BS',  '5:177:54:BS',  '6:177:55:BS',  '7:177:56:BS'
+    '0:177:32:BS:scene', '1:177:33:BS:scene', '2:177:34:BS:scene', '3:177:35:BS:scene', '4:177:36:BS:scene', '5:177:37:BS:scene', '6:177:38:BS:scene', '7:177:39:BS:scene',
+    '8:177:49:BS:scene', '9:177:50:BS:scene', '10:177:51:BS:scene', '11:177:52:BS:scene', '12:177:53:BS:scene', '13:177:54:BS:scene', '14:177:55:BS:scene', '15:177:56:BS:scene'
   ];
 
   return PAGE_1;
