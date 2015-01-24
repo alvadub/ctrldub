@@ -27,6 +27,7 @@ var RL = {
 
   CC_MAPPINGS: [],
   CC_ACTIONS: {},
+  CC_TRACKS: [],
   CC_STATE: {},
   CC_LAST: {}
 };

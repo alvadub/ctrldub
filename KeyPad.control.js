@@ -33,7 +33,12 @@ function init() {
   RL.CURSORTRACK = host.createCursorTrack(8, 2);
   RL.CURSORDEVICE = host.createCursorDevice();
 
-  RL.CURSORDEVICE.addNameObserver(20, '', nameObserver('primaryDevice'));
+  for (var i = 0, c = 8; i < c; i += 1) {
+    RL.TRACKS.getTrack(i).addIsSelectedObserver(trackObserver(i));
+    RL.TRACKS.getTrack(i).addNameObserver(20, '', nameObserver(i, RL.CC_TRACKS));
+  }
+
+  RL.CURSORDEVICE.addNameObserver(20, '', nameObserver('primaryDevice', RL.CC_STATE));
 
   RL.CC_ACTIONS = userActions() || defaultActions();
 
@@ -131,9 +136,25 @@ function onSysex(data) {
   printSysex(data);
 }
 
-function nameObserver(k) {
+function nameObserver(k, set) {
   return function(value) {
-    RL.CC_STATE[k] = value;
+    if (!value && set instanceof Array) {
+      Array.prototype.splice.call(set, k, 1)
+    } else {
+      set[k] = value;
+    }
+  };
+}
+
+function trackObserver(i) {
+  return function(state) {
+    if (state) {
+      RL.CC_STATE['activeTrack'] = i;
+
+      if (RL.CC_TRACKS[i]) {
+        host.showPopupNotification(RL.CC_TRACKS[i]);
+      }
+    }
   };
 }
 
@@ -161,9 +182,25 @@ function defaultActions() {
       }
     },
     track: function(e) {
-      this.cTrack[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+      var old = RL.CC_STATE['activeTrack'] || 0;
 
-      e.notify = false;
+      if (e.range > 0) {
+        old += 1;
+      } else {
+        old -= 1;
+      }
+
+      var fixed = Math.min(RL.CC_TRACKS.length - 1, Math.max(0, old));
+
+      if (RL.CC_TRACKS[fixed]) {
+        this.trackBank.getTrack(fixed).select();
+
+        e.label = RL.CC_TRACKS[fixed];
+      } else {
+        e.label = fixed;
+      }
+
+      RL.CC_STATE['activeTrack'] = fixed;
     },
     mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
