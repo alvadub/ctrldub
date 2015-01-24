@@ -180,9 +180,25 @@ function valueObserver(e) {
 function defaultActions() {
   return {
     macro: function(e) {
-      this.cTrack.getPrimaryDevice().getMacro(e.track).getAmount().set(e.level, 128);
+      if (e.shift) {
+        var old = RL.CC_STATE['activeMacro'] || 0;
 
-      e.label = e.level ? Math.round(e.level / 1.27) + '%' : 'OFF';
+        if (e.range > 0) {
+          old += 1;
+        } else {
+          old -= 1;
+        }
+
+        var fixed = Math.min(7, Math.max(0, old));
+
+        RL.CC_STATE['activeMacro'] = fixed;
+
+        e.label = 'Macro ' + (fixed + 1);
+      } else {
+        this.trackBank.getTrack(e.track).getPrimaryDevice().getMacro(RL.CC_STATE['activeMacro'] || 0).getAmount().set(e.level, 128);
+
+        e.label = e.level ? Math.round(e.level / 1.27) + '%' : 'OFF';
+      }
     },
     scene: function(e) {
       this.trackBank.launchScene(e.track);
@@ -249,14 +265,14 @@ function defaultMappings() {
     '0:177:8:BI:mute', '1:177:9:BI:mute', '2:177:10:BI:mute', '3:177:11:BI:mute', '4:177:12:BI:mute', '5:177:13:BI:mute', '6:177:14:BI:mute', '7:177:15:BI:mute',
     '0:177:24:B:solo', '1:177:25:B:solo', '2:177:26:B:solo', '3:177:27:B:solo', '4:177:28:B:solo', '5:177:29:B:solo', '6:177:30:B:solo', '7:177:31:B:solo',
     '0:177:40:B:arm', '1:177:41:B:arm', '2:177:42:B:arm', '3:177:43:B:arm', '4:177:44:B:arm', '5:177:45:B:arm', '6:177:46:B:arm', '7:177:47:B:arm',
-    '0:177:0:F', '1:177:1:F', '2:177:2:F', '3:177:3:F', '4:177:4:F', '5:177:5:F', '6:177:6:F', '7:177:7:F',
+    '0:177:0:F:vol', '1:177:1:F:vol', '2:177:2:F:vol', '3:177:3:F:vol', '4:177:4:F:vol', '5:177:5:F:vol', '6:177:6:F:vol', '7:177:7:F:vol',
     '0:148:44:PM', '0:132:44:PN', '1:148:45:PM', '1:132:45:PN', '2:148:46:PM', '2:132:46:PN', '3:148:47:PM', '3:132:47:PN', '4:148:48:PM', '4:132:48:PN', '5:148:49:PM', '5:132:49:PN', '6:148:50:PM', '6:132:50:PN', '7:148:51:PM', '7:132:51:PN',
     '0:148:36:PM', '0:132:36:PN', '1:148:37:PM', '1:132:37:PN', '2:148:38:PM', '2:132:38:PN', '3:148:39:PM', '3:132:39:PN', '4:148:40:PM', '4:132:40:PN', '5:148:41:PM', '5:132:41:PN', '6:148:42:PM', '6:132:42:PN', '7:148:43:PM', '7:132:43:PN',
     '0:180:121:PI', '1:180:122:PI', '2:180:123:PI', '3:180:124:PI', '4:180:125:PI', '5:180:126:PI', '6:180:127:PI', '7:179:0:PI',
     '0:180:113:PI', '1:180:114:PI', '2:180:115:PI', '3:180:116:PI', '4:180:117:PI', '5:180:118:PI', '6:180:119:PI', '7:180:120:PI',
 
     // Channels 1-8 (shift)
-    '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
+    '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES:macro',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
     '0:177:16:BIS', '1:177:17:BIS', '2:177:18:BIS', '3:177:19:BIS', '4:177:20:BIS', '5:177:21:BIS', '6:177:22:BIS', '7:177:23:BIS',
     '0:177:32:BS:scene', '1:177:33:BS:scene', '2:177:34:BS:scene', '3:177:35:BS:scene', '4:177:36:BS:scene', '5:177:37:BS:scene', '6:177:38:BS:scene', '7:177:39:BS:scene',
     '8:177:49:BS:scene', '9:177:50:BS:scene', '10:177:51:BS:scene', '11:177:52:BS:scene', '12:177:53:BS:scene', '13:177:54:BS:scene', '14:177:55:BS:scene', '15:177:56:BS:scene'
