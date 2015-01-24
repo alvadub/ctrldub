@@ -28,7 +28,8 @@ var RL = {
   CC_MAPPINGS: [],
   CC_ACTIONS: {},
   CC_PARAMS: {},
-  CC_STATE: {}
+  CC_STATE: {},
+  CC_LAST: {}
 };
 
 var PARAMS = {
@@ -126,7 +127,9 @@ function execute(action) {
       if (action.command) {
         RL.CC_ACTIONS[action.command].call({
           transport: RL.TRANSPORT,
-          trackBank: RL.TRACKS
+          trackBank: RL.TRACKS,
+          cDevice: RL.CURSORDEVICE,
+          cTrack: RL.CURSORTRACK
         }, action);
 
         if (!action.toggle && action.state) {

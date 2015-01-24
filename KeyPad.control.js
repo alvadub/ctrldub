@@ -28,8 +28,10 @@ function init() {
   host.getMidiInPort(0).setSysexCallback(onSysex);
   host.getMidiOutPort(0).setShouldSendMidiBeatClock(true);
 
-  RL.TRANSPORT = host.createTransport();
   RL.TRACKS = host.createTrackBank(8, 2, 8);
+  RL.TRANSPORT = host.createTransport();
+  RL.CURSORTRACK = host.createCursorTrack(8, 2);
+  RL.CURSORDEVICE = host.createCursorDevice();
 
   RL.CC_ACTIONS = userActions() || defaultActions();
 
@@ -95,10 +97,25 @@ function onMidi(status, data1, data2) {
       delete action.inverted;
     }
 
-    if (action.type === 'button') {
-      action.toggle = data2 > 65;
-    } else {
-      action.level = data2;
+    switch (action.type) {
+      case 'button':
+        action.toggle = data2 > 65;
+      break;
+
+      case 'encoder':
+        var old = RL.CC_LAST[action.offset] || 0,
+            diff = Math.max(old, data2) - Math.min(old, data2);
+
+        action.speed = diff > 1 ? 'fast' : 'slow';
+
+        if (old !== data2) {
+          action.range = data2 < old ? -1 : 1;
+        }
+
+        RL.CC_LAST[action.offset] = data2;
+      default:
+        action.level = data2;
+      break;
     }
 
     execute(action);
@@ -124,6 +141,16 @@ function valueObserver(e) {
 
 function defaultActions() {
   return {
+    device: function(e) {
+      if (e.speed === 'slow') {
+        this.cDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+      }
+    },
+    track: function(e) {
+      if (e.speed === 'slow') {
+        this.cTrack[e.range > 0 ? 'selectNext' : 'selectPrevious']();
+      }
+    },
     mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
     },
@@ -144,17 +171,20 @@ function defaultActions() {
 }
 
 function defaultMappings() {
-  return [
-    '0:177:57:E',                 '1:177:58:E',                 '2:177:59:E',                 '3:177:60:E',                 '4:177:61:E',                 '5:177:62:E',                 '6:177:63:E',                 '7:177:64:E',
-    '0:177:89:K',                 '1:177:90:K',                 '2:177:91:K',                 '3:177:92:K',                 '4:177:93:K',                 '5:177:94:K',                 '6:177:95:K',                 '7:177:96:K',
-    '0:177:97:K',                 '1:177:98:K',                 '2:177:99:K',                 '3:177:100:K',                '4:177:101:K',                '5:177:102:K',                '6:177:103:K',                '7:177:104:K',
-    '0:177:8:BI:mute',            '1:177:9:BI:mute',            '2:177:10:BI:mute',           '3:177:11:BI:mute',           '4:177:12:BI:mute',           '5:177:13:BI:mute',           '6:177:14:BI:mute',           '7:177:15:BI:mute',
-    '0:177:24:B:solo',            '1:177:25:B:solo',            '2:177:26:B:solo',            '3:177:27:B:solo',            '4:177:28:B:solo',            '5:177:29:B:solo',            '6:177:30:B:solo',            '7:177:31:B:solo',
-    '0:177:40:B:arm',             '1:177:41:B:arm',             '2:177:42:B:arm',             '3:177:43:B:arm',             '4:177:44:B:arm',             '5:177:45:B:arm',             '6:177:46:B:arm',             '7:177:47:B:arm',
-    '0:177:0:F',                  '1:177:1:F',                  '2:177:2:F',                  '3:177:3:F',                  '4:177:4:F',                  '5:177:5:F',                  '6:177:6:F',                  '7:177:7:F',
+  var PAGE_1 = [
+    // Channels 1-8 (normal)
+    '0:177:57:E:track', '1:177:58:E:device', '2:177:59:E', '3:177:60:E', '4:177:61:E', '5:177:62:E', '6:177:63:E', '7:177:64:E',
+    '0:177:89:K', '1:177:90:K', '2:177:91:K', '3:177:92:K', '4:177:93:K', '5:177:94:K', '6:177:95:K', '7:177:96:K',
+    '0:177:97:K', '1:177:98:K', '2:177:99:K', '3:177:100:K', '4:177:101:K', '5:177:102:K', '6:177:103:K', '7:177:104:K',
+    '0:177:8:BI:mute', '1:177:9:BI:mute', '2:177:10:BI:mute', '3:177:11:BI:mute', '4:177:12:BI:mute', '5:177:13:BI:mute', '6:177:14:BI:mute', '7:177:15:BI:mute',
+    '0:177:24:B:solo', '1:177:25:B:solo', '2:177:26:B:solo', '3:177:27:B:solo', '4:177:28:B:solo', '5:177:29:B:solo', '6:177:30:B:solo', '7:177:31:B:solo',
+    '0:177:40:B:arm', '1:177:41:B:arm', '2:177:42:B:arm', '3:177:43:B:arm', '4:177:44:B:arm', '5:177:45:B:arm', '6:177:46:B:arm', '7:177:47:B:arm',
+    '0:177:0:F', '1:177:1:F', '2:177:2:F', '3:177:3:F', '4:177:4:F', '5:177:5:F', '6:177:6:F', '7:177:7:F',
     '0:148:44:PM', '0:132:44:PN', '1:148:45:PM', '1:132:45:PN', '2:148:46:PM', '2:132:46:PN', '3:148:47:PM', '3:132:47:PN', '4:148:48:PM', '4:132:48:PN', '5:148:49:PM', '5:132:49:PN', '6:148:50:PM', '6:132:50:PN', '7:148:51:PM', '7:132:51:PN',
     '0:148:36:PM', '0:132:36:PN', '1:148:37:PM', '1:132:37:PN', '2:148:38:PM', '2:132:38:PN', '3:148:39:PM', '3:132:39:PN', '4:148:40:PM', '4:132:40:PN', '5:148:41:PM', '5:132:41:PN', '6:148:42:PM', '6:132:42:PN', '7:148:43:PM', '7:132:43:PN',
-    '0:180:121:P',                '1:180:122:P',                '2:180:123:P',                '3:180:124:P',                '4:180:125:P',                '5:180:126:P',                '6:180:127:P',                '7:179:0:P',
-    '0:180:113:P',                '1:180:114:P',                '2:180:115:P',                '3:180:116:P',                '4:180:117:P',                '5:180:118:P',                '6:180:119:P',                '7:180:120:P'
+    '0:180:121:P', '1:180:122:P', '2:180:123:P', '3:180:124:P', '4:180:125:P', '5:180:126:P', '6:180:127:P', '7:179:0:P',
+    '0:180:113:P', '1:180:114:P', '2:180:115:P', '3:180:116:P', '4:180:117:P', '5:180:118:P', '6:180:119:P', '7:180:120:P'
   ];
+
+  return PAGE_1;
 }
