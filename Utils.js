@@ -82,10 +82,6 @@ function debug() {
 function notify(action) {
   var text = '';
 
-  if (!action.command) {
-    text += 'CC' + (action.offset + 1) + ' ';
-  }
-
   switch (action.type) {
     case 'encoder':
       text += action.level;
@@ -147,5 +143,11 @@ function notify(action) {
     break;
   }
 
-  host.showPopupNotification(text);
+  if (text) {
+    if (!action.command && action.offset) {
+      text = 'CC' + (action.offset + 1) + ' ' + text;
+    }
+
+    host.showPopupNotification(text);
+  }
 }
