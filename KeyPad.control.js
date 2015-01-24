@@ -202,26 +202,6 @@ function defaultActions() {
 
       RL.CC_STATE['activeTrack'] = fixed;
     },
-    macro: function(e) {
-      var old = RL.CC_STATE['activeMacro'] || 0;
-
-      if (e.range > 0) {
-        old += 1;
-      } else {
-        old -= 1;
-      }
-
-      var fixed = Math.min(7, Math.max(0, old));
-
-      RL.CC_STATE['activeMacro'] = fixed;
-
-      e.label = 'Macro ' + (fixed + 1);
-    },
-    level: function(e) {
-      this.cDevice.getMacro(RL.CC_STATE['activeMacro']).getAmount().set(e.level, 128);
-
-      e.label = 'Macro ' + (RL.CC_STATE['activeMacro'] + 1) + ' / ' + Math.round(e.level / 1.27) + '%';
-    },
     mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
     },
@@ -244,7 +224,7 @@ function defaultActions() {
 function defaultMappings() {
   var PAGE_1 = [
     // Channels 1-8 (normal)
-    '0:177:57:E:track', '1:177:58:E:device', '2:177:59:E:macro', '3:177:60:E:level', '4:177:61:E', '5:177:62:E', '6:177:63:E', '7:177:64:E',
+    '0:177:57:E:track', '1:177:58:E:device', '2:177:59:E', '3:177:60:E', '4:177:61:E', '5:177:62:E', '6:177:63:E', '7:177:64:E',
     '0:177:89:K', '1:177:90:K', '2:177:91:K', '3:177:92:K', '4:177:93:K', '5:177:94:K', '6:177:95:K', '7:177:96:K',
     '0:177:97:K', '1:177:98:K', '2:177:99:K', '3:177:100:K', '4:177:101:K', '5:177:102:K', '6:177:103:K', '7:177:104:K',
     '0:177:8:BI:mute', '1:177:9:BI:mute', '2:177:10:BI:mute', '3:177:11:BI:mute', '4:177:12:BI:mute', '5:177:13:BI:mute', '6:177:14:BI:mute', '7:177:15:BI:mute',
