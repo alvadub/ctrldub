@@ -28,12 +28,12 @@ function init() {
   host.getMidiInPort(0).setSysexCallback(onSysex);
   host.getMidiOutPort(0).setShouldSendMidiBeatClock(true);
 
-  RL.TRACKS = host.createTrackBank(8, 2, 8);
+  RL.TRACKS = host.createTrackBank(16, 2, 8);
   RL.TRANSPORT = host.createTransport();
-  RL.CURSORTRACK = host.createCursorTrack(8, 2);
+  RL.CURSORTRACK = host.createCursorTrack(16, 2);
   RL.CURSORDEVICE = host.createCursorDevice();
 
-  for (var i = 0, c = 8; i < c; i += 1) {
+  for (var i = 0, c = 16; i < c; i += 1) {
     RL.TRACKS.getTrack(i).addIsSelectedObserver(trackObserver(i));
     RL.TRACKS.getTrack(i).addNameObserver(20, '', nameObserver(i, RL.CC_TRACKS));
   }
