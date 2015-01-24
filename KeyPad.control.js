@@ -179,6 +179,11 @@ function valueObserver(e) {
 
 function defaultActions() {
   return {
+    send: function(e) {
+      this.trackBank.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
+
+      e.label = e.value ? Math.round(e.value / 1.27) + '%' : 'OFF';
+    },
     macro: function(e) {
       if (e.shift) {
         var old = RL.CC_STATE['activeMacro'] || 0;
@@ -195,9 +200,9 @@ function defaultActions() {
 
         e.label = 'Macro ' + (fixed + 1);
       } else {
-        this.trackBank.getTrack(e.track).getPrimaryDevice().getMacro(RL.CC_STATE['activeMacro'] || 0).getAmount().set(e.level, 128);
+        this.trackBank.getTrack(e.track).getPrimaryDevice().getMacro(RL.CC_STATE['activeMacro'] || 0).getAmount().set(e.value, 128);
 
-        e.label = e.level ? Math.round(e.level / 1.27) + '%' : 'OFF';
+        e.label = e.value ? Math.round(e.value / 1.27) + '%' : 'OFF';
       }
     },
     scene: function(e) {
@@ -260,8 +265,8 @@ function defaultMappings() {
   var PAGE_1 = [
     // Channels 1-8 (normal)
     '0:177:57:E:macro', '1:177:58:E:macro', '2:177:59:E:macro', '3:177:60:E:macro', '4:177:61:E:macro', '5:177:62:E:macro', '6:177:63:E:macro', '7:177:64:E:macro',
-    '0:177:89:K', '1:177:90:K', '2:177:91:K', '3:177:92:K', '4:177:93:K', '5:177:94:K', '6:177:95:K', '7:177:96:K',
-    '0:177:97:K', '1:177:98:K', '2:177:99:K', '3:177:100:K', '4:177:101:K', '5:177:102:K', '6:177:103:K', '7:177:104:K',
+    '0:177:89:K:send:0', '1:177:90:K:send:0', '2:177:91:K:send:0', '3:177:92:K:send:0', '4:177:93:K:send:0', '5:177:94:K:send:0', '6:177:95:K:send:0', '7:177:96:K:send:0',
+    '0:177:97:K:send:1', '1:177:98:K:send:1', '2:177:99:K:send:1', '3:177:100:K:send:1', '4:177:101:K:send:1', '5:177:102:K:send:1', '6:177:103:K:send:1', '7:177:104:K:send:1',
     '0:177:8:BI:mute', '1:177:9:BI:mute', '2:177:10:BI:mute', '3:177:11:BI:mute', '4:177:12:BI:mute', '5:177:13:BI:mute', '6:177:14:BI:mute', '7:177:15:BI:mute',
     '0:177:24:B:solo', '1:177:25:B:solo', '2:177:26:B:solo', '3:177:27:B:solo', '4:177:28:B:solo', '5:177:29:B:solo', '6:177:30:B:solo', '7:177:31:B:solo',
     '0:177:40:B:arm', '1:177:41:B:arm', '2:177:42:B:arm', '3:177:43:B:arm', '4:177:44:B:arm', '5:177:45:B:arm', '6:177:46:B:arm', '7:177:47:B:arm',
