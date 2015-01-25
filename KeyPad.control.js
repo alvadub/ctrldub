@@ -179,6 +179,25 @@ function valueObserver(e) {
 
 function defaultActions() {
   return {
+    p: function(e) {
+      var old = RL.CC_STATE['p'] || 0;
+
+      if (e.range > 0) {
+        old += 1;
+      } else {
+        old -= 1;
+      }
+
+      var fixed = Math.min(7, Math.max(0, old));
+
+      for (var i = 0, c = 8; i < c; i += 1) {
+        this.trackBank.getTrack(e.track).getPrimaryDevice().getParameter(i).setIndication(i === fixed);
+      }
+
+      RL.CC_STATE['p'] = old;
+
+      e.label = 'Parameter ' + (fixed + 1);
+    },
     send: function(e) {
       this.trackBank.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
 
@@ -279,7 +298,7 @@ function defaultMappings() {
     '0:180:113:PI', '1:180:114:PI', '2:180:115:PI', '3:180:116:PI', '4:180:117:PI', '5:180:118:PI', '6:180:119:PI', '7:180:120:PI',
 
     // Channels 1-8 (shift)
-    '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES:macro',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
+    '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES:macro',  '3:177:68:ES:p',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
     '0:177:16:BIS', '1:177:17:BIS', '2:177:18:BIS', '3:177:19:BIS', '4:177:20:BIS', '5:177:21:BIS', '6:177:22:BIS', '7:177:23:BIS',
     '0:177:32:BS:scene', '1:177:33:BS:scene', '2:177:34:BS:scene', '3:177:35:BS:scene', '4:177:36:BS:scene', '5:177:37:BS:scene', '6:177:38:BS:scene', '7:177:39:BS:scene',
     '8:177:49:BS:scene', '9:177:50:BS:scene', '10:177:51:BS:scene', '11:177:52:BS:scene', '12:177:53:BS:scene', '13:177:54:BS:scene', '14:177:55:BS:scene', '15:177:56:BS:scene'
