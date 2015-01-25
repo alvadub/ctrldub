@@ -23,26 +23,7 @@ var RL = {
 
   OVERDUB: false,
   IS_PLAYING: false,
-  IS_RECORDING: false,
-
-  CC_MAPPINGS: [],
-  CC_ACTIONS: {},
-  CC_SCENES: [],
-  CC_TRACKS: [],
-  CC_STATE: {},
-  CC_LAST: {}
-};
-
-var PARAMS = {
-  E: { type: 'encoder' },
-  K: { type: 'knob' },
-  B: { type: 'button' },
-  F: { type: 'fader' },
-  P: { type: 'pad' },
-  S: { shift: true },
-  I: { inverted: true },
-  M: { toggle: true },
-  N: { toggle: false }
+  IS_RECORDING: false
 };
 
 function actionFor(status, data1, data2) {
@@ -81,63 +62,63 @@ function execute(action) {
   switch (action.type) {
     case 'overdub':
       if (action.toggle) {
-        RL.TRANSPORT.toggleOverdub();
+        RL.host.transport.toggleOverdub();
       }
     break;
 
     case 'record':
       if (action.toggle) {
-        RL.TRANSPORT.record();
+        RL.host.transport.record();
         RL.IS_RECORDING = !RL.IS_RECORDING;
       }
     break;
 
     case 'play':
       if (action.toggle) {
-        RL.TRANSPORT.play();
+        RL.host.transport.play();
       }
     break;
 
     case 'play-all':
       for (var i = 0; i < 8; i += 1) {
-        RL.TRACKS.getClipLauncherScenes().launch(i);
+        RL.host.trackBank.getClipLauncherScenes().launch(i);
       }
     break;
 
     case 'stop':
       if (action.toggle) {
         if (RL.IS_RECORDING) {
-          RL.TRANSPORT.record();
+          RL.host.transport.record();
         }
 
         RL.IS_RECORDING = false;
         RL.IS_PLAYING = false;
 
-        RL.TRANSPORT.stop();
+        RL.host.transport.stop();
       }
     break;
 
     case 'stop-all':
-      RL.TRACKS.getClipLauncherScenes().stop();
+      RL.host.trackBank.getClipLauncherScenes().stop();
     break;
 
     default:
       action.value = [127, 0][+action.toggle] || action.level || 0;
-      action.state = !!RL.CC_STATE[action.offset];
 
-      if (action.command) {
-        RL.CC_ACTIONS[action.command].call({
-          transport: RL.TRANSPORT,
-          trackBank: RL.TRACKS,
-          cDevice: RL.CURSORDEVICE,
-          cTrack: RL.CURSORTRACK
-        }, action);
+      if (RL.CC_ACTIONS[action.command]) {
+        RL.CC_ACTIONS[action.command].call(RL.host, action);
+
+        switch (action.command) {
+          case 'mute': action.state = RL.CC_STATE['activeTrack'][action.offset]; break;
+          case 'solo': action.state = RL.CC_STATE['soloTrack'][action.offset]; break;
+          case 'arm': action.state = RL.CC_STATE['armTrack'][action.offset]; break;
+        }
 
         if (!action.toggle && action.state) {
           sendMidi(action.channel, action.index, 127);
         }
       } else {
-        RL.U_CONTROLS.getControl(action.offset).set(action.value, 128);
+        RL.host.userControls.getControl(action.offset).set(action.value, 128);
       }
     break;
   }

@@ -1,34 +1,3 @@
-function $(_, key) {
-  var options = _.split(':'),
-      args = options[3].split('');
-
-  var copy = {};
-
-  for (var i = 0, v; v = PARAMS[args[i]]; i += 1) {
-    for (var k in v) {
-      copy[k] = v[k];
-    }
-  }
-
-  if (options[4]) {
-    var values = (options[5] || '').split(',');
-
-    for (var i = 0, v; (v = values[i] || '').length; i += 1) {
-      values[i] = /\d+/.test(values[i]) ? +values[i] : values[i];
-    }
-
-    copy.command = options[4];
-    copy.params = values;
-  }
-
-  copy.offset = key;
-  copy.track = +options[0];
-  copy.channel = +options[1];
-  copy.index = +options[2];
-
-  return copy;
-}
-
 function dump(obj) {
   if (obj === true) {
     return 'true';
