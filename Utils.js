@@ -1,4 +1,8 @@
 function dump(obj) {
+  if (obj === null) {
+    return 'null';
+  }
+
   if (obj === true) {
     return 'true';
   }
