@@ -108,8 +108,8 @@ function execute(action) {
       if (RL.CC_ACTIONS[action.command]) {
         RL.CC_ACTIONS[action.command].call(RL.host, action);
 
-        if (typeof RL.CC_STATE['stateTrack'][action.offset] !== 'undefined') {
-          action.state = RL.CC_STATE['stateTrack'][action.offset];
+        if (typeof RL.CC_STATE['commonValues'][action.offset] !== 'undefined') {
+          action.state = RL.CC_STATE['commonValues'][action.offset];
         }
 
         if (!action.toggle && action.state) {

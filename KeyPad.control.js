@@ -88,9 +88,9 @@ function init() {
           RL.CC_SCENES.push(e);
         break;
 
-        case 'mute': tracks[e.track].getMute().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
-        case 'solo': tracks[e.track].getSolo().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
-        case 'arm': tracks[e.track].getArm().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
+        case 'mute': tracks[e.track].getMute().addValueObserver(stateObserver('commonValues', e, 'io')); break;
+        case 'solo': tracks[e.track].getSolo().addValueObserver(stateObserver('commonValues', e, 'io')); break;
+        case 'arm': tracks[e.track].getArm().addValueObserver(stateObserver('commonValues', e, 'io')); break;
 
         default:
           var c = RL.host.userControls.getControl(e.offset);
