@@ -40,6 +40,43 @@ function init() {
   RL.CC_MAPPINGS = [];
   RL.CC_ACTIONS = userActions();
 
+  var stateObserver = function(label, index, type) {
+    if (typeof RL.CC_STATE[label] === 'undefined') {
+      switch (type) {
+        case 'scalar': RL.CC_STATE[label] = index; break;
+        case 'list': RL.CC_STATE[label] = []; break;
+        default: RL.CC_STATE[label] = {}; break;
+      }
+    }
+
+    return function(value) {
+      if (type === 'io') {
+        if (index.inverted) {
+          value = !value;
+        }
+
+        RL.CC_STATE[label][index.offset] = value;
+
+        sendMidi(index.channel, index.index, value ? 127 : 0);
+      } else if (!value) {
+        switch (type) {
+          case 'map': delete RL.CC_STATE[label][index]; break;
+          case 'list': Array.prototype.splice.call(RL.CC_STATE[label], index, 1); break;
+          case 'scalar':
+            if (typeof value === 'string') {
+              RL.CC_STATE[label] = index;
+            }
+          break;
+        }
+      } else {
+        switch (type) {
+          case 'scalar': RL.CC_STATE[label] = index !== null ? index : value; break;
+          default: RL.CC_STATE[label][index] = value; break;
+        }
+      }
+    };
+  };
+
   var initMappings = function(set) {
     RL.host.userControls = host.createUserControls(set.length);
 
@@ -51,9 +88,9 @@ function init() {
           RL.CC_SCENES.push(e);
         break;
 
-        case 'mute': tracks[e.track].getMute().addValueObserver(valueObserver('activeTrack', e)); break;
-        case 'solo': tracks[e.track].getSolo().addValueObserver(valueObserver('soloTrack', e)); break;
-        case 'arm': tracks[e.track].getArm().addValueObserver(valueObserver('armTrack', e)); break;
+        case 'mute': tracks[e.track].getMute().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
+        case 'solo': tracks[e.track].getSolo().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
+        case 'arm': tracks[e.track].getArm().addValueObserver(stateObserver('stateTrack', e, 'io')); break;
 
         default:
           var c = RL.host.userControls.getControl(e.offset);
@@ -63,50 +100,6 @@ function init() {
         break;
       }
     });
-  };
-
-  var stateObserver = function(label, index, type) {
-    if (typeof RL.CC_STATE[label] === 'undefined') {
-      switch (type) {
-        case 'scalar': RL.CC_STATE[label] = index; break;
-        case 'list': RL.CC_STATE[label] = []; break;
-        case 'map': RL.CC_STATE[label] = {}; break;
-      }
-    }
-
-    return function(value) {
-      if (!value) {
-        if (type === 'list') {
-          Array.prototype.splice.call(RL.CC_STATE[label], index, 1);
-        } else if (type === 'map') {
-          delete RL.CC_STATE[label][index];
-        } else {
-          RL.CC_STATE[label] = index;
-        }
-      } else {
-        if (type === 'scalar') {
-          RL.CC_STATE[label] = index !== null ? index : value;
-        } else {
-          RL.CC_STATE[label][index] = value;
-        }
-      }
-    };
-  };
-
-  var valueObserver = function(label, e) {
-    if (!RL.CC_STATE[label]) {
-      RL.CC_STATE[label] = {};
-    }
-
-    return function(state) {
-      if (e.inverted) {
-        state = !state;
-      }
-
-      RL.CC_STATE[label][e.offset] = state;
-
-      sendMidi(e.channel, e.index, state ? 127 : 0);
-    };
   };
 
   var tracks = [];
@@ -182,6 +175,7 @@ function onMidi(status, data1, data2) {
         }
 
         RL.CC_STATE['encoderValues'][action.offset] = data2;
+
       default:
         action.level = data2;
       break;

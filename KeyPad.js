@@ -108,10 +108,8 @@ function execute(action) {
       if (RL.CC_ACTIONS[action.command]) {
         RL.CC_ACTIONS[action.command].call(RL.host, action);
 
-        switch (action.command) {
-          case 'mute': action.state = RL.CC_STATE['activeTrack'][action.offset]; break;
-          case 'solo': action.state = RL.CC_STATE['soloTrack'][action.offset]; break;
-          case 'arm': action.state = RL.CC_STATE['armTrack'][action.offset]; break;
+        if (typeof RL.CC_STATE['stateTrack'][action.offset] !== 'undefined') {
+          action.state = RL.CC_STATE['stateTrack'][action.offset];
         }
 
         if (!action.toggle && action.state) {
