@@ -60,7 +60,6 @@ function init() {
         sendMidi(index.channel, index.index, value ? 127 : 0);
       } else if (!value) {
         switch (type) {
-          case 'map': delete RL.CC_STATE[label][index]; break;
           case 'list': Array.prototype.splice.call(RL.CC_STATE[label], index, 1); break;
           case 'scalar':
             if (typeof value === 'string') {
@@ -106,8 +105,8 @@ function init() {
 
   for (var i = 0, c = 16; i < c; i += 1) {
     tracks[i] = RL.host.trackBank.getTrack(i);
-    tracks[i].addIsSelectedObserver(stateObserver('currentTrack', i, 'scalar'));
-    tracks[i].addNameObserver(20, '', stateObserver('labelTrack', i, 'map'));
+    tracks[i].addIsSelectedObserver(stateObserver('activeTrack', i, 'scalar'));
+    tracks[i].addNameObserver(20, '', stateObserver('currentTracks', i, 'list'));
   }
 
   RL.host.cursorDevice.addNameObserver(20, '', stateObserver('primaryDevice', null, 'scalar'));
