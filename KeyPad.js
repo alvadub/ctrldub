@@ -106,6 +106,27 @@ function execute(action) {
       action.value = [127, 0][+action.toggle] || action.level || 0;
 
       if (RL.CC_ACTIONS[action.command]) {
+        if (['track', 'device', 'macro', 'param'].indexOf(action.command) > -1) {
+          if (!RL.CC_STATE['rangeValues']) {
+            RL.CC_STATE['rangeValues'] = {};
+          }
+
+          var old = RL.CC_STATE['rangeValues'][action.command] || 0;
+
+          if (action.range > 0) {
+            old += 1;
+          } else {
+            old -= 1;
+          }
+
+          var high = action.command === 'track' ? RL.CC_STATE['currentTracks'].length - 1 : 7,
+              fixed = Math.min(high, Math.max(0, old));
+
+          action.value = fixed;
+
+          RL.CC_STATE['rangeValues'][action.command] = fixed;
+        }
+
         RL.CC_ACTIONS[action.command].call(RL.host, action);
 
         if (typeof RL.CC_STATE['commonValues'][action.offset] !== 'undefined') {
