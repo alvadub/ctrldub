@@ -57,8 +57,6 @@ function actionFor(status, data1, data2) {
 }
 
 function execute(action) {
-  debug(action.execute ? 'EX' : 'CC', action);
-
   switch (action.type) {
     case 'overdub':
       if (action.toggle) {
@@ -106,25 +104,33 @@ function execute(action) {
       action.value = [127, 0][+action.toggle] || action.level || 0;
 
       if (RL.CC_ACTIONS[action.command]) {
-        if (['track', 'device', 'macro', 'param'].indexOf(action.command) > -1) {
-          if (!RL.CC_STATE['rangeValues']) {
-            RL.CC_STATE['rangeValues'] = {};
-          }
+        switch (action.command) {
+          case 'track':
+            if (!RL.CC_STATE['rangeValues']) {
+              RL.CC_STATE['rangeValues'] = {};
+            }
 
-          var old = RL.CC_STATE['rangeValues'][action.command] || 0;
+            var old = RL.CC_STATE['rangeValues'][action.command] || 0;
 
-          if (action.range > 0) {
-            old += 1;
-          } else {
-            old -= 1;
-          }
+            if (action.range > 0) {
+              old += 1;
+            } else {
+              old -= 1;
+            }
 
-          var high = action.command === 'track' ? RL.CC_STATE['currentTracks'].length - 1 : 7,
-              fixed = Math.min(high, Math.max(0, old));
+            var high = action.command === 'track' ? RL.CC_STATE['currentTracks'].length - 1 : 7,
+                fixed = Math.min(RL.CC_STATE['currentTracks'].length - 1, Math.max(0, old));
 
-          action.value = fixed;
+            action.value = fixed;
 
-          RL.CC_STATE['rangeValues'][action.command] = fixed;
+            RL.CC_STATE['rangeValues'][action.command] = fixed;
+          break;
+
+          case 'scene':
+            for (var i in RL.CC_SCENES) {
+              sendMidi(RL.CC_SCENES[i].channel, RL.CC_SCENES[i].index, RL.CC_SCENES[i].offset === action.offset ? 127 : 0);
+            }
+          break;
         }
 
         RL.CC_ACTIONS[action.command].call(RL.host, action);
@@ -147,4 +153,19 @@ function execute(action) {
   } else if (action.notify !== false) {
     notify(action);
   }
+}
+
+function get(from, key) {
+  if (from.indexOf('.') > 0) {
+    key = from.split('.')[1];
+    from = from.split('.')[0];
+  }
+
+  var obj = RL.CC_STATE[from];
+
+  if (typeof key !== 'undefined') {
+    return obj ? obj[key] : null;
+  }
+
+  return obj || null;
 }

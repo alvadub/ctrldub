@@ -38,7 +38,7 @@ function init() {
   RL.CC_STATE = {};
   RL.CC_SCENES = [];
   RL.CC_MAPPINGS = [];
-  RL.CC_ACTIONS = userActions();
+  RL.CC_ACTIONS = defaultActions();
 
   var stateObserver = function(label, index, type) {
     if (typeof RL.CC_STATE[label] === 'undefined') {
@@ -127,7 +127,7 @@ function init() {
     sendMidi(RL.CHANNEL1, RL.RECORDS, (RL.OVERDUB = on) ? 127 : 0);
   });
 
-  initMappings(userMappings());
+  initMappings(defaultMappings());
 
   println('CONNECTED');
 }
