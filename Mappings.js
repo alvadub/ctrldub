@@ -5,6 +5,7 @@ var PARAMS = {
   F: { type: 'fader' },
   P: { type: 'pad' },
   S: { shift: true },
+  G: { grouped: true },
   I: { inverted: true },
   M: { toggle: true },
   N: { toggle: false }
@@ -59,8 +60,8 @@ function defaultMappings() {
     // Channels 1-8 (shift)
     '0:177:65:ES:track',  '1:177:66:ES:device',  '2:177:67:ES',  '3:177:68:ES',  '4:177:69:ES',  '5:177:70:ES',  '6:177:71:ES',  '7:177:72:ES',
     '0:177:16:BIS', '1:177:17:BIS', '2:177:18:BIS', '3:177:19:BIS', '4:177:20:BIS', '5:177:21:BIS', '6:177:22:BIS', '7:177:23:BIS',
-    '0:177:32:BS:scene', '1:177:33:BS:scene', '2:177:34:BS:scene', '3:177:35:BS:scene', '4:177:36:BS:scene', '5:177:37:BS:scene', '6:177:38:BS:scene', '7:177:39:BS:scene',
-    '8:177:49:BS:scene', '9:177:50:BS:scene', '10:177:51:BS:scene', '11:177:52:BS:scene', '12:177:53:BS:scene', '13:177:54:BS:scene', '14:177:55:BS:scene', '15:177:56:BS:scene'
+    '0:177:32:BSG:scene', '1:177:33:BSG:scene', '2:177:34:BSG:scene', '3:177:35:BSG:scene', '4:177:36:BSG:scene', '5:177:37:BSG:scene', '6:177:38:BSG:scene', '7:177:39:BSG:scene',
+    '8:177:49:BSG:scene', '9:177:50:BSG:scene', '10:177:51:BSG:scene', '11:177:52:BSG:scene', '12:177:53:BSG:scene', '13:177:54:BSG:scene', '14:177:55:BSG:scene', '15:177:56:BSG:scene'
   ];
 
   return PAGE_1.map(function(data, i) {
