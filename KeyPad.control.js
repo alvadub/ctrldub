@@ -38,6 +38,8 @@ function init() {
   RL.CC_STATE = {};
   RL.CC_TRACKS = [];
   RL.CC_MAPPINGS = {};
+
+  RL.CC_USER_STATE = {};
   RL.CC_USER_ACTIONS = defaultActions();
 
   var initializeTracks = function() {
@@ -121,13 +123,18 @@ function init() {
       from = from.split('.')[0];
     }
 
-    var obj = RL.CC_STATE[from] && copy(RL.CC_STATE[from]);
+    var obj = (RL.CC_STATE[from] && copy(RL.CC_STATE[from])) ||
+              (RL.CC_USER_STATE[from] && copy(RL.CC_USER_STATE[from]));
 
     if (typeof key !== 'undefined') {
       return obj ? obj[key] : null;
     }
 
     return obj || null;
+  };
+
+  var stateSetter = function(key, value) {
+    RL.CC_USER_STATE[key] = value;
   };
 
   var getterFor = function(key) {
@@ -156,6 +163,7 @@ function init() {
 
 
   RL.host.get = stateGetter;
+  RL.host.set = stateSetter;
 
   RL.host.isPlaying = getterFor('IS_PLAYING');
   RL.host.isRecording = getterFor('IS_RECORDING');
