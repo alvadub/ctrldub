@@ -103,37 +103,16 @@ function execute(action) {
     default:
       action.value = [127, 0][+action.toggle] || action.level || 0;
 
-      if (RL.CC_ACTIONS[action.command]) {
-        switch (action.command) {
-          case 'track':
-            if (!RL.CC_STATE['rangeValues']) {
-              RL.CC_STATE['rangeValues'] = {};
-            }
+      if (RL.CC_USER_ACTIONS[action.command]) {
+        var scope = copy(RL.host);
 
-            var old = RL.CC_STATE['rangeValues'][action.command] || 0;
-
-            if (action.range > 0) {
-              old += 1;
-            } else {
-              old -= 1;
-            }
-
-            var high = action.command === 'track' ? RL.CC_STATE['currentTracks'].length - 1 : 7,
-                fixed = Math.min(RL.CC_STATE['currentTracks'].length - 1, Math.max(0, old));
-
-            action.value = fixed;
-
-            RL.CC_STATE['rangeValues'][action.command] = fixed;
-          break;
-
-          case 'scene':
-            for (var i in RL.CC_SCENES) {
-              sendMidi(RL.CC_SCENES[i].channel, RL.CC_SCENES[i].index, RL.CC_SCENES[i].offset === action.offset ? 127 : 0);
-            }
-          break;
+        if (action.grouped) {
+          scope.all = RL.CC_STATE['commonMappings'][action.command].map(function(cc) {
+            return copy(cc);
+          });
         }
 
-        RL.CC_ACTIONS[action.command].call(RL.host, action);
+        RL.CC_USER_ACTIONS[action.command].call(scope, action);
 
         if (typeof RL.CC_STATE['commonValues'][action.offset] !== 'undefined') {
           action.state = RL.CC_STATE['commonValues'][action.offset];
@@ -148,24 +127,9 @@ function execute(action) {
     break;
   }
 
-  if (action.label) {
-    host.showPopupNotification(action.label);
+  if (typeof action.notify === 'string') {
+    host.showPopupNotification(action.notify);
   } else if (action.notify !== false) {
     notify(action);
   }
-}
-
-function get(from, key) {
-  if (from.indexOf('.') > 0) {
-    key = from.split('.')[1];
-    from = from.split('.')[0];
-  }
-
-  var obj = RL.CC_STATE[from];
-
-  if (typeof key !== 'undefined') {
-    return obj ? obj[key] : null;
-  }
-
-  return obj || null;
 }

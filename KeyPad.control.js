@@ -36,9 +36,17 @@ function init() {
   };
 
   RL.CC_STATE = {};
-  RL.CC_SCENES = [];
-  RL.CC_MAPPINGS = [];
-  RL.CC_ACTIONS = defaultActions();
+  RL.CC_TRACKS = [];
+  RL.CC_MAPPINGS = {};
+  RL.CC_USER_ACTIONS = defaultActions();
+
+  var initializeTracks = function() {
+    for (var i = 0, c = 16; i < c; i += 1) {
+      RL.CC_TRACKS[i] = RL.host.trackBank.getTrack(i);
+      RL.CC_TRACKS[i].addIsSelectedObserver(stateObserver('activeTrack', i, 'scalar'));
+      RL.CC_TRACKS[i].addNameObserver(20, '', stateObserver('currentTracks', i, 'list'));
+    }
+  };
 
   var stateObserver = function(label, index, type) {
     if (typeof RL.CC_STATE[label] === 'undefined') {
@@ -79,17 +87,23 @@ function init() {
   var initMappings = function(set) {
     RL.host.userControls = host.createUserControls(set.length);
 
+    RL.CC_STATE['commonMappings'] = {};
+
     set.forEach(function(e) {
       RL.CC_MAPPINGS[e.channel + '#' + e.index] = e;
 
-      switch (e.command) {
-        case 'scene':
-          RL.CC_SCENES.push(e);
-        break;
+      if (e.grouped) {
+        if (!RL.CC_STATE['commonMappings'][e.command]) {
+          RL.CC_STATE['commonMappings'][e.command] = [];
+        }
 
-        case 'mute': tracks[e.track].getMute().addValueObserver(stateObserver('commonValues', e, 'io')); break;
-        case 'solo': tracks[e.track].getSolo().addValueObserver(stateObserver('commonValues', e, 'io')); break;
-        case 'arm': tracks[e.track].getArm().addValueObserver(stateObserver('commonValues', e, 'io')); break;
+        RL.CC_STATE['commonMappings'][e.command].push(e);
+      }
+
+      switch (e.command) {
+        case 'mute': RL.CC_TRACKS[e.track].getMute().addValueObserver(stateObserver('commonValues', e, 'io')); break;
+        case 'solo': RL.CC_TRACKS[e.track].getSolo().addValueObserver(stateObserver('commonValues', e, 'io')); break;
+        case 'arm': RL.CC_TRACKS[e.track].getArm().addValueObserver(stateObserver('commonValues', e, 'io')); break;
 
         default:
           var c = RL.host.userControls.getControl(e.offset);
@@ -101,13 +115,20 @@ function init() {
     });
   };
 
-  var tracks = [];
+  var stateGetter = function(from, key) {
+    if (from.indexOf('.') > 0) {
+      key = from.split('.')[1];
+      from = from.split('.')[0];
+    }
 
-  for (var i = 0, c = 16; i < c; i += 1) {
-    tracks[i] = RL.host.trackBank.getTrack(i);
-    tracks[i].addIsSelectedObserver(stateObserver('activeTrack', i, 'scalar'));
-    tracks[i].addNameObserver(20, '', stateObserver('currentTracks', i, 'list'));
-  }
+    var obj = RL.CC_STATE[from] && copy(RL.CC_STATE[from]);
+
+    if (typeof key !== 'undefined') {
+      return obj ? obj[key] : null;
+    }
+
+    return obj || null;
+  };
 
   RL.host.cursorDevice.addNameObserver(20, '', stateObserver('primaryDevice', null, 'scalar'));
 
@@ -127,6 +148,10 @@ function init() {
     sendMidi(RL.CHANNEL1, RL.RECORDS, (RL.OVERDUB = on) ? 127 : 0);
   });
 
+
+  RL.host.get = stateGetter;
+
+  initializeTracks();
   initMappings(defaultMappings());
 
   println('CONNECTED');
