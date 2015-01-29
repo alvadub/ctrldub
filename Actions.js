@@ -1,5 +1,12 @@
 function defaultActions() {
   return {
+    stop: function(e) {
+      if (e.toggle) {
+        this.get('commonMappings.scene').forEach(function(cc) {
+          sendMidi(cc.channel, cc.index, 0);
+        });
+      }
+    },
     device: function(e) {
       this.cursorDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
 
