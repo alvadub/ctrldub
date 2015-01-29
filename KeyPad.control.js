@@ -130,6 +130,12 @@ function init() {
     return obj || null;
   };
 
+  var getterFor = function(key) {
+    return function() {
+      return RL[key];
+    };
+  };
+
   RL.host.cursorDevice.addNameObserver(20, '', stateObserver('primaryDevice', null, 'scalar'));
 
   RL.host.transport.addIsRecordingObserver(function (on) {
@@ -150,6 +156,9 @@ function init() {
 
 
   RL.host.get = stateGetter;
+
+  RL.host.isPlaying = getterFor('IS_PLAYING');
+  RL.host.isRecording = getterFor('IS_RECORDING');
 
   initializeTracks();
   initMappings(defaultMappings());
