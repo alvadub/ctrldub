@@ -1,6 +1,6 @@
 function defaultActions() {
   return {
-    stop: function(e) {
+    onStop: function(e) {
       if (e.toggle && this.get('currentScene')) {
         var cc = this.get('currentScene');
 

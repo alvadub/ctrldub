@@ -109,7 +109,15 @@ function execute(action) {
 
   action.value = [127, 0][+action.toggle] || action.level || 0;
 
-  var callback = RL.CC_USER_ACTIONS[action.command || action.type];
+  var callback = RL.CC_USER_ACTIONS[action.command];
+
+  if (!callback) {
+    var proxy = ('on-' + action.type).replace(/-[a-z]/g, function(match) {
+      return match.substr(1).toUpperCase();
+    });
+
+    callback = RL.CC_USER_ACTIONS[proxy];
+  }
 
   if (typeof callback === 'function') {
     var scope = copy(RL.host);
