@@ -1,10 +1,10 @@
 function defaultActions() {
   return {
     stop: function(e) {
-      if (e.toggle) {
-        this.get('commonMappings.scene').forEach(function(cc) {
-          sendMidi(cc.channel, cc.index, 0);
-        });
+      if (e.toggle && this.get('currentScene')) {
+        var cc = this.get('currentScene');
+
+        sendMidi(cc.channel, cc.index, 0);
       }
     },
     device: function(e) {
@@ -14,6 +14,8 @@ function defaultActions() {
     },
     scene: function(e) {
       this.trackBank.launchScene(e.track);
+
+      this.set('currentScene', e);
 
       this.all.forEach(function(cc) {
         sendMidi(cc.channel, cc.index, cc.offset === e.offset ? 127 : 0);
