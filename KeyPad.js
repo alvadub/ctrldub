@@ -101,30 +101,34 @@ function execute(action) {
     break;
 
     default:
-      action.value = [127, 0][+action.toggle] || action.level || 0;
-
-      if (RL.CC_USER_ACTIONS[action.command]) {
-        var scope = copy(RL.host);
-
-        if (action.grouped) {
-          scope.all = RL.CC_STATE['commonMappings'][action.command].map(function(cc) {
-            return copy(cc);
-          });
-        }
-
-        RL.CC_USER_ACTIONS[action.command].call(scope, action);
-
-        if (typeof RL.CC_STATE['commonValues'][action.offset] !== 'undefined') {
-          action.state = RL.CC_STATE['commonValues'][action.offset];
-        }
-
-        if (!action.toggle && action.state) {
-          sendMidi(action.channel, action.index, 127);
-        }
-      } else {
+      if (!action.command) {
         RL.host.userControls.getControl(action.offset).set(action.value, 128);
       }
     break;
+  }
+
+  action.value = [127, 0][+action.toggle] || action.level || 0;
+
+  var callback = RL.CC_USER_ACTIONS[action.command || action.type];
+
+  if (typeof callback === 'function') {
+    var scope = copy(RL.host);
+
+    if (action.grouped) {
+      scope.all = RL.CC_STATE['commonMappings'][action.command].map(function(cc) {
+        return copy(cc);
+      });
+    }
+
+    callback.call(scope, action);
+
+    if (typeof RL.CC_STATE['commonValues'][action.offset] !== 'undefined') {
+      action.state = RL.CC_STATE['commonValues'][action.offset];
+    }
+
+    if (!action.toggle && action.state && action.command) {
+      sendMidi(action.channel, action.index, 127);
+    }
   }
 
   if (typeof action.notify === 'string') {
