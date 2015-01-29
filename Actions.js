@@ -3,26 +3,37 @@ function defaultActions() {
     device: function(e) {
       this.cursorDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
 
-      if (get('primaryDevice')) {
-        e.label = get('primaryDevice');
-      } else {
-        e.notify = false;
-      }
+      e.notify = this.get('primaryDevice') || false;
     },
     scene: function(e) {
       this.trackBank.launchScene(e.track);
 
-      e.label = 'Scene ' + (e.track + 1);
+      this.all.forEach(function(cc) {
+        sendMidi(cc.channel, cc.index, cc.offset === e.offset ? 127 : 0);
+      });
+
+      e.notify = 'Scene ' + (e.track + 1);
     },
     track: function(e) {
-      this.trackBank.getTrack(e.value).select();
+      var track = this.get('activeTrack'),
+          total = this.get('currentTracks.length') - 1;
 
-      e.label = get('currentTracks', e.value);
+      if (e.range > 0) {
+        track += 1;
+      } else {
+        track -= 1;
+      }
+
+      var index = Math.min(total, Math.max(0, track));
+
+      this.trackBank.getTrack(index).select();
+
+      e.notify = this.get('currentTracks', index);
     },
     send: function(e) {
       this.trackBank.getTrack(e.track).getSend(e.params[0]).set(e.value, 128);
 
-      e.label = e.value ? Math.round(e.value / 1.27) + '%' : 'OFF';
+      e.notify = e.value ? Math.round(e.value / 1.27) + '%' : 'OFF';
     },
     mute: function(e) {
       this.trackBank.getTrack(e.track).getMute().set(e.toggle);
