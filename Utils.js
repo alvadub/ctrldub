@@ -34,6 +34,16 @@ function dump(obj) {
   return '{ ' + out.join(', ') + ' }';
 }
 
+function copy(obj) {
+  var target = {};
+
+  for (var key in obj) {
+    target[key] = obj[key];
+  }
+
+  return target;
+}
+
 function debug() {
   if (arguments.length === 1) {
     return (DEBUG = !!arguments[0]);
