@@ -71,7 +71,7 @@ $.on({
   },
   toggleControl: function() {
     $.set('selectedControl.isEnabled', !$.get('selectedControl.isEnabled'));
-    $.update('pages.' + $.get('selectedPage'));
+    $.updateModel();
   },
   resetConfiguration: function() {
     localStorage.clear();
