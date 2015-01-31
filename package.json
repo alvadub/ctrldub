@@ -1,0 +1,34 @@
+{
+  "name": "reloop-keypad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "bin": {
+    "keypad": "cli.js"
+  },
+  "window": {
+    "toolbar": false,
+    "resizable": true,
+    "fullscreen": false,
+    "width": 800,
+    "height": 600
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pateketrueke/reloop-keypad.git"
+  },
+  "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pateketrueke/reloop-keypad/issues"
+  },
+  "homepage": "https://github.com/pateketrueke/reloop-keypad",
+  "dependencies": {
+    "jazz-midi": "^1.4.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "jszip": "^2.4.0",
+    "nw": "^0.12.0-alpha2"
+  }
+}

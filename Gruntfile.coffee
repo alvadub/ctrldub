@@ -1,30 +1,27 @@
+path = require('path')
+JSZip = require('jszip')
+
 module.exports = (grunt) ->
-  grunt.initConfig
-    watch:
-      options:
-        spawn: off
+  grunt.registerTask 'default', ->
+    assets = [
+      'package.json'
+      'styles.css'
+      'index.html'
+      'Setup.js'
+      'Command.js'
+      'Utils.js'
+      'Actions.js'
+      'Mappings.js'
+      'KeyPad.js'
+      'KeyPad.control.js'
+      'bower_components/ractive/ractive.js'
+    ]
 
-      main:
-        files: ['main.js']
-        tasks: ['browserify']
+    zip = new JSZip
 
-    bower:
-      install:
-        options:
-          copy: false
-          targetDir: 'bower_components'
+    for src in assets
+      zip.file src.replace(process.cwd(), ''), grunt.file.read(src)
 
-    browserify:
-      dist:
-        options:
-          watch: on
-          browserifyOptions:
-            fullPaths: off
-        files:
-          'bundle.js': ['main.js']
+    grunt.file.write 'KeyPad.nw', zip.generate(type: 'nodebuffer')
 
-  grunt.loadNpmTasks 'grunt-bower-task'
-  grunt.loadNpmTasks 'grunt-browserify'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
-
-  grunt.registerTask 'default', ['bower', 'browserify']
+    grunt.log.ok 'Done.'

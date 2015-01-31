@@ -1,0 +1,20 @@
+{
+  "name": "reloop-keypad",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/pateketrueke/reloop-keypad",
+  "authors": [
+    "Alvaro Cabrera <pateketrueke@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ractive": "~0.6.1"
+  }
+}
