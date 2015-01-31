@@ -7,7 +7,11 @@ function defaultMappings() {
       { channel: 177, index: 8, type: 'button', inverted: true },
       { channel: 177, index: 24, type: 'button' },
       { channel: 177, index: 40, type: 'button' },
-      { channel: 177, index: 0, type: 'fader' }
+      { channel: 177, index: 0, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 58, type: 'encoder' },
@@ -16,7 +20,11 @@ function defaultMappings() {
       { channel: 177, index: 9, type: 'button', inverted: true },
       { channel: 177, index: 25, type: 'button' },
       { channel: 177, index: 41, type: 'button' },
-      { channel: 177, index: 1, type: 'fader' }
+      { channel: 177, index: 1, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 59, type: 'encoder' },
@@ -25,7 +33,11 @@ function defaultMappings() {
       { channel: 177, index: 10, type: 'button', inverted: true },
       { channel: 177, index: 26, type: 'button' },
       { channel: 177, index: 42, type: 'button' },
-      { channel: 177, index: 2, type: 'fader' }
+      { channel: 177, index: 2, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 60, type: 'encoder' },
@@ -34,7 +46,11 @@ function defaultMappings() {
       { channel: 177, index: 11, type: 'button', inverted: true },
       { channel: 177, index: 27, type: 'button' },
       { channel: 177, index: 43, type: 'button' },
-      { channel: 177, index: 3, type: 'fader' }
+      { channel: 177, index: 3, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 61, type: 'encoder' },
@@ -43,7 +59,11 @@ function defaultMappings() {
       { channel: 177, index: 12, type: 'button', inverted: true },
       { channel: 177, index: 28, type: 'button' },
       { channel: 177, index: 44, type: 'button' },
-      { channel: 177, index: 4, type: 'fader' }
+      { channel: 177, index: 4, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 62, type: 'encoder' },
@@ -52,7 +72,11 @@ function defaultMappings() {
       { channel: 177, index: 13, type: 'button', inverted: true },
       { channel: 177, index: 29, type: 'button' },
       { channel: 177, index: 45, type: 'button' },
-      { channel: 177, index: 5, type: 'fader' }
+      { channel: 177, index: 5, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 63, type: 'encoder' },
@@ -61,7 +85,11 @@ function defaultMappings() {
       { channel: 177, index: 14, type: 'button', inverted: true },
       { channel: 177, index: 30, type: 'button' },
       { channel: 177, index: 46, type: 'button' },
-      { channel: 177, index: 6, type: 'fader' }
+      { channel: 177, index: 6, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ],
     [
       { channel: 177, index: 64, type: 'encoder' },
@@ -70,7 +98,11 @@ function defaultMappings() {
       { channel: 177, index: 15, type: 'button', inverted: true },
       { channel: 177, index: 31, type: 'button' },
       { channel: 177, index: 47, type: 'button' },
-      { channel: 177, index: 7, type: 'fader' }
+      { channel: 177, index: 7, type: 'fader' },
+      {}, {},
+      {}, {},
+      {},
+      {}
     ]
 
 
