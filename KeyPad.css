@@ -1,0 +1,27 @@
+html {box-sizing:border-box;}
+*,*:before,*:after {box-sizing:inherit;}
+*{margin:0;padding:0;}
+.cc:hover{background:gray;color:silver;}
+.track{border:1px solid silver;border-left:0;width:12.5%;}
+.track:first-child{border-left:1px solid silver;}
+.track:hover{background:silver;}
+.track:hover *{border-color:silver;}
+.row{display:table;width:100%;}
+.cell{display:table-cell;vertical-align:top;}
+.grid{margin:100px auto;width:72%;}
+.encoder,.pad{height:60px;}
+.left,.right{width:50%;}
+.fader{height:90px;}
+.fader,.mute,.solo,.arm{width:100%;}
+.left,.right,.mute,.solo,.arm{height:30px}
+.cc button{border:1px solid white;width:100%;height:100%;}
+.cc button:focus,.cc button:active{background:gray;}
+.pager{margin-bottom:5px;}
+.pager input{display:none;}
+.pager label{color:silver;}
+.pager input:checked ~ label{color:gray;}
+.page button{border:0;background:white;}
+.page button:disabled{background:silver;}
+.hidden{display:none;}
+.config{width:58%}
+.midi{width:42%;}
