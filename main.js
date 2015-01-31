@@ -71,16 +71,10 @@ $.on({
   },
   toggleControl: function() {
     $.set('selectedControl.isEnabled', !$.get('selectedControl.isEnabled'));
-    $.updateModel();
+    store('userMappings', RL.CC_MAPPINGS);
   },
   resetConfiguration: function() {
     localStorage.clear();
     location.reload();
-  }
-});
-
-$.observe({
-  pages: function() {
-    store('userMappings', RL.CC_MAPPINGS);
   }
 });

@@ -16,8 +16,8 @@ html {box-sizing:border-box;}
 .fader,.mute,.solo,.arm{width:100%;}
 .left,.right,.mute,.solo,.arm{height:30px}
 .cc button{border:1px solid white;width:100%;height:100%;}
-.cc button.active{background:gray;}
 .cc button.enabled{background:black;}
+.cc button.active{background:gray;}
 .pager{margin-bottom:5px;}
 .page button{border:0;background:white;}
 .page button:disabled{background:silver;}
