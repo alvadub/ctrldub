@@ -12,9 +12,14 @@
 <div class="grid" id="controller">
 
   <div class="pager">
-    <button on-click="resetConfiguration">reset</button>
     <span class="page"><button value="0" on-click="setPage" {{activePage(0) ? 'disabled' : ''}}>1</button></span>
     <span class="page"><button value="1" on-click="setPage" {{activePage(1) ? 'disabled' : ''}}>2</button></span>
+
+    <button on-click="enableAll">enable all</button>
+    <button on-click="disableAll">disable all</button>
+
+    <button on-click="resetConfiguration">reset</button>
+    <button on-click="saveConfiguration">save</button>
   </div>
 
   <div class="row">
