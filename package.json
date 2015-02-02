@@ -1,10 +1,10 @@
 {
   "name": "reloop-keypad",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
+  "version": "0.1.0",
+  "description": "ReLoop KeyPad Settings WebApp/CLI",
+  "main": "dist/index.html",
   "bin": {
-    "keypad": "cli.js"
+    "keypad": "bin/cli.js"
   },
   "window": {
     "toolbar": false,
@@ -23,11 +23,13 @@
     "url": "https://github.com/pateketrueke/reloop-keypad/issues"
   },
   "homepage": "https://github.com/pateketrueke/reloop-keypad",
-  "dependencies": {
-    "jazz-midi": "^1.4.1"
-  },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-browserify": "^3.3.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-parts": "^0.3.1",
+    "jazz-midi": "^1.4.1",
     "jszip": "^2.4.0",
     "nw": "^0.12.0-alpha2"
   }
