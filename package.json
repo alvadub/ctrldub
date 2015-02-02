@@ -2,7 +2,7 @@
   "name": "reloop-keypad",
   "version": "0.1.0",
   "description": "ReLoop KeyPad Settings WebApp/CLI",
-  "main": "dist/index.html",
+  "main": "index.html",
   "bin": {
     "keypad": "bin/cli.js"
   },
