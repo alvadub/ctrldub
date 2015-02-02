@@ -21,7 +21,7 @@ module.exports = (grunt) ->
         dest: 'bundle.js'
 
       ctrl:
-        src: 'lib/api/script.js'
+        src: 'lib/api/control.js'
         dest: 'KeyPad.control.js'
 
   grunt.loadNpmTasks 'grunt-parts'
