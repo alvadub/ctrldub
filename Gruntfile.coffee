@@ -16,6 +16,12 @@ module.exports = (grunt) ->
         files: ['lib/api/**/*.js']
         tasks: ['browserify:ctrl']
 
+    bower:
+      install:
+        options:
+          copy: off
+          targetDir: 'bower_components'
+
     less:
       styles:
         files:
@@ -34,8 +40,11 @@ module.exports = (grunt) ->
         dest: 'KeyPad.control.js'
 
   grunt.loadNpmTasks 'grunt-parts'
+  grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-less'
+
+  grunt.registerTask 'default', ['less', 'bower', 'browserify']
 
   # TODO: fix build...
 
