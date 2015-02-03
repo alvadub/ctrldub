@@ -10,25 +10,13 @@
 
 <script id="layout" type="text/ractive">
 <div class="grid" id="controller">
-
-  <div class="pager">
-    <span class="page"><button value="0" on-click="setPage" {{activePage(0) ? 'disabled' : ''}}>1</button></span>
-    <span class="page"><button value="1" on-click="setPage" {{activePage(1) ? 'disabled' : ''}}>2</button></span>
-
-    <button on-click="enableAll">enable all</button>
-    <button on-click="disableAll">disable all</button>
-
-    <button on-click="resetConfiguration">reset</button>
-    <button on-click="saveConfiguration">save</button>
-  </div>
-
   <div class="row">
-
     <div class="cell midi">
     {{#pages:pageIndex}}
       <div class="row {{activePage(pageIndex) ? '' : 'hidden'}}">
       {{#tracks:trackIndex}}
         <div class="cell track">
+          <div class="nth">{{trackIndex + 1}}</div>
           <div class="cc encoder"><button value="0" on-click="setControl" class="{{activeControl(controls[0])}}"></button></div>
           <div class="row">
             <div class="cell cc knob left"><button value="1" on-click="setControl" class="{{activeControl(controls[1])}}"></button></div>
@@ -44,20 +32,30 @@
               <div class="cc fader"><button value="6" on-click="setControl" class="{{activeControl(controls[6])}}"></button></div>
             </div>
           </div>
-          <div class="cc pad"><button value="7" on-click="setControl" class="{{activeControl(controls[7])}}"></button></div>
-          <div class="cc pad"><button value="8" on-click="setControl" class="{{activeControl(controls[8])}}"></button></div>
-          <div class="nth">{{trackIndex + 1}}</div>
+          <div class="row">
+            <div class="cc pad"><button value="7" on-click="setControl" class="{{activeControl(controls[7])}}"></button></div>
+            <div class="cc pad"><button value="8" on-click="setControl" class="{{activeControl(controls[8])}}"></button></div>
+          </div>
         </div>
       {{/tracks}}
       </div>
     {{/pages}}
+    <div class="actions row">
+      <div class="cell fill">
+        <button value="0" on-click="setPage" {{activePage(0) ? 'disabled' : ''}}>1</button>
+        <button value="1" on-click="setPage" {{activePage(1) ? 'disabled' : ''}}>2</button>
+      </div>
+
+      <div class="cell nowrap">
+        <button on-click="resetConfiguration">reset</button>
+        <button on-click="saveConfiguration">save</button>
+      </div>
+    </div>
   </div>
 
   <div class="cell config">
     {{#selectedControl}}
-      track {{track + 1}} - {{type}}
-      <button on-click="toggleControl">{{isEnabled ? 'disable' : 'enable'}}</button>
-      <pre>{{JSON.stringify(this,null,2)}}</pre>
+      <pre class="content">{{JSON.stringify(this,null,2)}}</pre>
     {{/selectedControl}}
   </div>
 
