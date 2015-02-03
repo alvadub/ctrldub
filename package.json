@@ -1,17 +1,17 @@
 {
   "name": "reloop-keypad",
   "version": "0.1.0",
-  "description": "ReLoop KeyPad Settings WebApp/CLI",
+  "description": "ReLoop KeyPad - MIDI Configuration Editor",
   "main": "index.html",
   "bin": {
     "keypad": "bin/cli.js"
   },
   "window": {
     "toolbar": false,
-    "resizable": true,
+    "resizable": false,
     "fullscreen": false,
-    "width": 800,
-    "height": 600
+    "width": 1230,
+    "height": 435
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "grunt": "^0.4.5",
     "grunt-bower-task": "^0.4.0",
     "grunt-browserify": "^3.3.0",
+    "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-parts": "^0.3.1",
     "jazz-midi": "^1.4.1",

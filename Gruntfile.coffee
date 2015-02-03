@@ -8,9 +8,18 @@ module.exports = (grunt) ->
         files: ['lib/web/script.js']
         tasks: ['browserify:app']
 
+      less:
+        files: ['lib/web/**/*.less']
+        tasks: ['less:styles']
+
       ctrl:
         files: ['lib/api/**/*.js']
         tasks: ['browserify:ctrl']
+
+    less:
+      styles:
+        files:
+          'styles.css': ['lib/web/styles/app.less']
 
     browserify:
       options:
@@ -26,6 +35,7 @@ module.exports = (grunt) ->
 
   grunt.loadNpmTasks 'grunt-parts'
   grunt.loadNpmTasks 'grunt-browserify'
+  grunt.loadNpmTasks 'grunt-contrib-less'
 
   # TODO: fix build...
 
