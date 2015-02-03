@@ -44,18 +44,23 @@ html {
 
 body {
   font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
-  background: url(classy_fabric.png);
+  background-image: url(classy_fabric.png);
 }
 
 button {
   background: transparent;
   border: 0;
+
+  &:active,
+  &:focus {
+    outline: 0;
+  }
 }
 
 #application {
   width: @width;
-  margin-top: 10px;
-  margin-left: 10px;
+  margin-top: 8px;
+  margin-left: 8px;
 }
 
 .track {
@@ -64,6 +69,7 @@ button {
 
   .nth {
     color: darken(@silver, 30);
+    margin-bottom: 4px;
     text-align: center;
     font-size: .7em;
   }
@@ -112,8 +118,8 @@ button {
 .cc {
   text-align: center;
 
-  &.button, &.pad {
-    padding: 2px;
+  button {
+    margin: 2px;
   }
 }
 
@@ -129,7 +135,7 @@ button {
     padding: 5px;
     background: @silver;
 
-    .box-shadow(10px, 10px, 0, darken(@gray, 10));
+    .box-shadow(8px, 8px, 0, darken(@gray, 10));
   }
 }
 
@@ -138,7 +144,7 @@ button {
   padding: 5px;
   background: @gray;
 
-  .box-shadow(10px, 10px, 0, darken(@gray, 10));
+  .box-shadow(8px, 8px, 0, darken(@gray, 10));
 }
 
 .actions button, .button button, .pad button, .encoder button, .knob button, .fader button {
@@ -173,9 +179,8 @@ button {
 .arm button { outline: 1px dotted @red; background: mix(@red, @gray, 10); }
 
 .fader button {
-  margin: 2px 5px;
-  width: @cell-width - 8;
-  height: (@cell-height * 3) + 8;
+  width: @cell-width - 4;
+  height: (@cell-height * 3) + 10;
 
   .button-pressed;
 
@@ -193,7 +198,7 @@ button {
 }
 
 .actions {
-  margin-top: 5px;
+  margin-top: 8px;
 
   button {
     padding: .2em .5em;

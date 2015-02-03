@@ -10,8 +10,8 @@
     "toolbar": false,
     "resizable": false,
     "fullscreen": false,
-    "width": 1230,
-    "height": 435
+    "width": 1224,
+    "height": 428
   },
   "repository": {
     "type": "git",
