@@ -1,7 +1,7 @@
 {
   "name": "reloop-keypad",
   "version": "0.1.0",
-  "description": "ReLoop KeyPad - MIDI Configuration Editor",
+  "description": "Reloop KeyPad - MIDI Configuration Editor",
   "bin": {
     "keypad": "bin/cli.js"
   },
