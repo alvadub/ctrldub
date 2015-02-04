@@ -1,6 +1,3 @@
-path = require('path')
-JSZip = require('jszip')
-
 module.exports = (grunt) ->
   grunt.initConfig
     watch:
@@ -16,6 +13,13 @@ module.exports = (grunt) ->
         files: ['lib/api/**/*.js']
         tasks: ['browserify:ctrl']
 
+    concat:
+      app:
+        src: [
+          'bower_components/ractive/ractive.js'
+        ]
+        dest: 'www/vendor.js'
+
     bower:
       install:
         options:
@@ -25,7 +29,7 @@ module.exports = (grunt) ->
     less:
       styles:
         files:
-          'styles.css': ['lib/web/styles/app.less']
+          'www/styles.css': ['lib/web/styles/app.less']
 
     browserify:
       options:
@@ -33,7 +37,7 @@ module.exports = (grunt) ->
 
       app:
         src: 'lib/web/script.js'
-        dest: 'bundle.js'
+        dest: 'www/bundle.js'
 
       ctrl:
         src: 'lib/api/control.js'
@@ -43,31 +47,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-less'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
 
-  grunt.registerTask 'default', ['less', 'bower', 'browserify']
-
-  # TODO: fix build...
-
-  # grunt.registerTask 'build', ->
-  #   assets = grunt.file.expand [
-  #     'src/*.js'
-  #     'package.json'
-  #   ]
-
-  #   Array::push.apply assets, [
-  #     'package.json'
-  #     'styles.css'
-  #     'index.html'
-  #     'bundle.js'
-  #     'KeyPad.control.js'
-  #     'bower_components/ractive/ractive.js'
-  #   ]
-
-  #   zip = new JSZip
-
-  #   for src in assets
-  #     zip.file src.replace(process.cwd(), ''), grunt.file.read(src)
-
-  #   grunt.file.write 'KeyPad.nw', zip.generate(type: 'nodebuffer')
-
-  #   grunt.log.ok 'Done.'
+  grunt.registerTask 'default', ['less', 'bower', 'concat', 'browserify']
