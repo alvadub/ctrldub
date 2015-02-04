@@ -3,11 +3,14 @@
 *.zip
 *.tgz
 *.log
+*.json
 
+KeyPad.*
 README.md
 gulpfile.*
 Gruntfile.*
 
+/lib
 /tmp
 /src
 /spec

@@ -1,7 +1,8 @@
 *.nw
 *.log
+*.css
 KeyPad.*
-styles.css
 *bundle.js
+*vendor.js
 /node_modules
 /bower_components
