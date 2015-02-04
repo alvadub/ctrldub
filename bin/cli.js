@@ -18,8 +18,8 @@ var argv = minimist(process.argv.slice(2), {
 
 var pkg = require('../package.json');
 
-function writeln() {
-  process.stdout.write(Array.prototype.slice.call(arguments).join('') + '\n');
+function write() {
+  process.stdout.write(Array.prototype.slice.call(arguments).join(''));
 }
 
 function exit(status) {
@@ -51,7 +51,7 @@ if (argv.help) {
 var input = jazz.MidiInList();
 
 if (!input.length) {
-  writeln('Waiting for input...');
+  write('Waiting for input ... ');
 
   while (!input.length) {
     input = jazz.MidiInList();
@@ -60,10 +60,12 @@ if (!input.length) {
   var test = 'Reloop KeyPad MIDI';
 
   input = input.filter(function(id) {
-    if (test.indexOf(id) !== -1) {
+    if (id.indexOf(test) !== -1) {
       return true;
     }
   });
+
+  write('OK\n');
 }
 
 if (!input.length) {
@@ -79,10 +81,11 @@ var app = express();
 
 var port = argv.port && /^\d+$/.test(argv.port) ? +argv.port : 8080;
 
+write('Listening on http://localhost:', port, '/\n');
+write('[press CTRL-C to quit]\n');
+
 app.use(serveStatic('www'));
 app.listen(port);
-
-writeln('Open http://localhost:', port, '/');
 
 var midi = new jazz.MIDI();
 
@@ -102,17 +105,29 @@ server.on('connection', function(ws) {
     var data = JSON.parse(message);
 
     if (data.status === 'ping') {
-      writeln('CONNECTED');
+      write('Connected\n');
+
+      ws.send(JSON.stringify({
+        label: input,
+        status: 'pong'
+      }));
     } else {
-      writeln(message);
+      write(message + '\n');
     }
   });
 
   if (midi.MidiInOpen(input, callback) !== input) {
-    writeln('ERR');
-  } else {
-    ws.send(JSON.stringify({
-      status: 'pong'
-    }));
+    write('ERR\n');
   }
+
+  midi.OnDisconnectMidiIn(function(name) {
+    write('Disconnected\n');
+
+    ws.send(JSON.stringify({
+      label: name,
+      status: 'quit'
+    }));
+
+    exit();
+  });
 });
