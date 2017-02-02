@@ -2,7 +2,6 @@
 *.log
 *.css
 dist
-KeyPad.*
 *bundle.js
 *vendor.js
 /node_modules
