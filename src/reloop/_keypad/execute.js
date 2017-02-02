@@ -1,10 +1,8 @@
-'use strict';
-
 /* global sendMidi, host */
 
-var $ = require('../helpers');
+import { copy, notify } from './helpers';
 
-module.exports = function(action) {
+export default function (action) {
   if (typeof action.value === 'undefined') {
     action.value = [127, 0][+action.toggle] || action.level || 0;
   }
@@ -14,26 +12,26 @@ module.exports = function(action) {
       if (action.toggle) {
         this.host.transport.toggleOverdub();
       }
-    break;
+      break;
 
     case 'record':
       if (action.toggle) {
         this.host.transport.record();
         this.IS_RECORDING = !this.IS_RECORDING;
       }
-    break;
+      break;
 
     case 'play':
       if (action.toggle) {
         this.host.transport.play();
       }
-    break;
+      break;
 
     case 'play-all':
-      for (var i = 0; i < 8; i += 1) {
+      for (let i = 0; i < 8; i += 1) {
         this.host.trackBank.getClipLauncherScenes().launch(i);
       }
-    break;
+      break;
 
     case 'stop':
       if (action.toggle) {
@@ -46,40 +44,39 @@ module.exports = function(action) {
 
         this.host.transport.stop();
       }
-    break;
+      break;
 
     case 'stop-all':
       this.host.trackBank.getClipLauncherScenes().stop();
-    break;
+      break;
 
     default:
       if (typeof action.offset === 'number') {
         this.host.userControls.getControl(action.offset).set(action.value, 128);
       }
-    break;
+      break;
   }
 
-  var callback = this.CC_USER_ACTIONS[action.command];
+  let callback = this.CC_USER_ACTIONS[action.command];
 
   if (!callback) {
-    var proxy = ('on-' + action.type).replace(/-[a-z]/g, function(match) {
-      return match.substr(1).toUpperCase();
-    });
+    const proxy = (`on-${action.type}`)
+      .replace(/-[a-z]/g, match => match.substr(1).toUpperCase());
 
     callback = this.CC_USER_ACTIONS[proxy];
   }
 
   if (typeof callback === 'function') {
-    var api = $.copy(this.host);
+    const api = copy(this.host);
 
     if (action.grouped) {
-      api.all = this.CC_STATE.commonMappings[action.command].map($.copy);
+      api.all = this.CC_STATE.commonMappings[action.command].map(copy);
     }
 
     callback.call(api, action);
 
-    if (typeof this.CC_STATE.commonValues[action.channel + '#' + action.index] !== 'undefined') {
-      action.state = this.CC_STATE.commonValues[action.channel + '#' + action.index];
+    if (typeof this.CC_STATE.commonValues[`${action.channel}#${action.index}`] !== 'undefined') {
+      action.state = this.CC_STATE.commonValues[`${action.channel}#${action.index}`];
     }
 
     if (!action.toggle && action.state && action.command) {
@@ -90,7 +87,7 @@ module.exports = function(action) {
   if (typeof action.notify === 'string') {
     host.showPopupNotification(action.notify);
   } else if (action.notify !== false) {
-    $.notify(action);
+    notify(action);
   }
 
   return this;

@@ -1,27 +1,50 @@
 {
   "name": "reloop-keypad",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Reloop KeyPad - MIDI Configuration Editor",
   "bin": {
     "keypad": "bin/cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pateketrueke/reloop-keypad.git"
+    "url": "https://github.com/dubnix/reloop-keypad.git"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pateketrueke/reloop-keypad/issues"
+    "url": "https://github.com/dubnix/reloop-keypad/issues"
   },
-  "homepage": "https://github.com/pateketrueke/reloop-keypad",
+  "homepage": "https://github.com/dubnix/reloop-keypad",
+  "scripts": {
+    "lint": "eslint bin lib"
+  },
+  "tarima": {
+    "cacheFile": "dist/index.json",
+    "public": "dist/public",
+    "dest": "dist",
+    "bundle": "**/index.js",
+    "rename": [
+      "**/src/**:{filepath/1}/{filename}.{extname}"
+    ],
+    "filter": [
+      "!_*",
+      "!**/_*",
+      "!**/_*/**"
+    ],
+    "bundleOptions": {
+      "extensions": {
+        "js": "es6"
+      }
+    }
+  },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-bower-task": "^0.4.0",
-    "grunt-browserify": "^3.3.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-parts": "^0.3.1"
+    "buble": "^0.15.2",
+    "chokidar": "^1.6.1",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.14.0",
+    "rollup": "^0.41.4",
+    "tarima-cli": "gextech/tarima-cli"
   },
   "dependencies": {
     "express": "^4.11.2",

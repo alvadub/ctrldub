@@ -1,25 +1,24 @@
-'use strict';
-
 /* global loadAPI, sendSysex, host */
+/* eslint-disable no-new-func */
+
+import KeyPad from './_keypad';
+import defaultActions from './_default/actions';
+import defaultMappings from './_default/mappings';
 
 loadAPI(1);
 
-var RL;
+let RL;
 
-var KeyPad = require('./keypad');
+// hack for exposing public symbols
+const GLOBAL = new Function('return this')();
 
-var exports = new Function('return this')();
+GLOBAL.DEBUG = true;
 
-var defaultActions = require('./default/actions'),
-    defaultMappings = require('./default/mappings');
-
-exports.DEBUG = true;
-
-exports.init = function() {
+GLOBAL.init = () => {
   sendSysex(KeyPad.ID3);
 
-  var keys = host.getMidiInPort(0).createNoteInput('Keys', '?0????', '?1????', '?2????'),
-      pads = host.getMidiInPort(0).createNoteInput('Pads', '?4????');
+  const keys = host.getMidiInPort(0).createNoteInput('Keys', '?0????', '?1????', '?2????');
+  const pads = host.getMidiInPort(0).createNoteInput('Pads', '?4????');
 
   keys.setShouldConsumeEvents(false);
   pads.setShouldConsumeEvents(false);
@@ -30,7 +29,7 @@ exports.init = function() {
     .set(defaultMappings);
 };
 
-exports.exit = function() {
+GLOBAL.exit = () => {
   RL.teardown();
 };
 

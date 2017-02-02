@@ -1,7 +1,5 @@
-'use strict';
-
 /*  global println */
 
-module.exports = function() {
+export default () => {
   println('DISCONNECTED');
 };

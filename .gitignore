@@ -1,6 +1,7 @@
 *.nw
 *.log
 *.css
+dist
 KeyPad.*
 *bundle.js
 *vendor.js

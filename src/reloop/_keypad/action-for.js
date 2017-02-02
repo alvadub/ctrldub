@@ -1,7 +1,5 @@
-'use strict';
-
-module.exports = function(status, data1, data2) {
-  var on = data2 > 65;
+export default function (status, data1, data2) {
+  const on = data2 > 65;
 
   if (data1 === this.PLAY) {
     return { type: 'play', toggle: on, state: this.IS_PLAYING };
@@ -17,13 +15,13 @@ module.exports = function(status, data1, data2) {
     return { type: 'overdub', toggle: on, state: this.OVERDUB };
   }
 
-  if (this.CC_MAPPINGS[status + '#' + data1]) {
-    var ref = this.CC_MAPPINGS[status + '#' + data1],
-        copy = {};
+  if (this.CC_MAPPINGS[`${status}#${data1}`]) {
+    const ref = this.CC_MAPPINGS[`${status}#${data1}`];
+    const copy = {};
 
-    for (var k in ref) {
+    Object.keys(ref).forEach(k => {
       copy[k] = ref[k];
-    }
+    });
 
     return copy;
   }

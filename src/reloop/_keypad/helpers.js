@@ -1,5 +1,3 @@
-'use strict';
-
 /* global host, println, DEBUG */
 
 function dump(obj) {
@@ -23,22 +21,22 @@ function dump(obj) {
     return obj;
   }
 
-  var out = [];
+  const out = [];
 
-  for (var k in obj) {
-    var v = dump(obj[k]);
+  Object.keys(obj).forEach(k => {
+    const v = dump(obj[k]);
 
-    out.push(obj instanceof Array ? v : (k + ': ' + v));
-  }
+    out.push(obj instanceof Array ? v : `${k}: ${v}`);
+  });
 
   if (obj instanceof Array) {
-    return '[ ' + out.join(', ') + ' ]';
+    return `[ ${out.join(', ')} ]`;
   }
 
-  return '{ ' + out.join(', ') + ' }';
+  return `{ ${out.join(', ')} }`;
 }
 
-module.exports.copy = function(obj) {
+export function copy(obj) {
   if (obj instanceof Array) {
     return obj.slice();
   }
@@ -47,39 +45,41 @@ module.exports.copy = function(obj) {
     return obj;
   }
 
-  var target = {};
+  const target = {};
 
-  for (var key in obj) {
+  Object.keys(obj).forEach(key => {
     target[key] = obj[key];
-  }
+  });
 
   return target;
-};
+}
 
-module.exports.debug =  function() {
+export function debug(...args) {
   if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-    var out = [];
+    const out = [];
 
-    for (var i = 0, a; typeof (a = arguments[i]) !== 'undefined'; i += 1) {
-      out.push(dump(a));
-    }
+    args
+    .filter(x => typeof x !== 'undefined')
+    .forEach(x => {
+      out.push(dump(x));
+    });
 
-    println('> ' + out.join(' '));
+    println(`> ${out.join(' ')}`);
   }
-};
+}
 
-module.exports.notify = function(action) {
-  var text = '';
+export function notify(action) {
+  let text = '';
 
   switch (action.type) {
     case 'encoder':
       text += action.level;
-    break;
+      break;
 
     case 'fader':
     case 'knob':
-      text += (action.level ? Math.round(action.level / 1.27) + '%' : 'OFF');
-    break;
+      text += (action.level ? `${Math.round(action.level / 1.27)}%` : 'OFF');
+      break;
 
     case 'pad':
       if (action.toggle) {
@@ -91,20 +91,20 @@ module.exports.notify = function(action) {
           text += 'OFF';
         }
       }
-    break;
+      break;
 
     case 'play':
       if (action.toggle) {
         text += !action.state ? 'PLAY' : 'PAUSE';
       }
-    break;
+      break;
 
     case 'record':
     case 'overdub':
       if (action.toggle) {
-        text += action.type.toUpperCase() + ' ' + (!action.state ? 'ON' : 'OFF');
+        text += `${action.type.toUpperCase()} ${!action.state ? 'ON' : 'OFF'}`;
       }
-    break;
+      break;
 
     default:
       switch (action.command) {
@@ -114,29 +114,29 @@ module.exports.notify = function(action) {
           } else {
             text += 'UNMUTE';
           }
-        break;
+          break;
 
         case 'solo':
         case 'arm':
           if (action.toggle) {
-            text += action.command.toUpperCase() + ' ' +  (!action.state ? 'ON' : 'OFF');
+            text += `${action.command.toUpperCase()} ${!action.state ? 'ON' : 'OFF'}`;
           }
-        break;
+          break;
 
         default:
           if (action.toggle) {
             text += action.type.replace(/-/g, ' ').toUpperCase();
           }
-        break;
+          break;
       }
-    break;
+      break;
   }
 
   if (text) {
     if (typeof action.offset === 'number') {
-      text = 'CC' + (action.offset + 1) + ' ' + text;
+      text = `CC ${action.offset + 1} ${text}`;
     }
 
     host.showPopupNotification(text);
   }
-};
+}

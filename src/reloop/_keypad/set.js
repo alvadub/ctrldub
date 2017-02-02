@@ -1,12 +1,10 @@
-'use strict';
-
-var initMappings = require('./util/init-mappings');
+import initMappings from './util/init-mappings';
 
 function reduce(set, fn) {
   if (!(set instanceof Array)) {
     fn(set);
   } else {
-    set.forEach(function(value) {
+    set.forEach(value => {
       if (value !== null) {
         reduce(value, fn);
       }
@@ -14,11 +12,12 @@ function reduce(set, fn) {
   }
 }
 
-module.exports = function(mappings) {
-  var map = [],
-      count = 0;
+export default function (mappings) {
+  const map = [];
 
-  reduce(mappings, function(e) {
+  let count = 0;
+
+  reduce(mappings, e => {
     if (typeof e.channel === 'number' && typeof e.index === 'number') {
       if (!e.command) {
         e.offset = count;
@@ -32,4 +31,4 @@ module.exports = function(mappings) {
   initMappings(this, map, count);
 
   return this;
-};
+}

@@ -1,8 +1,6 @@
-'use strict';
-
 /* global sendMidi */
 
-module.exports = function(RL, label, index, type) {
+export default (RL, label, index, type) => {
   if (typeof RL.CC_STATE[label] === 'undefined') {
     switch (type) {
       case 'scalar': RL.CC_STATE[label] = index; break;
@@ -11,13 +9,13 @@ module.exports = function(RL, label, index, type) {
     }
   }
 
-  return function(value) {
+  return value => {
     if (type === 'io') {
       if (index.inverted) {
         value = !value;
       }
 
-      RL.CC_STATE[label][index.channel + '#' + index.index] = value;
+      RL.CC_STATE[label][`${index.channel}#${index.index}`] = value;
 
       sendMidi(index.channel, index.index, value ? 127 : 0);
     } else if (!value) {
@@ -27,7 +25,10 @@ module.exports = function(RL, label, index, type) {
           if (typeof value === 'string') {
             RL.CC_STATE[label] = index;
           }
-        break;
+          break;
+
+        // nothing to do
+        default:break;
       }
     } else {
       switch (type) {
