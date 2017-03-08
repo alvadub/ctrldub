@@ -43,7 +43,7 @@ export default (RL, set, length) => {
     if (typeof e.offset === 'number') {
       const cc = RL.host.userControls.getControl(e.offset);
 
-      cc.setLabel(`CC ${e.offset + 1}`);
+      cc.setLabel(`LCC ${e.offset + 1}`);
       cc.setIndication(true);
     }
   });

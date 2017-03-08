@@ -6,7 +6,7 @@ import makeHost from './util/make-host';
 import initTracks from './util/init-tracks';
 
 export default function () {
-  println('CONNECTED');
+  println('ReLoop KeyPad -- ON');
 
   makeHost(this);
   initTracks(this);
@@ -61,11 +61,7 @@ export default function () {
     }
   });
 
-  host.getMidiInPort(0).setSysexCallback(data => {
-    println('SYSEX');
-    printSysex(data);
-  });
-
+  host.getMidiInPort(0).setSysexCallback(printSysex);
   host.getMidiOutPort(0).setShouldSendMidiBeatClock(true);
 
   return this;

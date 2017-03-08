@@ -1,3 +1,5 @@
+import { keys } from './helpers';
+
 export default function (status, data1, data2) {
   const on = data2 > 65;
 
@@ -19,10 +21,10 @@ export default function (status, data1, data2) {
     const ref = this.CC_MAPPINGS[`${status}#${data1}`];
     const copy = {};
 
-    Object.keys(ref).forEach(k => {
+    keys(ref, k => {
       copy[k] = ref[k];
     });
 
     return copy;
   }
-};
+}

@@ -1,5 +1,5 @@
 /*  global println */
 
 export default () => {
-  println('DISCONNECTED');
+  println('ReLoop KeyPad -- OFF');
 };

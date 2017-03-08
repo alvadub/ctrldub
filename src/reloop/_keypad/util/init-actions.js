@@ -1,5 +1,7 @@
+import { keys } from '../helpers';
+
 export default (RL, map) => {
-  Object.keys(map).forEach(key => {
+  keys(map, key => {
     RL.CC_USER_ACTIONS[key] = map[key];
   });
 };

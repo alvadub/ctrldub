@@ -1,4 +1,13 @@
+/* eslint-disable no-restricted-syntax */
 /* global host, println, DEBUG */
+
+export function keys(obj, cb) {
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      cb(key);
+    }
+  }
+}
 
 function dump(obj) {
   if (obj === null) {
@@ -23,7 +32,7 @@ function dump(obj) {
 
   const out = [];
 
-  Object.keys(obj).forEach(k => {
+  keys(obj, k => {
     const v = dump(obj[k]);
 
     out.push(obj instanceof Array ? v : `${k}: ${v}`);
@@ -47,7 +56,7 @@ export function copy(obj) {
 
   const target = {};
 
-  Object.keys(obj).forEach(key => {
+  keys(obj, key => {
     target[key] = obj[key];
   });
 
@@ -134,7 +143,7 @@ export function notify(action) {
 
   if (text) {
     if (typeof action.offset === 'number') {
-      text = `CC ${action.offset + 1} ${text}`;
+      text = `ACC ${action.offset + 1} ${text}`;
     }
 
     host.showPopupNotification(text);
