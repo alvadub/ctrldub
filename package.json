@@ -16,7 +16,9 @@
   },
   "homepage": "https://github.com/dubnix/reloop-keypad",
   "scripts": {
-    "lint": "eslint bin lib"
+    "lint": "eslint bin lib",
+    "build": "tarima -fq",
+    "dev": "tarima -ws"
   },
   "tarima": {
     "cacheFile": "dist/index.json",
@@ -44,7 +46,7 @@
     "eslint-config-airbnb-base": "^5.0.3",
     "eslint-plugin-import": "^1.14.0",
     "rollup": "^0.41.4",
-    "tarima-cli": "gextech/tarima-cli"
+    "tarima-cli": "^0.3.8"
   },
   "dependencies": {
     "express": "^4.11.2",

@@ -12,6 +12,9 @@ export default function () {
   initTracks(this);
 
   host.getMidiInPort(0).setMidiCallback((status, data1, data2) => {
+    // FIXME: probably a hardware issue...
+    if (data1 === 100) return;
+
     const action = this.actionFor(status, data1, data2);
 
     if (!action) {
@@ -46,6 +49,8 @@ export default function () {
           if (data2 === 0 || data2 === 127) {
             action.range = data2 ? 1 : -1;
           }
+
+          action.level = data2;
 
           this.CC_STATE.encoderValues[`${action.channel}#${action.index}`] = data2;
         } break;

@@ -82,7 +82,8 @@ export function notify(action) {
 
   switch (action.type) {
     case 'encoder':
-      text += action.level;
+      text += action.range === -1 ? 'DOWN' : 'UP';
+      text += ` (${action.level})`;
       break;
 
     case 'fader':

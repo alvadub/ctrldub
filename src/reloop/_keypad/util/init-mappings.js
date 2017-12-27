@@ -3,7 +3,7 @@
 import stateObserver from './state-observer';
 
 export default (RL, set, length) => {
-  RL.host.userControls = host.createUserControls(length);
+  RL.host.userControls = host.createUserControlsSection(length);
 
   RL.CC_STATE.commonMappings = {};
   RL.CC_STATE.commonValues = {};
@@ -47,4 +47,8 @@ export default (RL, set, length) => {
       cc.setIndication(true);
     }
   });
+
+  // RL.host.cursorTrack.addNameObserver(50, 'None', name => {
+  //   host.showPopupNotification('NONE?' + name);
+  // });
 };
