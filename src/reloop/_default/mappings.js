@@ -93,36 +93,31 @@ export default [
   ],
   [
     { channel: 178, index: 57, type: 'encoder', command: 'setTrack' },
-    { channel: 178, index: 89, type: 'knob', command: 'sendLevel', track: 0, send: 0 },
-    { channel: 178, index: 8, type: 'button', grouped: true, command: 'scenePlay', scene: 0 },
+    { channel: 178, index: 24, type: 'button', command: 'scenePlay', scene: 0 },
   ],
   [
     { channel: 178, index: 58, type: 'encoder', command: 'setDevice' },
-    { channel: 178, index: 90, type: 'knob', command: 'sendLevel', track: 1, send: 0 },
-    { channel: 178, index: 9, type: 'button', grouped: true, command: 'scenePlay', scene: 1 },
+    { channel: 178, index: 25, type: 'button', command: 'scenePlay', scene: 1 },
   ],
   [
-    { channel: 178, index: 91, type: 'knob', command: 'sendLevel', track: 2, send: 0 },
-    { channel: 178, index: 10, type: 'button', grouped: true, command: 'scenePlay', scene: 2 },
+    { channel: 178, index: 26, type: 'button', command: 'scenePlay', scene: 2 },
   ],
   [
-    { channel: 178, index: 92, type: 'knob', command: 'sendLevel', track: 3, send: 0 },
-    { channel: 178, index: 11, type: 'button', grouped: true, command: 'scenePlay', scene: 3 },
+    { channel: 178, index: 27, type: 'button', command: 'scenePlay', scene: 3 },
   ],
   [
-    { channel: 178, index: 93, type: 'knob', command: 'sendLevel', track: 4, send: 0 },
-    { channel: 178, index: 12, type: 'button', grouped: true, command: 'scenePlay', scene: 4 },
+    { channel: 178, index: 28, type: 'button', command: 'scenePlay', scene: 4 },
   ],
   [
-    { channel: 178, index: 94, type: 'knob', command: 'sendLevel', track: 5, send: 0 },
-    { channel: 178, index: 13, type: 'button', grouped: true, command: 'scenePlay', scene: 5 },
+    { channel: 178, index: 29, type: 'button', command: 'scenePlay', scene: 5 },
   ],
   [
-    { channel: 178, index: 95, type: 'knob', command: 'sendLevel', track: 6, send: 0 },
-    { channel: 178, index: 14, type: 'button', grouped: true, command: 'scenePlay', scene: 6 },
+    { channel: 178, index: 30, type: 'button', command: 'scenePlay', scene: 6 },
   ],
   [
-    { channel: 178, index: 96, type: 'knob', command: 'sendLevel', track: 7, send: 0 },
-    { channel: 178, index: 15, type: 'button', grouped: true, command: 'scenePlay', scene: 7 },
+    { channel: 178, index: 31, type: 'button', command: 'scenePlay', scene: 7 },
+  ],
+  [
+    { channel: 178, index: 32, type: 'button', command: 'scenePlay', scene: 8 },
   ],
 ];

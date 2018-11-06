@@ -6,9 +6,11 @@ export default {
 
     this.set('currentScene', e);
 
-    this.all.forEach((cc) => {
-      sendMidi(cc.channel, cc.index, cc.scene === e.scene ? 127 : 0);
-    });
+    if (this.all) {
+      this.all.forEach((cc) => {
+        sendMidi(cc.channel, cc.index, cc.scene === e.scene ? 127 : 0);
+      });
+    }
 
     e.notify = `Scene ${e.scene + 1}`;
   },
