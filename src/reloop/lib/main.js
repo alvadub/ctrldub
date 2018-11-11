@@ -1,8 +1,8 @@
 /* global sendSysex, host */
 
-import KeyPad from './_keypad';
-import defaultActions from './_default/actions';
-import defaultMappings from './_default/mappings';
+import KeyPad from './keypad';
+import defaultActions from './defaults/actions';
+import defaultMappings from './defaults/mappings';
 
 export default GLOBAL => {
   let RL;

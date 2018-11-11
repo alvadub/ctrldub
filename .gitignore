@@ -1,8 +1,9 @@
 *.nw
 *.log
 *.css
-dist
+.tarima
 *bundle.js
 *vendor.js
-/node_modules
-/bower_components
+build
+node_modules
+bower_components

@@ -1,7 +1,7 @@
 /* global loadAPI */
 /* eslint-disable no-new-func */
 
-import run from './_run';
+import run from './lib/main';
 
 loadAPI(1);
 

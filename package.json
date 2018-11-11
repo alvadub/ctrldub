@@ -18,20 +18,21 @@
   "scripts": {
     "lint": "eslint bin lib",
     "build": "tarima -fq",
-    "dev": "tarima -ws"
+    "dev": "tarima watch"
   },
   "tarima": {
-    "cacheFile": "dist/index.json",
     "public": "dist/public",
+    "from": "src",
     "dest": "dist",
-    "bundle": "**/*.js",
+    "bundle": true,
     "rename": [
-      "**/src/**:{filepath/1}/{filename}.{extname}"
+      "**/src/**:{fullpath/2}.js"
     ],
     "filter": [
       "!_*",
       "!**/_*",
-      "!**/_*/**"
+      "!**/_*/**",
+      "!**/lib/**"
     ],
     "bundleOptions": {
       "extensions": {
@@ -40,19 +41,18 @@
     }
   },
   "devDependencies": {
-    "buble": "^0.15.2",
-    "chokidar": "^1.6.1",
-    "eslint": "^3.5.0",
-    "eslint-config-airbnb-base": "^5.0.3",
-    "eslint-plugin-import": "^1.14.0",
-    "rollup": "^0.41.4",
-    "tarima-cli": "^0.3.8"
+    "buble": "^0.19.6",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "rollup": "^0.67.0",
+    "tarima": "^4.2.3"
   },
   "dependencies": {
     "express": "^4.11.2",
     "jazz-midi": "^1.4.1",
-    "minimist": "^1.1.0",
     "serve-static": "^1.8.1",
-    "ws": "^0.7.1"
+    "wargs": "^0.8.1",
+    "ws": "^6.1.0"
   }
 }

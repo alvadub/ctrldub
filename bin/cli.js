@@ -2,21 +2,25 @@
 
 'use strict';
 
-var ws = require('ws'),
-    jazz = require('jazz-midi'),
-    minimist = require('minimist');
+const ws = require('ws');
+const jazz = require('jazz-midi');
+const minimist = require('minimist');
 
-var argv = minimist(process.argv.slice(2), {
+const express = require('express');
+const serveStatic = require('serve-static');
+
+const pkg = require('../package.json');
+
+const argv = minimist(process.argv.slice(2), {
   alias: {
     h: 'help',
     v: 'version',
-    p: 'port'
+    p: 'port',
   },
   string: ['port'],
-  boolean: ['help', 'version']
+  boolean: ['help', 'version'],
 });
 
-var pkg = require('../package.json');
 
 function write() {
   process.stdout.write(Array.prototype.slice.call(arguments).join(''));
@@ -24,7 +28,7 @@ function write() {
 
 function exit(status) {
   if (arguments.length > 1) {
-    process.stderr.write(Array.prototype.slice.call(arguments, 1).join('') + '\n');
+    process.stderr.write(`${Array.prototype.slice.call(arguments, 1).join('')}\n`);
   }
 
   process.exit.bind(process)(status);
@@ -35,7 +39,7 @@ if (argv.version) {
 }
 
 if (argv.help) {
-  var message = [];
+  const message = [];
 
   message.push('Usage:');
   message.push('  keypad -p 5000');
@@ -48,7 +52,7 @@ if (argv.help) {
   exit(1, message.join('\n'));
 }
 
-var input = jazz.MidiInList();
+let input = jazz.MidiInList();
 
 if (!input.length) {
   write('Waiting for input ... ');
@@ -57,12 +61,14 @@ if (!input.length) {
     input = jazz.MidiInList();
   }
 
-  var test = 'Reloop KeyPad MIDI';
+  const test = 'Reloop KeyPad MIDI';
 
-  input = input.filter(function(id) {
+  input = input.filter(id => {
     if (id.indexOf(test) !== -1) {
       return true;
     }
+
+    return false;
   });
 
   write('OK\n');
@@ -74,12 +80,9 @@ if (!input.length) {
   input = input.shift();
 }
 
-var express = require('express'),
-    serveStatic = require('serve-static');
+const app = express();
 
-var app = express();
-
-var port = argv.port && /^\d+$/.test(argv.port) ? +argv.port : 8080;
+const port = argv.port && /^\d+$/.test(argv.port) ? +argv.port : 8080;
 
 write('Listening on http://localhost:', port, '/\n');
 write('[press CTRL-C to quit]\n');
@@ -87,32 +90,32 @@ write('[press CTRL-C to quit]\n');
 app.use(serveStatic('www'));
 app.listen(port);
 
-var midi = new jazz.MIDI();
+const midi = new jazz.MIDI();
 
-var server = new ws.Server({
-  port: port + 1
+const server = new ws.Server({
+  port: port + 1,
 });
 
-server.on('connection', function(ws) {
-  var callback = function(tick, data) {
-    ws.send(JSON.stringify({
-      tick: tick,
-      data: data
+server.on('connection', _ws => {
+  const callback = (tick, data) => {
+    _ws.send(JSON.stringify({
+      tick,
+      data,
     }));
   };
 
-  ws.on('message', function(message) {
-    var data = JSON.parse(message);
+  ws.on('message', message => {
+    const data = JSON.parse(message);
 
     if (data.status === 'ping') {
       write('Connected\n');
 
       ws.send(JSON.stringify({
         label: input,
-        status: 'pong'
+        status: 'pong',
       }));
     } else {
-      write(message + '\n');
+      write(`${message}\n`);
     }
   });
 
@@ -120,12 +123,12 @@ server.on('connection', function(ws) {
     write('ERR\n');
   }
 
-  midi.OnDisconnectMidiIn(function(name) {
+  midi.OnDisconnectMidiIn(name => {
     write('Disconnected\n');
 
     ws.send(JSON.stringify({
       label: name,
-      status: 'quit'
+      status: 'quit',
     }));
 
     exit();
