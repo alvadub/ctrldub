@@ -21,12 +21,11 @@
     "dev": "tarima watch"
   },
   "tarima": {
-    "public": "dist/public",
+    "public": ".",
     "from": "src",
-    "dest": "dist",
     "bundle": true,
     "rename": [
-      "**/src/**:{fullpath/2}.js"
+      "**/src/**:{fullpath/1}"
     ],
     "filter": [
       "!_*",
@@ -34,9 +33,13 @@
       "!**/_*/**",
       "!**/lib/**"
     ],
+    "devPlugins": [
+      "tarima-lr"
+    ],
     "bundleOptions": {
       "extensions": {
-        "js": "es6"
+        "js": "es6",
+        "control": false
       }
     }
   },
@@ -45,8 +48,10 @@
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "less": "^3.8.1",
     "rollup": "^0.67.0",
-    "tarima": "^4.2.3"
+    "tarima": "^4.2.4",
+    "tarima-lr": "^0.4.5"
   },
   "dependencies": {
     "express": "^4.11.2",

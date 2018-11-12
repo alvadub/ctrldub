@@ -4,23 +4,21 @@
 
 const ws = require('ws');
 const jazz = require('jazz-midi');
-const minimist = require('minimist');
+const wargs = require('wargs');
 
 const express = require('express');
 const serveStatic = require('serve-static');
 
 const pkg = require('../package.json');
 
-const argv = minimist(process.argv.slice(2), {
+const argv = wargs(process.argv.slice(2), {
   alias: {
     h: 'help',
     v: 'version',
     p: 'port',
   },
-  string: ['port'],
-  boolean: ['help', 'version'],
+  boolean: 'hv',
 });
-
 
 function write() {
   process.stdout.write(Array.prototype.slice.call(arguments).join(''));

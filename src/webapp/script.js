@@ -1,12 +1,9 @@
-'use strict';
+import pkg from '../../package.json';
+import defaultMappings from '../reloop/lib/defaults/mappings';
 
 /* global Ractive */
 
-const pkg = require('../../package.json');
-
 document.title = [pkg.description, pkg.version].join(' v');
-
-const defaultMappings = require('../api/default/mappings');
 
 function store(key, value) {
   localStorage[key] = JSON.stringify(value);
