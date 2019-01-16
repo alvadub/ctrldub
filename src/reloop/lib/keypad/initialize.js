@@ -13,7 +13,7 @@ export default function () {
 
   host.getMidiInPort(0).setMidiCallback((status, data1, data2) => {
     // FIXME: probably a hardware issue...
-    if (data1 === 100) return;
+    if (data1 === 100 || (status === 177 && data1 === 7)) return;
 
     const action = this.actionFor(status, data1, data2);
 
