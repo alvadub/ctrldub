@@ -1,4 +1,5 @@
 export const $$ = {
+  HOST: null,
   OVERDUB: false,
   IS_PLAYING: false,
   IS_RECORDING: false,

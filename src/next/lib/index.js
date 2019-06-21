@@ -1,8 +1,6 @@
 import * as KeyPad from './keypad';
 import makeHost from './make-host';
-import {
-  initialize, teardown,
-} from './hooks';
+import { initialize, teardown } from './hooks';
 
 export function run() {
   this.DEBUG = true;
