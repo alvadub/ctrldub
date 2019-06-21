@@ -22,10 +22,11 @@
   },
   "tarima": {
     "public": ".",
-    "from": "src",
-    "bundle": true,
+    "from": "src/next",
+    "bundle": "**/main.js",
     "rename": [
-      "**/src/**:{fullpath/1}"
+      "**:{fullpath/2}",
+      "main.js:KeyPad.control.js"
     ],
     "filter": [
       "!_*",
