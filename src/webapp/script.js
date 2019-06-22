@@ -1,6 +1,6 @@
 // import WS from 'ws';
 import pkg from '../../package.json';
-import defaultMappings from '../reloop/lib/defaults/mappings';
+import defaultMappings from '../next/lib/mappings';
 
 /* global Ractive */
 

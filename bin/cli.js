@@ -15,10 +15,11 @@ const argv = wargs(process.argv.slice(2), {
   alias: {
     h: 'help',
     v: 'version',
+    d: 'debug',
     p: 'port',
   },
-  boolean: 'hv',
-});
+  boolean: 'hvd',
+}).flags;
 
 function write() {
   process.stdout.write(Array.prototype.slice.call(arguments).join(''));
@@ -45,6 +46,7 @@ if (argv.help) {
   message.push('Options:');
   message.push('  -p, --port       The port used for exposing the server');
   message.push('  -v, --version    Show the current version');
+  message.push('  -d, --debug      Print MIDI info');
   message.push('  -h, --help       Display this help');
 
   exit(1, message.join('\n'));
@@ -108,6 +110,10 @@ server.on('connection', _ws => {
 
     if (data.status === 'ping') {
       const name = midi.MidiInOpen(0, (t, msg) => {
+        if (argv.debug) {
+          console.log('MIDI', msg);
+        }
+
         _ws.send(JSON.stringify({
           data: msg,
         }));

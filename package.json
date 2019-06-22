@@ -62,6 +62,6 @@
     "express": "^4.11.2",
     "jazz-midi": "^1.4.1",
     "serve-static": "^1.8.1",
-    "wargs": "^0.8.1"
+    "wargs": "^0.8.2"
   }
 }

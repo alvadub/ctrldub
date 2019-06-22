@@ -2,7 +2,8 @@
 export default [
   [
     [
-      { channel: 177, index: 57, type: 'encoder', maximum: 7 },
+      { channel: 177, index: 73, type: 'button' },
+      { channel: 177, index: 57, type: 'encoder' },
       { channel: 177, index: 89, type: 'knob' },
       { channel: 177, index: 97, type: 'knob' },
       { channel: 177, index: 8, type: 'button', command: 'toggleMute', track: 0 },
@@ -11,6 +12,7 @@ export default [
       { channel: 177, index: 0, type: 'fader' },
     ],
     [
+      { channel: 177, index: 74, type: 'button' },
       { channel: 177, index: 58, type: 'encoder' },
       { channel: 177, index: 90, type: 'knob' },
       { channel: 177, index: 98, type: 'knob' },
@@ -20,6 +22,7 @@ export default [
       { channel: 177, index: 1, type: 'fader' },
     ],
     [
+      { channel: 177, index: 75, type: 'button' },
       { channel: 177, index: 59, type: 'encoder' },
       { channel: 177, index: 91, type: 'knob' },
       { channel: 177, index: 99, type: 'knob' },
@@ -29,6 +32,7 @@ export default [
       { channel: 177, index: 2, type: 'fader' },
     ],
     [
+      { channel: 177, index: 76, type: 'button' },
       { channel: 177, index: 60, type: 'encoder' },
       { channel: 177, index: 92, type: 'knob' },
       { channel: 177, index: 100, type: 'knob' },
@@ -38,6 +42,7 @@ export default [
       { channel: 177, index: 3, type: 'fader' },
     ],
     [
+      { channel: 177, index: 77, type: 'button' },
       { channel: 177, index: 61, type: 'encoder' },
       { channel: 177, index: 93, type: 'knob' },
       { channel: 177, index: 101, type: 'knob' },
@@ -47,6 +52,7 @@ export default [
       { channel: 177, index: 4, type: 'fader' },
     ],
     [
+      { channel: 177, index: 78, type: 'button' },
       { channel: 177, index: 62, type: 'encoder' },
       { channel: 177, index: 94, type: 'knob' },
       { channel: 177, index: 102, type: 'knob' },
@@ -56,6 +62,7 @@ export default [
       { channel: 177, index: 5, type: 'fader' },
     ],
     [
+      { channel: 177, index: 79, type: 'button' },
       { channel: 177, index: 63, type: 'encoder' },
       { channel: 177, index: 95, type: 'knob' },
       { channel: 177, index: 103, type: 'knob' },
@@ -65,6 +72,7 @@ export default [
       { channel: 177, index: 6, type: 'fader' },
     ],
     [
+      { channel: 177, index: 80, type: 'button' },
       { channel: 177, index: 64, type: 'encoder' },
       { channel: 177, index: 96, type: 'knob' },
       { channel: 177, index: 104, type: 'knob' },
