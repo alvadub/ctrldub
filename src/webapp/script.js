@@ -61,28 +61,23 @@ const $ = new Ractive({
   oninit() {
     const ws = new WebSocket(`ws://localhost:${+document.location.port + 1}`);
 
-    // ws.onopen = () => {
-
-    // };
-
     ws.addEventListener('open', function (event) {
-      // ws.send(JSON.stringify({
-      //   status: 'ping',
-      // }));
-      console.log('OPN', event);
+      ws.send(JSON.stringify({
+        status: 'ping',
+      }));
     });
 
     ws.addEventListener('message', function (event) {
-      // const info = JSON.parse(message.data);
-      console.log('MSG', event);
-      // if (info.data) {
-      //   reduce(data, e => {
-      //     if (e && e.channel === info.data[0] && e.index === info.data[1]) {
-      //       e.level = info.data[2];
-      //       $.set('selectedControl', e);
-      //     }
-      //   });
-      // }
+      const info = JSON.parse(event.data);
+
+      if (info.data) {
+        reduce(data, e => {
+          if (e && e.channel === info.data[0] && e.index === info.data[1]) {
+            e.level = info.data[2];
+            $.set('selectedControl', e);
+          }
+        });
+      }
     });
   },
   data: {

@@ -107,7 +107,13 @@ server.on('connection', _ws => {
     const data = JSON.parse(message);
 
     if (data.status === 'ping') {
-      write('Connected\n');
+      const name = midi.MidiInOpen(0, (t, msg) => {
+        _ws.send(JSON.stringify({
+          data: msg,
+        }));
+      });
+
+      write(`Connected: ${name}\n`);
 
       _ws.send(JSON.stringify({
         label: input,
