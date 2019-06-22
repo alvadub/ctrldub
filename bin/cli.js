@@ -85,6 +85,7 @@ const port = argv.port && /^\d+$/.test(argv.port) ? +argv.port : 8080;
 write('Listening on http://localhost:', port, '/\n');
 write('[press CTRL-C to quit]\n');
 
+app.use(serveStatic('build'));
 app.use(serveStatic('www'));
 app.listen(port);
 

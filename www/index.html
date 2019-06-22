@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+<div id="application"></div>
+
+<script id="layout" type="text/ractive">
+<div class="grid" id="controller">
+  <div class="row">
+    <div class="cell midi">
+    {{#pages:pageIndex}}
+      <div class="row {{activePage(pageIndex) ? '' : 'hidden'}}">
+      {{#tracks:trackIndex}}
+        <div class="cell track">
+          <div class="nth">{{trackIndex + 1}}</div>
+          <div class="cc encoder"><button value="0" on-click="setControl" class="{{activeControl(controls[0])}}"></button></div>
+          <div class="row">
+            <div class="cell cc knob left"><button value="1" on-click="setControl" class="{{activeControl(controls[1])}}"></button></div>
+            <div class="cell cc knob right"><button value="2" on-click="setControl" class="{{activeControl(controls[2])}}"></button></div>
+          </div>
+          <div class="row">
+            <div class="cell">
+              <div class="cc button mute"><button value="3" on-click="setControl" class="{{activeControl(controls[3])}}"></button></div>
+              <div class="cc button solo"><button value="4" on-click="setControl" class="{{activeControl(controls[4])}}"></button></div>
+              <div class="cc button arm"><button value="5" on-click="setControl" class="{{activeControl(controls[5])}}"></button></div>
+            </div>
+            <div class="cell">
+              <div class="cc fader"><button value="6" on-click="setControl" class="{{activeControl(controls[6])}}"></button></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cc pad"><button value="7" on-click="setControl" class="{{activeControl(controls[7])}}"></button></div>
+            <div class="cc pad"><button value="8" on-click="setControl" class="{{activeControl(controls[8])}}"></button></div>
+          </div>
+        </div>
+      {{/tracks}}
+      </div>
+    {{/pages}}
+    <div class="actions row">
+      <div class="cell fill">
+        <button value="0" on-click="setPage" {{activePage(0) ? 'disabled' : ''}}>1</button>
+        <button value="1" on-click="setPage" {{activePage(1) ? 'disabled' : ''}}>2</button>
+      </div>
+
+      <div class="cell nowrap">
+        <button on-click="resetConfiguration">reset</button>
+        <button on-click="saveConfiguration">save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell config">
+    {{#selectedControl}}
+      <pre class="content">{{JSON.stringify(this,null,2)}}</pre>
+    {{/selectedControl}}
+  </div>
+
+</div>
+
+</div>
+</script>
+  <script src="vendor.js"></script>
+  <script src="script.js"></script>
+  </body>
+</html>
