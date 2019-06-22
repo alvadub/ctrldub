@@ -1,5 +1,6 @@
 import * as KeyPad from './keypad';
 import makeHost from './make-host';
+import initMappings from './init-mappings';
 import { initialize, teardown } from './hooks';
 
 export function run() {
@@ -14,8 +15,9 @@ export function run() {
     keys.setShouldConsumeEvents(false);
     pads.setShouldConsumeEvents(false);
 
-    initialize();
     makeHost();
+    initialize();
+    initMappings();
   };
 
   this.exit = () => {

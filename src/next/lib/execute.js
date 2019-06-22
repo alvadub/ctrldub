@@ -58,32 +58,32 @@ export default action => {
       break;
   }
 
-  // let callback = CC_USER_ACTIONS[action.command];
+  let callback = CC_USER_ACTIONS[action.command];
 
-  // if (!callback) {
-  //   const proxy = (`on-${action.type}`)
-  //     .replace(/-[a-z]/g, match => match.substr(1).toUpperCase());
+  if (!callback) {
+    const proxy = (`on-${action.type}`)
+      .replace(/-[a-z]/g, match => match.substr(1).toUpperCase());
 
-  //   callback = CC_USER_ACTIONS[proxy];
-  // }
+    callback = CC_USER_ACTIONS[proxy];
+  }
 
-  // if (typeof callback === 'function') {
-  //   const api = copy($$.HOST);
+  if (typeof callback === 'function') {
+    const api = copy($$.HOST);
 
-  //   if (action.grouped) {
-  //     api.all = CC_STATE.commonMappings[action.command].map(copy);
-  //   }
+    if (action.grouped) {
+      api.all = CC_STATE.commonMappings[action.command].map(copy);
+    }
 
-  //   callback.call(api, action);
+    callback.call(api, action);
 
-  //   if (typeof CC_STATE.commonValues[`${action.channel}#${action.index}`] !== 'undefined') {
-  //     action.state = CC_STATE.commonValues[`${action.channel}#${action.index}`];
-  //   }
+    if (typeof CC_STATE.commonValues[`${action.channel}#${action.index}`] !== 'undefined') {
+      action.state = CC_STATE.commonValues[`${action.channel}#${action.index}`];
+    }
 
-  //   if (!action.toggle && action.state && action.command) {
-  //     sendMidi(action.channel, action.index, 127);
-  //   }
-  // }
+    if (!action.toggle && action.state && action.command) {
+      sendMidi(action.channel, action.index, 127);
+    }
+  }
 
   if (typeof action.notify === 'string') {
     host.showPopupNotification(action.notify);

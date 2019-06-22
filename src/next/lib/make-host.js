@@ -1,7 +1,7 @@
 import stateObserver from './state-observer';
 import { debug } from './helpers';
 import {
-  $$, CHANNEL1, RECORD, RECORDS, PLAY,
+  $$, CHANNEL1, RECORD, RECORDS, PLAY, TRACKS, CC_TRACKS, CC_MAPPINGS,
 } from './keypad';
 
 /* global sendMidi, host */
@@ -13,6 +13,12 @@ export default () => {
     cursorTrack: host.createCursorTrack(16, 2),
     cursorDevice: host.createCursorDevice(),
   };
+
+  for (let i = 0, c = TRACKS; i < c; i += 1) {
+    CC_TRACKS[i] = $$.HOST.trackBank.getTrack(i);
+    CC_TRACKS[i].addIsSelectedObserver(stateObserver('activeTrack', i, 'scalar'));
+    CC_TRACKS[i].addNameObserver(20, '', stateObserver('currentTracks', i, 'list'));
+  }
 
   $$.HOST.cursorDevice.addNameObserver(20, '', stateObserver('primaryDevice', false, 'scalar'));
 
