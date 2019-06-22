@@ -103,13 +103,13 @@ server.on('connection', _ws => {
     }));
   };
 
-  ws.on('message', message => {
+  _ws.on('message', message => {
     const data = JSON.parse(message);
 
     if (data.status === 'ping') {
       write('Connected\n');
 
-      ws.send(JSON.stringify({
+      _ws.send(JSON.stringify({
         label: input,
         status: 'pong',
       }));
@@ -125,7 +125,7 @@ server.on('connection', _ws => {
   midi.OnDisconnectMidiIn(name => {
     write('Disconnected\n');
 
-    ws.send(JSON.stringify({
+    _ws.send(JSON.stringify({
       label: name,
       status: 'quit',
     }));

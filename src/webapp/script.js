@@ -1,5 +1,6 @@
+// import WS from 'ws';
 import pkg from '../../package.json';
-import defaultMappings from '../next/lib/mappings';
+import defaultMappings from '../reloop/lib/defaults/mappings';
 
 /* global Ractive */
 
@@ -25,6 +26,10 @@ function pageInfo(pages) {
   return pages.map(tracks => {
     return {
       tracks: tracks.map(track => {
+        if (!Array.isArray(track)) {
+          return;
+        }
+
         return {
           controls: track.map(control => {
             if (control) {
@@ -54,29 +59,31 @@ const $ = new Ractive({
   el: 'application',
   template: '#layout',
   oninit() {
-    const WS = require('ws');
+    const ws = new WebSocket(`ws://localhost:${+document.location.port + 1}`);
 
-    const ws = new WS(`ws://localhost:${+document.location.port + 1}`);
+    // ws.onopen = () => {
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify({
-        status: 'ping',
-      }));
-    };
+    // };
 
-    ws.onmessage = message => {
-      const info = JSON.parse(message.data);
+    ws.addEventListener('open', function (event) {
+      // ws.send(JSON.stringify({
+      //   status: 'ping',
+      // }));
+      console.log('OPN', event);
+    });
 
-      if (info.data) {
-        reduce(data, e => {
-          if (e && e.channel === info.data[0] && e.index === info.data[1]) {
-            e.level = info.data[2];
-
-            $.set('selectedControl', e);
-          }
-        });
-      }
-    };
+    ws.addEventListener('message', function (event) {
+      // const info = JSON.parse(message.data);
+      console.log('MSG', event);
+      // if (info.data) {
+      //   reduce(data, e => {
+      //     if (e && e.channel === info.data[0] && e.index === info.data[1]) {
+      //       e.level = info.data[2];
+      //       $.set('selectedControl', e);
+      //     }
+      //   });
+      // }
+    });
   },
   data: {
     pages: pageInfo(data),

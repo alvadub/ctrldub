@@ -55,13 +55,13 @@
     "less": "^3.8.1",
     "rollup": "^1.15.6",
     "tarima": "^4.5.3",
-    "tarima-lr": "^0.5.1"
+    "tarima-lr": "^0.5.1",
+    "ws": "^7.0.1"
   },
   "dependencies": {
     "express": "^4.11.2",
     "jazz-midi": "^1.4.1",
     "serve-static": "^1.8.1",
-    "wargs": "^0.8.1",
-    "ws": "^7.0.1"
+    "wargs": "^0.8.1"
   }
 }
