@@ -23,7 +23,30 @@ export const CC_TRACKS = [];
 export const CC_MAPPINGS = {};
 
 export const CC_USER_STATE = {};
-export const CC_USER_ACTIONS = {};
+
+export const CC_USER_ACTIONS = {
+  sendLevel(e) {
+    $$.HOST.trackBank.getTrack(e.track).getSend(e.send).set(e.value, 128);
+
+    e.notify = e.value ? `${Math.round(e.value / 1.27)}%` : 'OFF';
+  },
+  volumeLevel(e) {
+    $$.HOST.trackBank.getTrack(e.track).getVolume().set(e.value, 128);
+  },
+  toggleMute(e) {
+    $$.HOST.trackBank.getTrack(e.track).getMute().set(e.toggle);
+  },
+  toggleSolo(e) {
+    if (e.toggle) {
+      $$.HOST.trackBank.getTrack(e.track).getSolo().toggle();
+    }
+  },
+  toggleArm(e) {
+    if (e.toggle) {
+      $$.HOST.trackBank.getTrack(e.track).getArm().toggle();
+    }
+  },
+};
 
 export const VENDOR = 'Reloop';
 export const PRODUCT = 'KeyPad';

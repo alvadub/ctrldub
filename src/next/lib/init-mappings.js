@@ -1,5 +1,6 @@
 import stateObserver from './state-observer';
 import mappings from './mappings';
+import { keys } from './helpers';
 import {
   $$, CC_STATE, CC_TRACKS, CC_MAPPINGS,
 } from './keypad';

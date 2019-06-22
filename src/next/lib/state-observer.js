@@ -14,6 +14,10 @@ export default (label, index, type) => {
 
   return value => {
     if (type === 'io') {
+      if (index.inverted) {
+        value = !value;
+      }
+
       debug('SEND', index.channel, index.index, value);
       sendMidi(index.channel, index.index, value ? 127 : 0);
       CC_STATE[label][`${index.channel}#${index.index}`] = value;

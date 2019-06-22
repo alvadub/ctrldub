@@ -2,6 +2,7 @@
 
 import { debug } from './helpers';
 import { toggleMute } from './actions';
+import { CC_STATE } from './keypad';
 import actionFor from './action-for';
 import execute from './execute';
 
@@ -17,6 +18,46 @@ export function initialize() {
     if (!action) {
       debug('MIDI', status, data1, data2);
     } else {
+      if (action.inverted) {
+        if (typeof action.toggle === 'boolean') {
+          action.toggle = !action.toggle;
+        }
+
+        data2 = 127 - data2;
+
+        delete action.inverted;
+      }
+
+      switch (action.type) {
+        case 'button':
+          action.toggle = data2 > 65;
+          break;
+
+        case 'encoder': {
+          if (!CC_STATE.encoderValues) {
+            CC_STATE.encoderValues = {};
+          }
+
+          const old = CC_STATE.encoderValues[`${action.channel}#${action.index}`] || 0;
+
+          if (old !== data2) {
+            action.range = data2 < old ? -1 : 1;
+          }
+
+          if (data2 === 0 || data2 === 127) {
+            action.range = data2 ? 1 : -1;
+          }
+
+          action.level = data2;
+
+          CC_STATE.encoderValues[`${action.channel}#${action.index}`] = data2;
+        } break;
+
+        default:
+          action.level = data2;
+          break;
+      }
+
       debug('CC', action);
       execute(action);
     }
