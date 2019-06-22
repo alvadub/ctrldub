@@ -78,7 +78,8 @@ export default () => {
     }
   });
 
-  $$.HOST.cursorTrack.addNameObserver(50, 'None', name => {
+  // FIXME: this just captures name events... somehow is taking from REC-buttons (drums?)
+  $$.HOST.cursorTrack.addNameObserver(50, 'None', function (name) {
     host.showPopupNotification('NONE?' + name);
   });
 };

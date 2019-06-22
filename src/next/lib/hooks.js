@@ -1,7 +1,6 @@
 /*  global println, printSysex, host */
 
 import { debug } from './helpers';
-import { toggleMute } from './actions';
 import { CC_STATE } from './keypad';
 import actionFor from './action-for';
 import execute from './execute';

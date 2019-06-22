@@ -7,7 +7,7 @@ export default [
       { channel: 177, index: 97, type: 'knob' },
       { channel: 177, index: 8, type: 'button', command: 'toggleMute', track: 0 },
       { channel: 177, index: 24, type: 'button', command: 'toggleSolo', track: 0 },
-      { channel: 177, index: 40, type: 'button' },
+      { channel: 177, index: 40, type: 'button', toggle: true },
       { channel: 177, index: 0, type: 'fader' },
     ],
     [
@@ -94,10 +94,12 @@ export default [
   ],
   [
     { channel: 178, index: 57, type: 'encoder', command: 'setTrack' },
+    { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 8 },
     { channel: 178, index: 24, type: 'button', command: 'scenePlay', scene: 0 },
   ],
   [
     { channel: 178, index: 58, type: 'encoder', command: 'setDevice' },
+    { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 9 },
     { channel: 178, index: 25, type: 'button', command: 'scenePlay', scene: 1 },
   ],
   [
