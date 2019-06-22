@@ -1,4 +1,4 @@
-@import '_sauce';
+@import 'helpers/sauce';
 
 @green:  #3f7b0d;
 @blue:   #3245A1;
@@ -44,7 +44,7 @@ html {
 
 body {
   font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
-  background-image: url(classy_fabric.png);
+  background-image: url(/classy_fabric.png);
 }
 
 button {
@@ -97,7 +97,20 @@ button {
   }
 }
 
-.encoder button, .pad button {
+.encoder {
+  position: relative;
+
+  button:last-child {
+    background-color: rgba(255, 255, 255, .1);
+    position: absolute;
+    width: 33%;
+    height: 33%;
+    left: 33%;
+    top: 33%;
+  }
+}
+
+.encoder button:first-child, .pad button {
   width: @cell-width * 2;
   height: @cell-height * 2;
 }

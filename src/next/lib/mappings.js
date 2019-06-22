@@ -83,7 +83,39 @@ export default [
     ],
   ],
   [
-    { channel: 180, index: 113, type: 'button' },
+    [
+      { channel: 178, index: 57, type: 'encoder', command: 'setTrack' },
+      { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 8 },
+      { channel: 178, index: 24, type: 'button', command: 'scenePlay', scene: 0 },
+    ],
+    [
+      { channel: 178, index: 58, type: 'encoder', command: 'setDevice' },
+      { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 9 },
+      { channel: 178, index: 25, type: 'button', command: 'scenePlay', scene: 1 },
+    ],
+    [
+      { channel: 178, index: 26, type: 'button', command: 'scenePlay', scene: 2 },
+    ],
+    [
+      { channel: 178, index: 27, type: 'button', command: 'scenePlay', scene: 3 },
+    ],
+    [
+      { channel: 178, index: 28, type: 'button', command: 'scenePlay', scene: 4 },
+    ],
+    [
+      { channel: 178, index: 29, type: 'button', command: 'scenePlay', scene: 5 },
+    ],
+    [
+      { channel: 178, index: 30, type: 'button', command: 'scenePlay', scene: 6 },
+    ],
+    [
+      { channel: 178, index: 31, type: 'button', command: 'scenePlay', scene: 7 },
+    ],
+    // [
+    //   { channel: 178, index: 32, type: 'button', command: 'scenePlay', scene: 8 },
+    // ],
+  ],
+  [[{ channel: 180, index: 113, type: 'button' },
     { channel: 180, index: 114, type: 'button' },
     { channel: 180, index: 115, type: 'button' },
     { channel: 180, index: 116, type: 'button' },
@@ -98,37 +130,5 @@ export default [
     { channel: 180, index: 125, type: 'button' },
     { channel: 180, index: 126, type: 'button' },
     { channel: 180, index: 127, type: 'button' },
-    { channel: 179, index: 1, type: 'button' },
-  ],
-  [
-    { channel: 178, index: 57, type: 'encoder', command: 'setTrack' },
-    { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 8 },
-    { channel: 178, index: 24, type: 'button', command: 'scenePlay', scene: 0 },
-  ],
-  [
-    { channel: 178, index: 58, type: 'encoder', command: 'setDevice' },
-    { channel: 178, index: 8, type: 'button', command: 'toggleMute', track: 9 },
-    { channel: 178, index: 25, type: 'button', command: 'scenePlay', scene: 1 },
-  ],
-  [
-    { channel: 178, index: 26, type: 'button', command: 'scenePlay', scene: 2 },
-  ],
-  [
-    { channel: 178, index: 27, type: 'button', command: 'scenePlay', scene: 3 },
-  ],
-  [
-    { channel: 178, index: 28, type: 'button', command: 'scenePlay', scene: 4 },
-  ],
-  [
-    { channel: 178, index: 29, type: 'button', command: 'scenePlay', scene: 5 },
-  ],
-  [
-    { channel: 178, index: 30, type: 'button', command: 'scenePlay', scene: 6 },
-  ],
-  [
-    { channel: 178, index: 31, type: 'button', command: 'scenePlay', scene: 7 },
-  ],
-  [
-    { channel: 178, index: 32, type: 'button', command: 'scenePlay', scene: 8 },
-  ],
+    { channel: 179, index: 1, type: 'button' }]],
 ];

@@ -21,7 +21,10 @@
     "dev": "tarima watch"
   },
   "tarima": {
-    "public": ".",
+    "public": "www",
+    "serve": [
+      "build"
+    ],
     "from": [
       "src/next",
       "src/webapp"
@@ -35,15 +38,21 @@
       "!_*",
       "!**/_*",
       "!**/_*/**",
-      "!**/lib/**"
+      "!**/{lib,helpers,components}/**"
     ],
     "devPlugins": [
       "tarima-lr"
     ],
     "bundleOptions": {
+      "rollup": {
+        "plugins": [
+          "rollup-plugin-node-resolve",
+          "rollup-plugin-commonjs",
+          "rollup-plugin-svelte"
+        ]
+      },
       "extensions": {
-        "js": "es6",
-        "control": false
+        "js": "es6"
       }
     }
   },
@@ -54,14 +63,18 @@
     "eslint-plugin-import": "^2.14.0",
     "less": "^3.8.1",
     "rollup": "^1.15.6",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.4",
+    "rollup-plugin-svelte": "^5.1.0",
+    "svelte": "^3.5.3",
     "tarima": "^4.5.3",
-    "tarima-lr": "^0.5.1",
-    "ws": "^7.0.1"
+    "tarima-lr": "^0.5.3"
   },
   "dependencies": {
     "express": "^4.11.2",
     "jazz-midi": "^1.4.1",
     "serve-static": "^1.8.1",
-    "wargs": "^0.8.2"
+    "wargs": "^0.8.2",
+    "ws": "^7.0.1"
   }
 }
