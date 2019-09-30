@@ -90,10 +90,7 @@
       {#each pageData.tracks as { index }}
         <div class="cell track">
           <div class="nth">{index + 1}</div>
-          <div class="cc encoder">
-            <button on:click={setControl}></button>
-            <button on:click={setControl}></button>
-          </div>
+          <div class="cc encoder"><button on:click={setControl}></button></div>
           <div class="row">
             <div class="cell cc knob left"><button on:click={setControl}></button></div>
             <div class="cell cc knob right"><button on:click={setControl}></button></div>

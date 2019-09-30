@@ -97,20 +97,7 @@ button {
   }
 }
 
-.encoder {
-  position: relative;
-
-  button:last-child {
-    background-color: rgba(255, 255, 255, .1);
-    position: absolute;
-    width: 33%;
-    height: 33%;
-    left: 33%;
-    top: 33%;
-  }
-}
-
-.encoder button:first-child, .pad button {
+.encoder button, .pad button {
   width: @cell-width * 2;
   height: @cell-height * 2;
 }
@@ -180,6 +167,7 @@ button {
 }
 
 .actions button:active, .actions button:disabled,
+.encoder button:active, .encoder button.active,
 .button button:active, .button button.active,
 .pad button:active, .pad button.active {
   background: darken(@gray, 10);
