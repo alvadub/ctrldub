@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default [
   [
     [
@@ -7,7 +6,7 @@ export default [
       { channel: 177, index: 97, type: 'knob' },
       { channel: 177, index: 8, type: 'button', inverted: true, command: 'toggleMute', track: 0 },
       { channel: 177, index: 24, type: 'button', command: 'toggleSolo', track: 0 },
-      { channel: 177, index: 40, type: 'button' },
+      { channel: 177, index: 40, type: 'button', command: 'toggleArm', track: 0 },
       { channel: 177, index: 0, type: 'fader' },
     ],
     [
@@ -16,7 +15,7 @@ export default [
       { channel: 177, index: 98, type: 'knob' },
       { channel: 177, index: 9, type: 'button', inverted: true, command: 'toggleMute', track: 1 },
       { channel: 177, index: 25, type: 'button', command: 'toggleSolo', track: 1 },
-      { channel: 177, index: 41, type: 'button' },
+      { channel: 177, index: 41, type: 'button', command: 'toggleArm', track: 1 },
       { channel: 177, index: 1, type: 'fader' },
     ],
     [
@@ -25,7 +24,7 @@ export default [
       { channel: 177, index: 99, type: 'knob' },
       { channel: 177, index: 10, type: 'button', inverted: true, command: 'toggleMute', track: 2 },
       { channel: 177, index: 26, type: 'button', command: 'toggleSolo', track: 2 },
-      { channel: 177, index: 42, type: 'button' },
+      { channel: 177, index: 42, type: 'button', command: 'toggleArm', track: 2 },
       { channel: 177, index: 2, type: 'fader' },
     ],
     [
@@ -34,7 +33,7 @@ export default [
       { channel: 177, index: 100, type: 'knob' },
       { channel: 177, index: 11, type: 'button', inverted: true, command: 'toggleMute', track: 3 },
       { channel: 177, index: 27, type: 'button', command: 'toggleSolo', track: 3 },
-      { channel: 177, index: 43, type: 'button' },
+      { channel: 177, index: 43, type: 'button', command: 'toggleArm', track: 3 },
       { channel: 177, index: 3, type: 'fader' },
     ],
     [
@@ -43,7 +42,7 @@ export default [
       { channel: 177, index: 101, type: 'knob' },
       { channel: 177, index: 12, type: 'button', inverted: true, command: 'toggleMute', track: 4 },
       { channel: 177, index: 28, type: 'button', command: 'toggleSolo', track: 4 },
-      { channel: 177, index: 44, type: 'button' },
+      { channel: 177, index: 44, type: 'button', command: 'toggleArm', track: 4 },
       { channel: 177, index: 4, type: 'fader' },
     ],
     [
@@ -52,7 +51,7 @@ export default [
       { channel: 177, index: 102, type: 'knob' },
       { channel: 177, index: 13, type: 'button', inverted: true, command: 'toggleMute', track: 5 },
       { channel: 177, index: 29, type: 'button', command: 'toggleSolo', track: 5 },
-      { channel: 177, index: 45, type: 'button' },
+      { channel: 177, index: 45, type: 'button', command: 'toggleArm', track: 5 },
       { channel: 177, index: 5, type: 'fader' },
     ],
     [
@@ -65,7 +64,8 @@ export default [
       { channel: 177, index: 6, type: 'fader' },
     ],
     [
-      { channel: 177, index: 64, type: 'encoder' },
+      { channel: 177, index: 64, type: 'encoder', command: 'setTrack' },
+      { channel: 177, index: 80, type: 'encoder', command: 'setDevice' },
       { channel: 177, index: 96, type: 'knob' },
       { channel: 177, index: 104, type: 'knob' },
       { channel: 177, index: 15, type: 'button', inverted: true, command: 'toggleMute', track: 7 },

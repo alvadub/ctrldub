@@ -1,10 +1,10 @@
-/* global sendMidi */
+import { get, set } from './state';
 
 export default {
   scenePlay(e) {
     this.trackBank.launchScene(e.scene);
 
-    this.set('currentScene', e);
+    set('currentScene', e);
 
     if (this.all) {
       this.all.forEach((cc) => {
@@ -17,12 +17,12 @@ export default {
   setDevice(e) {
     this.cursorDevice[e.range > 0 ? 'selectNext' : 'selectPrevious']();
 
-    e.notify = this.get('primaryDevice');
+    e.notify = get('primaryDevice');
   },
   setTrack(e) {
-    const total = this.get('currentTracks.length') - 1;
+    const total = get('currentTracks.length') - 1;
 
-    let track = this.get('activeTrack');
+    let track = get('activeTrack');
 
     if (e.range > 0) {
       track += 1;
@@ -34,7 +34,7 @@ export default {
 
     this.trackBank.getTrack(index).select();
 
-    e.notify = this.get('currentTracks', index);
+    e.notify = get('currentTracks', index);
   },
   sendLevel(e) {
     this.trackBank.getTrack(e.track).getSend(e.send).set(e.value, 128);
@@ -58,7 +58,7 @@ export default {
     }
   },
   onStop() {
-    const cc = this.get('currentScene');
+    const cc = get('currentScene');
 
     if (cc) {
       sendMidi(cc.channel, cc.index, 0);

@@ -1,20 +1,17 @@
 {
-  "name": "reloop-keypad",
+  "name": "ctrldub",
   "version": "0.0.0",
-  "description": "Reloop KeyPad - MIDI Configuration Editor",
-  "bin": {
-    "keypad": "bin/cli.js"
-  },
+  "description": "BitWig Controller Scripts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dubnix/reloop-keypad.git"
+    "url": "https://github.com/dubnix/ctrldub.git"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dubnix/reloop-keypad/issues"
+    "url": "https://github.com/dubnix/ctrldub/issues"
   },
-  "homepage": "https://github.com/dubnix/reloop-keypad",
+  "homepage": "https://github.com/dubnix/ctrldub",
   "scripts": {
     "lint": "eslint bin lib",
     "build": "tarima -fq",
@@ -25,39 +22,29 @@
     "from": "src",
     "bundle": true,
     "rename": [
-      "**/src/**:{fullpath/1}"
+      "**/src/*.js:{name}.control.js"
     ],
     "filter": [
       "!_*",
       "!**/_*",
       "!**/_*/**",
-      "!**/lib/**"
-    ],
-    "devPlugins": [
-      "tarima-lr"
+      "!**/{lib,shared}/**"
     ],
     "bundleOptions": {
       "extensions": {
-        "js": "es6",
-        "control": false
+        "js": "es6"
+      },
+      "rollup": {
+        "format": "esm",
+        "treeshake": false
       }
     }
   },
   "devDependencies": {
-    "buble": "^0.19.7",
+    "buble": "^0.20.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "less": "^3.8.1",
-    "rollup": "^1.15.6",
-    "tarima": "^4.5.3",
-    "tarima-lr": "^0.5.1"
-  },
-  "dependencies": {
-    "express": "^4.11.2",
-    "jazz-midi": "^1.4.1",
-    "serve-static": "^1.8.1",
-    "wargs": "^0.8.1",
-    "ws": "^7.0.1"
+    "tarima": "^4.9.5"
   }
 }

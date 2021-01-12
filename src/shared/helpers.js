@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* global host, println, DEBUG */
-
 export function keys(obj, cb) {
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -9,71 +6,32 @@ export function keys(obj, cb) {
   }
 }
 
-function dump(obj) {
-  if (obj === null) {
-    return 'null';
-  }
-
-  if (obj === true) {
-    return 'true';
-  }
-
-  if (obj === false) {
-    return 'false';
-  }
-
-  if (typeof obj === 'function') {
-    return obj.toString().replace(/[\r\n\t\s]+/g, ' ');
-  }
-
-  if (typeof obj !== 'object') {
+export function clone(obj) {
+  if (!obj || typeof obj !== 'object') {
     return obj;
   }
-
-  const out = [];
-
-  keys(obj, k => {
-    const v = dump(obj[k]);
-
-    out.push(obj instanceof Array ? v : `${k}: ${v}`);
-  });
-
   if (obj instanceof Array) {
-    return `[ ${out.join(', ')} ]`;
+    return obj.map(clone);
   }
 
-  return `{ ${out.join(', ')} }`;
-}
-
-export function copy(obj) {
-  if (obj instanceof Array) {
-    return obj.slice();
-  }
-
-  if (typeof obj !== 'object') {
-    return obj;
-  }
-
-  const target = {};
+  const copy = {};
 
   keys(obj, key => {
-    target[key] = obj[key];
+    copy[key] = obj[key];
   });
 
-  return target;
+  return copy;
 }
 
-export function debug(...args) {
-  if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-    const out = [];
-
-    args
-    .filter(x => typeof x !== 'undefined')
-    .forEach(x => {
-      out.push(dump(x));
+export function reduce(list, fn) {
+  if (!(list instanceof Array)) {
+    fn(list);
+  } else {
+    list.forEach(value => {
+      if (value !== null) {
+        reduce(value, fn);
+      }
     });
-
-    println(`> ${out.join(' ')}`);
   }
 }
 
