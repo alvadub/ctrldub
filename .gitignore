@@ -1,9 +1,6 @@
-*.nw
+.DS_Store
+.git
 *.log
-*.css
 .tarima
-*bundle.js
-*vendor.js
 build
 node_modules
-bower_components

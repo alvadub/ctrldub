@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/dubnix/ctrldub",
   "scripts": {
-    "lint": "eslint bin lib",
+    "lint": "eslint src",
     "build": "tarima -fq",
     "dev": "tarima watch"
   },
