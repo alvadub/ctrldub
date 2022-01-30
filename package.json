@@ -14,37 +14,14 @@
   "homepage": "https://github.com/dubnix/ctrldub",
   "scripts": {
     "lint": "eslint src",
-    "build": "tarima -fq",
-    "dev": "tarima watch"
-  },
-  "tarima": {
-    "public": ".",
-    "from": "src",
-    "bundle": true,
-    "rename": [
-      "**/src/*.js:{name}.control.js"
-    ],
-    "filter": [
-      "!_*",
-      "!**/_*",
-      "!**/_*/**",
-      "!**/{lib,shared}/**"
-    ],
-    "bundleOptions": {
-      "extensions": {
-        "js": "es6"
-      },
-      "rollup": {
-        "format": "esm",
-        "treeshake": false
-      }
-    }
+    "build": "mortero -Xshared -r**/src/*.js:{name}.control.js --platform neutral --target es5 --no-debug --no-shake --bundle --legacy",
+    "dev": "npm run build -- -w"
   },
   "devDependencies": {
     "buble": "^0.20.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "tarima": "^4.9.5"
+    "mortero": "^0.0.53"
   }
 }
