@@ -14,7 +14,8 @@
   "homepage": "https://github.com/dubnix/ctrldub",
   "scripts": {
     "lint": "eslint src",
-    "build": "mortero -Xshared -r**/src/*.js:{name}.control.js --platform neutral --target es5 --no-debug --no-shake --bundle --legacy",
+    "build": "mortero -Xshared -r**/src/*.js:{name}.control.js --platform neutral --target es5 --no-debug --no-shake --bundle 'src/*.js' --legacy",
+    "postbuild": "rm -rf build/src",
     "dev": "npm run build -- -w"
   },
   "devDependencies": {
